@@ -1,0 +1,292 @@
+/* ==========================================================================
+   About Page — Styles specific to about.html
+   ========================================================================== */
+
+/* ── About Hero ── */
+.section--about-hero {
+  padding-top: calc(var(--space-2xl) + 80px);
+  padding-bottom: var(--space-xl);
+  text-align: center;
+}
+
+.about-hero__headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-tight);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.about-hero__subhead {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  max-width: 640px;
+  margin: 0 auto var(--space-lg);
+  font-weight: var(--font-weight-light);
+  line-height: var(--leading-relaxed);
+}
+
+.about-hero__anchors {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.about-hero__anchor {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: all var(--ease-out) var(--duration-normal);
+}
+
+.about-hero__anchor:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+
+/* ── Story Section ── */
+.story__content {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.story__content p {
+  margin-bottom: var(--space-md);
+}
+
+.story__lead {
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-light);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-lg);
+}
+
+.story__pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.story__pillar {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--ease-out) var(--duration-normal);
+}
+
+.story__pillar:hover {
+  border-color: var(--color-accent-blue);
+}
+
+.story__pillar-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(67, 169, 223, 0.08);
+  color: var(--color-accent-blue);
+  margin-bottom: var(--space-md);
+}
+
+.story__pillar h3 {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-xs);
+}
+
+.story__pillar p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ── Team Grid ── */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.team-card {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--ease-out) var(--duration-normal);
+}
+
+.team-card:hover {
+  border-color: var(--color-accent-blue);
+}
+
+.team-card__avatar {
+  flex-shrink: 0;
+}
+
+.team-card__avatar-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.team-card__name {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0.25rem;
+}
+
+.team-card__role {
+  font-size: var(--text-sm);
+  color: var(--color-accent-blue);
+  margin-bottom: var(--space-sm);
+}
+
+.team-card__bio {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-sm);
+}
+
+.team-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Careers ── */
+.careers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.career-card {
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--ease-out) var(--duration-normal);
+}
+
+.career-card:hover {
+  border-color: var(--color-accent-blue);
+}
+
+.career-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-sm);
+  gap: var(--space-sm);
+}
+
+.career-card__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.career-card__type {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.career-card__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-md);
+}
+
+.careers__fallback {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.careers__fallback a {
+  color: var(--color-accent-blue);
+  text-decoration: none;
+}
+
+.careers__fallback a:hover {
+  text-decoration: underline;
+}
+
+/* ── CTA Section ── */
+.section--cta {
+  padding: var(--space-2xl) 0;
+}
+
+/* ── Active Nav Link ── */
+.nav__link--active {
+  color: var(--color-text-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .story__pillars {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .careers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-card {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .team-card__tags {
+    justify-content: center;
+  }
+
+  .career-card__header {
+    flex-direction: column;
+  }
+
+  .about-hero__headline {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+}

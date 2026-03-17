@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Illuminate™ | Attribution + Incrementality + MMM for eCommerce | Refractive</title>
+  <meta name="description" content="Illuminate™ turns scattered marketing data into confident decisions. Attribution, incrementality testing, and media mix modeling—built for eCommerce brands.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../refractive-digital1.webflow/images/favicon.ico">
+  <link rel="apple-touch-icon" href="../refractive-digital1.webflow/images/webclip.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/illuminate.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       NAVIGATION
+       ════════════════════════════════════════════════════════ -->
+  <div class="bottom-blur"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" id="logo">
+        <img src="../refractive-digital1.webflow/images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon">
+        <img src="../refractive-digital1.webflow/images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text">
+      </a>
+
+      <div class="nav__links">
+        <a href="index.html#how-we-work" class="nav__link">How We Work</a>
+        <a href="solutions.html" class="nav__link">Solutions</a>
+        <a href="illuminate.html" class="nav__link nav__link--active">Illuminate</a>
+        <a href="about.html" class="nav__link">About</a>
+        <a href="index.html#contact" class="btn btn--primary btn--sm">Book a Growth Audit</a>
+      </div>
+
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="nav__mobile-overlay" id="mobile-nav">
+    <a href="index.html#how-we-work" class="nav__link">How We Work</a>
+    <a href="solutions.html" class="nav__link">Solutions</a>
+    <a href="illuminate.html" class="nav__link">Illuminate</a>
+    <a href="about.html" class="nav__link">About</a>
+    <a href="index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       ANCHOR NAV (Sticky sub-navigation)
+       ════════════════════════════════════════════════════════ -->
+  <div class="anchor-nav" id="anchor-nav">
+    <div class="anchor-nav__inner">
+      <a href="#overview" class="anchor-nav__link is-active">Overview</a>
+      <a href="#outcomes" class="anchor-nav__link">Outcomes</a>
+      <a href="#features" class="anchor-nav__link">Features</a>
+      <a href="#incrementality" class="anchor-nav__link">Incrementality</a>
+      <a href="#mmm" class="anchor-nav__link">MMM</a>
+      <a href="#attribution" class="anchor-nav__link">Attribution</a>
+      <a href="#ai" class="anchor-nav__link">AI Insights</a>
+      <a href="#integrations" class="anchor-nav__link">Integrations</a>
+      <a href="#security" class="anchor-nav__link">Security</a>
+      <a href="#process" class="anchor-nav__link">Process</a>
+      <a href="#pricing" class="anchor-nav__link">Pricing</a>
+      <a href="#faq" class="anchor-nav__link">FAQ</a>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       1. HERO
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--illum-hero" id="illum-hero">
+    <div class="container">
+      <span class="eyebrow" data-animate="fade-up">Measurement</span>
+      <h1 class="illum-hero__headline" data-animate="fade-up">Illuminate™ — See what's real.</h1>
+      <p class="illum-hero__subhead" data-animate="fade-up">Prove lift. Reallocate budget. Compound growth with confidence.</p>
+      <p class="illum-hero__support" data-animate="fade-up">Included with Full-Stack Growth Partner. Available standalone.</p>
+
+      <div class="illum-hero__ctas" data-animate="fade-up">
+        <a href="#pricing" class="btn btn--primary btn--lg">Book an Illuminate Demo</a>
+        <a href="#features" class="btn btn--outline btn--lg">See the Feature Set</a>
+      </div>
+
+      <div class="illum-hero__proof" data-animate="fade-up">
+        <span class="proof-badge">Attribution + Incrementality + MMM</span>
+        <span class="proof-badge">Built for Shopify + DTC stacks</span>
+        <span class="proof-badge">No black box reporting</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       2. OVERVIEW
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="overview">
+    <div class="container container--narrow">
+      <span class="eyebrow" data-animate="fade-up">Overview</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Turn noise into signal.</h2>
+      <p class="section__subhead" data-animate="fade-up">Illuminate™ unifies your marketing data and ties it to outcomes you can defend. It combines attribution with incrementality testing and modeling so you can fund what actually drives revenue, then repeat what works.</p>
+    </div>
+
+    <div class="container">
+      <div class="overview-cards" data-animate-stagger>
+        <div class="overview-card">
+          <div class="overview-card__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3>Attribution</h3>
+          <p>Understand the journey. See which channels and touchpoints drive real conversions.</p>
+        </div>
+
+        <div class="overview-card">
+          <div class="overview-card__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 20V10"/>
+              <path d="M12 20V4"/>
+              <path d="M6 20v-6"/>
+            </svg>
+          </div>
+          <h3>Incrementality</h3>
+          <p>Prove what caused lift. Geo experiments and holdouts that separate signal from noise.</p>
+        </div>
+
+        <div class="overview-card">
+          <div class="overview-card__icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+              <path d="M2 12h20"/>
+            </svg>
+          </div>
+          <h3>Media Mix Modeling</h3>
+          <p>Plan the next dollar with privacy resilience. Forecast marginal returns at a channel level.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       3. OUTCOMES
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="outcomes">
+    <div class="container container--narrow">
+      <span class="eyebrow" data-animate="fade-up">Outcomes</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Decisions that move faster than your market.</h2>
+
+      <div class="outcomes-grid" data-animate-stagger>
+        <div class="outcome-item">
+          <div class="outcome-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <p>Cut waste by identifying non-incremental spend.</p>
+        </div>
+        <div class="outcome-item">
+          <div class="outcome-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <p>Reallocate budget based on marginal returns.</p>
+        </div>
+        <div class="outcome-item">
+          <div class="outcome-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <p>Increase learning velocity with a test-and-scale loop.</p>
+        </div>
+        <div class="outcome-item">
+          <div class="outcome-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <p>Align stakeholders with one source of truth.</p>
+        </div>
+      </div>
+
+      <div class="before-after" data-animate="fade-up">
+        <div class="before-after__col before-after__col--before">
+          <h4>Before</h4>
+          <p>Fragmented dashboards, conflicting metrics, no confidence in what's working.</p>
+        </div>
+        <div class="before-after__col before-after__col--after">
+          <h4>After</h4>
+          <p>One dashboard + one weekly memo + one reallocation plan.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       4. FEATURE SET
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="features">
+    <div class="container">
+      <span class="eyebrow" data-animate="fade-up">Features</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Everything you need to manage the next dollar.</h2>
+
+      <div class="feature-grid" data-animate-stagger>
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <polyline points="16 11 18 13 22 9"/>
+          </svg>
+          <h3>Multi-touch attribution</h3>
+          <p>Compare models and see which channels contribute to conversions across the full funnel.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <h3>Path-to-purchase insights</h3>
+          <p>Visualize the customer journey from first touch to purchase with time-to-convert analysis.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <h3>Creative intelligence</h3>
+          <p>Cluster creative by hooks, angles, and formats to understand what resonates and why.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10"/>
+            <path d="M12 20V4"/>
+            <path d="M6 20v-6"/>
+          </svg>
+          <h3>Incrementality testing</h3>
+          <p>Geo and cell split tests with holdouts that prove true lift, not claimed conversions.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          <h3>Always-on lift monitoring</h3>
+          <p>Continuous measurement that catches performance shifts before they become problems.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+            <path d="M2 12h20"/>
+          </svg>
+          <h3>MMM scenario planning</h3>
+          <p>Model budget shifts before you make them. See projected returns by channel and spend level.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          <h3>Budget simulator</h3>
+          <p>Marginal ROI curves that show exactly where your next dollar should go.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <h3>Weekly performance memo</h3>
+          <p>Automated insight summaries and reallocation recommendations delivered to your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       5. INCREMENTALITY (Deep dive)
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="incrementality">
+    <div class="container">
+      <div class="deep-section">
+        <div class="deep-section__content" data-animate="fade-up">
+          <span class="eyebrow">Incrementality</span>
+          <h2 class="section__heading">Measure lift, not clicks.</h2>
+          <p>Incrementality answers the only question that matters: "Did this spend create new revenue, or just claim it?" Illuminate™ designs and reads geo/cell split tests and holdouts, then turns the results into a simple budget decision.</p>
+          <ul class="deep-section__list">
+            <li>Geo experiments and holdouts</li>
+            <li>iROAS and lift readouts</li>
+            <li>"Scale / Hold / Cut" recommendations</li>
+          </ul>
+          <div class="deep-section__deliverable">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span>Deliverable: Incrementality Readout (PDF)</span>
+          </div>
+        </div>
+        <div class="deep-section__visual" data-animate="fade-up">
+          <div class="deep-section__graphic deep-section__graphic--incr">
+            <div class="graph-bar graph-bar--control">
+              <span class="graph-bar__label">Control</span>
+              <div class="graph-bar__fill" style="height: 45%"></div>
+            </div>
+            <div class="graph-bar graph-bar--test">
+              <span class="graph-bar__label">Test</span>
+              <div class="graph-bar__fill" style="height: 72%"></div>
+            </div>
+            <div class="graph-bar graph-bar--lift">
+              <span class="graph-bar__label">Lift</span>
+              <div class="graph-bar__fill" style="height: 27%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       6. MEDIA MIX MODELING (Deep dive)
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="mmm">
+    <div class="container">
+      <div class="deep-section deep-section--reverse">
+        <div class="deep-section__content" data-animate="fade-up">
+          <span class="eyebrow">Media Mix Modeling</span>
+          <h2 class="section__heading">Plan budgets when tracking gets messy.</h2>
+          <p>MMM helps you forecast marginal returns at a channel level, even in privacy-restricted environments. Use it for quarterly planning, media mix shifts, and executive-level clarity.</p>
+          <ul class="deep-section__list">
+            <li>Scenario modeling</li>
+            <li>Marginal ROI curves</li>
+            <li>Seasonality controls</li>
+          </ul>
+        </div>
+        <div class="deep-section__visual" data-animate="fade-up">
+          <div class="deep-section__graphic deep-section__graphic--mmm">
+            <div class="mmm-channel">
+              <span class="mmm-channel__name">Meta</span>
+              <div class="mmm-channel__bar"><div class="mmm-channel__fill" style="width: 85%"></div></div>
+              <span class="mmm-channel__val">$4.2 ROAS</span>
+            </div>
+            <div class="mmm-channel">
+              <span class="mmm-channel__name">Google</span>
+              <div class="mmm-channel__bar"><div class="mmm-channel__fill" style="width: 68%"></div></div>
+              <span class="mmm-channel__val">$3.4 ROAS</span>
+            </div>
+            <div class="mmm-channel">
+              <span class="mmm-channel__name">TikTok</span>
+              <div class="mmm-channel__bar"><div class="mmm-channel__fill" style="width: 52%"></div></div>
+              <span class="mmm-channel__val">$2.6 ROAS</span>
+            </div>
+            <div class="mmm-channel">
+              <span class="mmm-channel__name">Email</span>
+              <div class="mmm-channel__bar"><div class="mmm-channel__fill" style="width: 92%"></div></div>
+              <span class="mmm-channel__val">$6.1 ROAS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       7. ATTRIBUTION (Deep dive)
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="attribution">
+    <div class="container">
+      <div class="deep-section">
+        <div class="deep-section__content" data-animate="fade-up">
+          <span class="eyebrow">Attribution</span>
+          <h2 class="section__heading">Understand the journey without worshiping last-click.</h2>
+          <p>Illuminate™ supports multiple attribution views so teams can compare narratives and align on a working model. The goal isn't a perfect model. It's faster, better decisions.</p>
+          <ul class="deep-section__list">
+            <li>Last-click vs multi-touch comparison</li>
+            <li>Assisted conversions and time-to-convert</li>
+            <li>Channel and creative contribution views</li>
+          </ul>
+        </div>
+        <div class="deep-section__visual" data-animate="fade-up">
+          <div class="deep-section__graphic deep-section__graphic--attr">
+            <div class="attr-row">
+              <span class="attr-row__label">First Touch</span>
+              <div class="attr-row__dots">
+                <span class="attr-dot attr-dot--active"></span>
+                <span class="attr-dot"></span>
+                <span class="attr-dot"></span>
+                <span class="attr-dot"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-row__label">Multi-Touch</span>
+              <div class="attr-row__dots">
+                <span class="attr-dot attr-dot--active"></span>
+                <span class="attr-dot attr-dot--active"></span>
+                <span class="attr-dot attr-dot--active"></span>
+                <span class="attr-dot attr-dot--active"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-row__label">Last Click</span>
+              <div class="attr-row__dots">
+                <span class="attr-dot"></span>
+                <span class="attr-dot"></span>
+                <span class="attr-dot"></span>
+                <span class="attr-dot attr-dot--active"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       8. AI INSIGHTS
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="ai">
+    <div class="container container--narrow">
+      <span class="eyebrow" data-animate="fade-up">AI Insights</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">AI where it actually matters.</h2>
+      <p class="section__subhead" data-animate="fade-up">We use AI to shorten the loop between idea, test, and insight. Illuminate™ surfaces patterns, flags anomalies, and helps generate the next round of experiments.</p>
+
+      <div class="ai-grid" data-animate-stagger>
+        <div class="ai-card">
+          <h4>Creative variant clustering</h4>
+          <p>Group creatives by hooks and angles to see what messaging resonates across audiences.</p>
+        </div>
+        <div class="ai-card">
+          <h4>Auto-generated hypotheses</h4>
+          <p>Get testing ideas based on performance patterns, seasonal trends, and competitor signals.</p>
+        </div>
+        <div class="ai-card">
+          <h4>Anomaly detection</h4>
+          <p>Get alerted when metrics break pattern, before small issues become big problems.</p>
+        </div>
+        <div class="ai-card">
+          <h4>Weekly insights memo</h4>
+          <p>Summarized performance highlights and recommended next actions, delivered automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       9. INTEGRATIONS
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="integrations">
+    <div class="container" style="text-align: center;">
+      <span class="eyebrow" data-animate="fade-up">Integrations</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Plug into your existing stack.</h2>
+      <p class="section__subhead" data-animate="fade-up">Connect your store, ads, and analytics. Keep your tools. Own your data.</p>
+
+      <div class="integration-logos" data-animate="fade-up">
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/shopify-seeklogo.svg" alt="Shopify" loading="lazy">
+        </div>
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/meta-icon-seeklogo.svg" alt="Meta" loading="lazy">
+        </div>
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/google-ads-seeklogo.svg" alt="Google Ads" loading="lazy">
+        </div>
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/tiktok-icon-seeklogo-1.svg" alt="TikTok" loading="lazy">
+        </div>
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/Klaviyo.svg" alt="Klaviyo" loading="lazy">
+        </div>
+        <div class="integration-logo">
+          <img src="../refractive-digital1.webflow/images/google-analytics-seeklogo.svg" alt="GA4" loading="lazy">
+        </div>
+      </div>
+
+      <p class="integration-note" data-animate="fade-up">Warehouse-first compatible (BigQuery / Snowflake) for advanced teams.</p>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       10. DATA & PRIVACY
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="security">
+    <div class="container container--narrow" style="text-align: center;">
+      <span class="eyebrow" data-animate="fade-up">Data &amp; Privacy</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Your data stays yours.</h2>
+
+      <div class="security-grid" data-animate-stagger>
+        <div class="security-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <p>Read-only access where possible</p>
+        </div>
+        <div class="security-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <p>Data portability (exportable)</p>
+        </div>
+        <div class="security-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <p>Consent-aware tracking guidance</p>
+        </div>
+        <div class="security-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <p>Role-based access</p>
+        </div>
+      </div>
+
+      <p class="security-trust" data-animate="fade-up">"We build dashboards for decisions, not surveillance."</p>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       11. HOW IT WORKS
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="process">
+    <div class="container">
+      <span class="eyebrow" data-animate="fade-up" style="text-align:center; display:block;">Process</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">From setup to signal in weeks.</h2>
+
+      <div class="process-steps-illum" data-animate-stagger>
+        <div class="process-step-illum">
+          <div class="process-step-illum__num">1</div>
+          <h3>Connect</h3>
+          <p>Data sources + taxonomy. We plug into your existing stack and map every signal.</p>
+        </div>
+        <div class="process-step-illum">
+          <div class="process-step-illum__num">2</div>
+          <h3>Validate</h3>
+          <p>Tracking integrity and baseline. We audit your data before trusting any of it.</p>
+        </div>
+        <div class="process-step-illum">
+          <div class="process-step-illum__num">3</div>
+          <h3>Measure</h3>
+          <p>Attribution + incrementality plan. Experiments designed, tests running, lift measured.</p>
+        </div>
+        <div class="process-step-illum">
+          <div class="process-step-illum__num">4</div>
+          <h3>Act</h3>
+          <p>Weekly memo + budget reallocation cadence. Signal becomes action becomes growth.</p>
+        </div>
+      </div>
+
+      <p class="process-deliverables" data-animate="fade-up">Deliverables: Dashboard + Memo + 90-day testing roadmap</p>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       12. ROADMAP DISCLOSURE
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="roadmap">
+    <div class="container container--narrow" style="text-align: center;">
+      <span class="eyebrow" data-animate="fade-up">Transparency</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Powered now, proprietary next.</h2>
+      <p class="section__subhead" data-animate="fade-up">Illuminate™ is delivered using best-in-class measurement partners today while we ship Refractive's proprietary layer over the next 6-12 months. Clients keep full data portability, and the experience stays consistent under the Illuminate™ brand.</p>
+
+      <div class="safeguards" data-animate-stagger>
+        <div class="safeguard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Data export guaranteed</span>
+        </div>
+        <div class="safeguard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>No vendor lock-in</span>
+        </div>
+        <div class="safeguard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Roadmap updates quarterly</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       13. PRICING
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--deep" id="pricing">
+    <div class="container">
+      <span class="eyebrow" data-animate="fade-up" style="text-align:center; display:block;">Pricing</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Pricing that aligns incentives.</h2>
+
+      <div class="pricing-cards" data-animate-stagger>
+        <div class="pricing-card">
+          <div class="pricing-card__badge">Included</div>
+          <h3 class="pricing-card__title">Full-Stack Growth Partner</h3>
+          <p class="pricing-card__desc">Illuminate™ is included with all Growth Partner retainers. Attribution, incrementality, and weekly memos come standard.</p>
+          <a href="index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+        </div>
+
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-card__badge">Standalone</div>
+          <h3 class="pricing-card__title">Illuminate™ Core</h3>
+          <p class="pricing-card__price">Starting at $2,500/mo</p>
+          <p class="pricing-card__desc">Attribution dashboards, incrementality testing, and weekly performance memos for brands managing media in-house.</p>
+          <a href="index.html#contact" class="btn btn--primary">Book a Demo</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card__badge">Advanced</div>
+          <h3 class="pricing-card__title">Illuminate™ Pro</h3>
+          <p class="pricing-card__price">Starting at $5,000/mo</p>
+          <p class="pricing-card__desc">Everything in Core plus MMM scenario planning, budget simulator, creative intelligence, and AI-powered insights.</p>
+          <a href="index.html#contact" class="btn btn--primary">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       14. FAQ
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" id="faq">
+    <div class="container container--narrow">
+      <span class="eyebrow" data-animate="fade-up">No fluff. Just clarity.</span>
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Illuminate FAQs</h2>
+
+      <div class="faq-list">
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>Is Illuminate included with retainers?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Yes. Illuminate™ is included with all Full-Stack Growth Partner retainers. You get attribution dashboards, incrementality testing, and weekly performance memos as part of the engagement.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>Can we buy it standalone?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Yes. Illuminate™ is available as a standalone product in Core and Pro tiers for brands managing media in-house or with another agency. You still get full access to dashboards, memos, and testing frameworks.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>How do incrementality tests work?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>We design geo or cell-based split tests where one group sees your ads and another doesn't. By comparing the conversion rates between groups, we measure true incremental lift, not just what the ad platform claims credit for.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>How is MMM different from attribution?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Attribution tracks individual user journeys. MMM looks at aggregate channel-level performance using statistical modeling. It's especially useful in privacy-restricted environments and for budget planning, since it doesn't depend on cookies or pixels.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>What access do you need?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Read-only access to your ad platforms, analytics, and Shopify store. We request the minimum permissions needed and never make changes to your live accounts without explicit approval.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>Do we own the data and exports?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Yes. All data is yours. Dashboards, reports, and raw exports are fully portable. If you ever leave, you take everything with you. No lock-in, no data hostage situations.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>How long until we see signal?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Attribution dashboards are live within 2 weeks of onboarding. Incrementality tests typically need 4-6 weeks to reach statistical significance. MMM models require 12+ months of historical data to calibrate.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-animate="fade-up">
+          <button class="faq-item__question" aria-expanded="false">
+            <span>Can we keep our existing tools?</span>
+            <svg class="faq-item__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-item__answer">
+            <p>Absolutely. Illuminate™ is additive, not a replacement. It plugs into your existing stack (Shopify, GA4, Meta, Google, Klaviyo, etc.) and provides a unified layer on top. Keep your tools. Own your data. We make it talk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       15. FINAL CTA
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--cta-final">
+    <div class="container" style="text-align: center;">
+      <h2 class="section__heading section__heading--center" data-animate="fade-up">Stop guessing. Start reallocating.</h2>
+      <p class="section__subhead" data-animate="fade-up">If you're spending meaningful budget, Illuminate™ will show what's real and where to push next.</p>
+      <div class="illum-hero__ctas" data-animate="fade-up">
+        <a href="index.html#contact" class="btn btn--primary btn--lg">Book an Illuminate Demo</a>
+        <a href="index.html#contact" class="btn btn--outline btn--lg">Start with Signal Scan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="index.html">
+            <img src="../refractive-digital1.webflow/images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo">
+          </a>
+          <p class="footer__heading">Fuel for founder-operators.</p>
+          <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
+          <form class="footer__newsletter">
+            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+          </form>
+          <p class="footer__privacy-note">We care about your data in our <a href="#">privacy policy</a>.</p>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Solutions</h4>
+          <a href="solutions.html#foundation">Brand Strategy</a>
+          <a href="solutions.html#growth">Performance &amp; Acquisition</a>
+          <a href="solutions.html#experience">Experience &amp; Conversion</a>
+          <a href="solutions.html#retention">Retention &amp; Lifecycle</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Illuminate</h4>
+          <a href="#attribution">Attribution</a>
+          <a href="#incrementality">Incrementality</a>
+          <a href="#features">Creative Performance</a>
+          <a href="#ai">AI Enhanced</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Insights</h4>
+          <a href="blog/index.html">Blog</a>
+          <a href="#">Playbooks &amp; Templates</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">About</h4>
+          <a href="about.html#team">Team</a>
+          <a href="about.html#careers">Careers</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>&copy; 2025 Refractive. All rights reserved.</span>
+        <div class="footer__bottom-right">
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 17.9895 4.3882 22.954 10.125 23.8542V15.4688H7.07812V12H10.125V9.35625C10.125 6.34875 11.9166 4.6875 14.6576 4.6875C15.9701 4.6875 17.3438 4.92188V7.875H15.8306C14.34 7.875 13.875 8.80008 13.875 9.75V12H17.2031L16.6711 15.4688H13.875V23.8542C19.6118 22.954 24 17.9895 24 12Z"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="X / Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://linkedin.com/company/refractive-co" class="footer__social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.223 0H1.772C.792 0 0 .773 0 1.73v20.536C0 23.222.792 24 1.772 24h20.451C23.203 24 24 23.222 24 22.27V1.73C24 .773 23.203 0 22.223 0zM7.12 20.452H3.558V8.995H7.12v11.457zM5.339 7.434a2.064 2.064 0 110-4.125 2.064 2.064 0 010 4.125zM20.452 20.452h-3.556v-5.569c0-1.328-.024-3.037-1.852-3.037-1.851 0-2.136 1.445-2.136 2.939v5.667H9.351V8.995h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg>
+            </a>
+          </div>
+          <div class="footer__legal">
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════
+       SCRIPTS
+       ════════════════════════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initNav();
+      initFaq();
+      initAnimations();
+
+      // ── Anchor Nav Scroll-Spy ──
+      const anchorNav = document.getElementById('anchor-nav');
+      const anchorLinks = anchorNav.querySelectorAll('.anchor-nav__link');
+      const sections = [];
+
+      anchorLinks.forEach(link => {
+        const id = link.getAttribute('href').slice(1);
+        const section = document.getElementById(id);
+        if (section) sections.push({ el: section, link });
+      });
+
+      // Show/hide anchor nav based on scroll position
+      const heroBottom = document.getElementById('illum-hero');
+
+      function updateAnchorNav() {
+        const scrollY = window.scrollY;
+        const heroRect = heroBottom.getBoundingClientRect();
+
+        // Show anchor nav after scrolling past hero
+        if (heroRect.bottom < 80) {
+          anchorNav.classList.add('is-visible');
+        } else {
+          anchorNav.classList.remove('is-visible');
+        }
+
+        // Highlight active section
+        let current = sections[0];
+        for (const s of sections) {
+          if (s.el.getBoundingClientRect().top <= 120) {
+            current = s;
+          }
+        }
+        anchorLinks.forEach(l => l.classList.remove('is-active'));
+        if (current) current.link.classList.add('is-active');
+      }
+
+      window.addEventListener('scroll', updateAnchorNav, { passive: true });
+      updateAnchorNav();
+
+      // Smooth scroll for anchor nav links
+      anchorLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = link.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            const navHeight = document.getElementById('nav').offsetHeight + anchorNav.offsetHeight;
+            const targetPos = target.getBoundingClientRect().top + window.scrollY - navHeight - 10;
+            window.scrollTo({ top: targetPos, behavior: 'smooth' });
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

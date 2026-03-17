@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Shopify Infrastructure That Separates 7-Figure Brands from 9-Figure Brands | Refractive</title>
+  <meta name="description" content="Growth eventually stops being a marketing problem and becomes a systems problem. Here's the Infrastructure Maturity Model that shows what breaks at $3M, $30M, and $100M — and how to build ahead of it.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../../refractive-digital1.webflow/images/favicon.ico">
+  <link rel="apple-touch-icon" href="../../refractive-digital1.webflow/images/webclip.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/blog.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       NAVIGATION
+       ════════════════════════════════════════════════════════ -->
+  <div class="bottom-blur"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo" id="logo">
+        <img src="../../refractive-digital1.webflow/images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon">
+        <img src="../../refractive-digital1.webflow/images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text">
+      </a>
+
+      <div class="nav__links">
+        <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
+        <a href="../solutions.html" class="nav__link">Solutions</a>
+        <a href="../illuminate.html" class="nav__link">Illuminate</a>
+        <a href="../about.html" class="nav__link">About</a>
+        <a href="../index.html#contact" class="btn btn--primary btn--sm">Book a Growth Audit</a>
+      </div>
+
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="nav__mobile-overlay" id="mobile-nav">
+    <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
+    <a href="../solutions.html" class="nav__link">Solutions</a>
+    <a href="../illuminate.html" class="nav__link">Illuminate</a>
+    <a href="../about.html" class="nav__link">About</a>
+    <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       ARTICLE HERO
+       ════════════════════════════════════════════════════════ -->
+  <section class="article-hero" data-animate="fade-up">
+    <span class="article-hero__category">Infrastructure</span>
+    <h1 class="article-hero__title">
+      The Shopify Infrastructure That Separates <span class="gradient-text">7-Figure Brands from 9-Figure Brands</span>
+    </h1>
+    <div class="article-hero__meta">
+      <span>March 2025</span>
+      <div class="article-hero__divider"></div>
+      <span>11 min read</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       ARTICLE BODY
+       ════════════════════════════════════════════════════════ -->
+  <article class="article">
+    <div class="article__body">
+
+      <!-- ── THE HOOK ── -->
+      <p class="article__lead">
+        The brand that can't scale past $10M doesn't have a marketing problem. It has a systems problem it hasn't diagnosed yet.
+      </p>
+
+      <p>
+        There's a pattern that repeats across Shopify brands. The first $1M to $3M comes from product-market fit and hustle. The founder finds an audience, runs some Meta ads, gets traction. Growth feels organic, even when it's paid. The tech stack is simple: Shopify, Klaviyo, a Meta pixel, maybe a reviews app. And it works. Until it doesn't.
+      </p>
+
+      <p>
+        Somewhere between $3M and $10M, things start to strain. The analytics don't match reality. Customer service tickets spike because order tracking is unreliable. The email platform has one version of the customer, the ad platform has another, and the warehouse has a third. Inventory planning is a spreadsheet. Attribution is a debate. The founder-operator's response is usually to hire more people or spend more on ads. Neither fixes the underlying issue.
+      </p>
+
+      <p>
+        The underlying issue is infrastructure. Not in the IT-department sense — in the operational architecture sense. The systems that connect your data, your operations, your marketing, and your customer experience are either built for your current scale or they're not. When they're not, growth doesn't just slow down. It actively degrades. You spend more to acquire customers you can't serve well, which damages retention, which increases your dependence on acquisition, which raises costs. It's a flywheel in reverse.
+      </p>
+
+      <!-- ── THE PROBLEM ── -->
+      <h2>Why Marketing Can't Solve a Systems Problem</h2>
+
+      <p>
+        The instinct at every growth stage is to pour more fuel on acquisition. Revenue plateaued? Increase ad spend. CPA rising? Test more creative. LTV declining? Launch a loyalty program. These are all marketing solutions to what is often a systems problem.
+      </p>
+
+      <p>
+        Consider what actually happens when a brand at $5M/year tries to scale to $15M by tripling ad spend. The Meta account gets more data, finds more customers. Orders increase. But the existing infrastructure wasn't built for this volume. The 3PL starts missing SLAs. Customer service response times balloon because there's no ticket automation. The email flows still treat every customer the same — the person who bought once at a discount gets the same post-purchase sequence as the loyal full-price buyer. Inventory goes out of stock on best-sellers because there's no demand forecasting connected to the ad spend data.
+      </p>
+
+      <p>
+        The result: the brand acquires more customers at a higher cost, delivers a worse experience, and watches repeat purchase rates decline. Net revenue grows, but margin compresses. The founder looks at the numbers and thinks the marketing isn't working. The marketing is working fine. The systems behind it are failing.
+      </p>
+
+      <blockquote>
+        <p>You don't outgrow your marketing. You outgrow your infrastructure. And the symptoms always look like marketing problems until you dig deeper.</p>
+      </blockquote>
+
+      <p>
+        This is the trap. Brands keep optimizing the top of the funnel while the mid-funnel and post-purchase infrastructure silently erode the economics. They hire a better media buyer when they need a better data layer. They redesign the website when they need to restructure their operational stack. The diagnosis is wrong, so the prescription doesn't work.
+      </p>
+
+      <!-- ── THE FRAMEWORK ── -->
+      <h2>The Infrastructure Maturity Model</h2>
+
+      <p>
+        Every Shopify brand sits at one of four infrastructure stages. Each stage has a distinct tech stack, distinct capabilities, and distinct failure modes. Understanding where you are — and what the next stage requires — is the difference between scaling intentionally and scaling into chaos.
+      </p>
+
+      <div class="article__callout">
+        <div class="article__callout-title">Stage 1 — Startup Stack ($0 - $3M)</div>
+        <p><strong>Tech stack:</strong> Shopify (standard plan), Klaviyo for email, Meta pixel (browser-side), a reviews app (Judge.me or Stamped), basic Google Analytics, maybe Recharge for subscriptions. Everything is connected through native integrations or Zapier. Data lives in platform silos.</p>
+        <p><strong>Capabilities:</strong> You can run ads, send emails, fulfill orders, and see basic performance metrics. You know your revenue, your top-line CPA, and your email open rates. You have enough to operate, but not enough to optimize with precision.</p>
+        <p><strong>What works:</strong> Simplicity. At this stage, fewer tools means fewer failure points. The founder can see the entire operation. Decision-making is fast because data requirements are low. Product-market fit and creative quality matter more than infrastructure.</p>
+        <p><strong>What breaks:</strong> Nothing yet — as long as you don't try to scale past this stage without upgrading. The Startup Stack is perfectly functional for a $1-3M brand. The mistake is trying to run a $10M operation on it.</p>
+      </div>
+
+      <div class="article__callout">
+        <div class="article__callout-title">Stage 2 — Growth Stack ($3M - $15M)</div>
+        <p><strong>Tech stack:</strong> Shopify Plus (or advanced Shopify), Klaviyo with segmentation and flows, server-side tracking (CAPI + server-side GTM), a CDP or data integration layer (Segment, Elevar, or Triple Whale), post-purchase survey tools (Fairing/KnoCommerce), a proper analytics platform beyond GA4, loyalty/rewards (Yotpo or LoyaltyLion), SMS (Postscript or Attentive).</p>
+        <p><strong>Capabilities:</strong> You can track conversions with server-side reliability. You can segment customers by behavior and value. You can attribute revenue across channels with reasonable accuracy. You can automate post-purchase flows based on customer data. You can forecast creative needs and plan inventory with some data backing.</p>
+        <p><strong>What works:</strong> Integrated data starts to compound. Server-side tracking feeds better signals to ad platforms. Customer segmentation enables differentiated messaging. Post-purchase surveys give you channel attribution data that platform reporting can't. The Growth Stack turns marketing from guesswork into informed decision-making.</p>
+        <p><strong>What breaks:</strong> Data integration becomes the bottleneck. Every new tool adds another data silo. Klaviyo has one customer profile, the CDP has another, your analytics platform has a third. Reconciling these views requires manual work or middleware. As SKU count grows, inventory management in spreadsheets becomes untenable. As ad spend scales, the gap between platform-reported and actual performance widens, and without robust measurement infrastructure, you can't tell which channels are actually driving incremental revenue.</p>
+      </div>
+
+      <div class="article__callout">
+        <div class="article__callout-title">Stage 3 — Scale Stack ($15M - $50M)</div>
+        <p><strong>Tech stack:</strong> Shopify Plus with custom theme and checkout extensions, a data warehouse (BigQuery, Snowflake, or Redshift), an ERP or OMS (NetSuite, Brightpearl, or ShipHero), a proper BI tool (Looker, Tableau, or Mode), predictive analytics models for LTV and churn, a structured creative production pipeline, server-side tracking with value-based optimization signals, an incrementality testing framework.</p>
+        <p><strong>Capabilities:</strong> You have a single source of truth for customer data. You can calculate true LTV by cohort, by channel, by product. You can model the incremental impact of each marketing channel. You can forecast demand and plan inventory based on marketing spend projections. You can send predictive signals to ad platforms to optimize for long-term value, not just conversions. You can measure creative performance systematically and forecast decay.</p>
+        <p><strong>What works:</strong> The data warehouse changes everything. For the first time, all your data — transactions, marketing spend, customer behavior, inventory, fulfillment — lives in one place. Analysis that previously required pulling exports from five platforms and joining them in a spreadsheet now happens in a dashboard that updates automatically. Decision velocity increases dramatically because the data is already unified.</p>
+        <p><strong>What breaks:</strong> Organizational complexity. The systems exist, but operating them requires specialized talent — data engineers, analysts, marketing technologists. Most brands at this stage don't have these roles. They try to run Scale Stack infrastructure with Startup Stack teams, which means the tools are underutilized and the data goes stale. Process breaks before technology breaks.</p>
+      </div>
+
+      <div class="article__callout">
+        <div class="article__callout-title">Stage 4 — Enterprise Stack ($50M+)</div>
+        <p><strong>Tech stack:</strong> Headless or composable commerce architecture (Hydrogen, custom storefronts), real-time data pipelines (event streaming via Kafka or similar), advanced personalization engines, customer data platform with real-time activation, automated inventory and demand planning integrated with marketing spend, machine learning models for pricing, merchandising, and customer routing, multi-warehouse fulfillment optimization.</p>
+        <p><strong>Capabilities:</strong> Real-time personalization at every touchpoint — site experience, email, SMS, ads, and customer service all react to the same customer profile in real time. Automated decisioning replaces manual campaign management. Pricing responds to demand signals. Inventory allocation optimizes across warehouses based on customer geography. Marketing spend automatically adjusts based on real-time margin and LTV data.</p>
+        <p><strong>What works:</strong> Automation at scale. The systems don't just report what happened — they make decisions about what to do next. A customer's predicted LTV changes their ad bid, their email cadence, their site experience, and their customer service priority simultaneously. The entire operation becomes an interconnected system where each decision reinforces every other decision.</p>
+        <p><strong>What breaks:</strong> This stack requires significant engineering resources to build and maintain. The cost is justified at $50M+ in revenue, but it demands a technology-first organizational structure. Brands that reach this stage without building the team to support it end up with expensive infrastructure nobody knows how to operate.</p>
+      </div>
+
+      <!-- ── THE EVIDENCE ── -->
+      <h2>What Breaks at Each Stage: Three Revenue Snapshots</h2>
+
+      <p>
+        The Infrastructure Maturity Model isn't theoretical. Here's what each transition looks like in practice, and the specific failure modes that signal you've outgrown your current stage.
+      </p>
+
+      <h3>The $3M Brand Trying to Reach $10M</h3>
+
+      <p>
+        A supplements brand is doing $3M/year. They've been growing 40% year over year on a Startup Stack. The founder decides to push to $10M by increasing Meta spend from $30K to $80K per month. Within 60 days, three things happen. First, CPA increases by 30% because the browser pixel is missing 35% of conversions — the algorithm is optimizing on incomplete data, and scaling spend amplifies the error. Second, their best-selling SKU goes out of stock because there's no connection between ad spend and inventory planning — the team didn't realize that scaling ads on one product would burn through three months of inventory in six weeks. Third, customer service tickets double because the post-purchase email flow sends the same generic sequence to everyone, including repeat customers who don't need onboarding content. The brand's CSAT scores drop, and repeat purchase rates decline by 15%.
+      </p>
+
+      <p>
+        The fix isn't to pull back on spend. It's to upgrade to a Growth Stack before scaling: implement server-side tracking to recover lost conversions, connect ad spend data to inventory forecasting, and segment post-purchase flows by customer type. Total infrastructure investment: $15-25K and 6-8 weeks. The ROI: the ability to scale spend without the degradation spiral.
+      </p>
+
+      <h3>The $15M Brand Stuck at $15M</h3>
+
+      <p>
+        A fashion brand hit $15M and has been stuck there for two years. They've tried everything on the marketing side — new agencies, new creative approaches, TikTok expansion, influencer campaigns. Nothing moves the needle beyond 5-10% growth. The issue isn't marketing. It's that they've hit the ceiling of what a Growth Stack can support.
+      </p>
+
+      <p>
+        Their data is fragmented across seven platforms. Calculating true LTV requires a manual process that takes the finance team two weeks per quarter. They can't tell which of their four marketing channels is actually driving incremental revenue because their measurement is all platform-reported. Inventory planning is reactive — they chronically overstock slow-movers and understock winners. Their retention strategy is one-size-fits-all because they don't have the data infrastructure to segment by predicted value.
+      </p>
+
+      <p>
+        The unlock is a Scale Stack: a data warehouse that unifies their data, a BI layer that gives operators real-time visibility into cohort economics, and predictive models that enable value-based marketing decisions. The investment is $50-80K upfront and $8-15K per month in tooling and analytics talent. But it breaks the growth ceiling because every marketing dollar is now allocated based on actual incrementality data, every inventory decision is backed by demand forecasting, and every customer interaction is informed by predicted lifetime value.
+      </p>
+
+      <h3>The $50M Brand Leaking Margin</h3>
+
+      <p>
+        A home goods brand is doing $50M with healthy top-line growth but declining margins. Their Scale Stack is functional — they have a data warehouse, proper attribution, cohort analytics. But their operations haven't kept pace with their data capabilities. They're running a single warehouse that ships coast-to-coast, meaning West Coast customers wait 5-7 days while East Coast customers get 2-day delivery. Their pricing is static, even though demand for their products varies by 40% across seasons. Their customer service team treats a $2,000 LTV customer the same as a one-time discount buyer.
+      </p>
+
+      <p>
+        The Enterprise Stack solves this: multi-warehouse fulfillment optimization cuts average delivery time by 2 days and shipping costs by 18%. Dynamic pricing based on demand signals improves margin by 3-5 points on seasonal products. Customer service routing based on predicted LTV ensures high-value customers get priority treatment, improving retention in the segment that matters most. Real-time personalization on the website increases conversion by showing returning customers products based on their purchase history, not generic merchandising.
+      </p>
+
+      <blockquote>
+        <p>At $3M, you need better marketing. At $30M, you need better systems. At $100M, you need systems that make decisions for you. The infrastructure requirement changes at every stage.</p>
+      </blockquote>
+
+      <!-- ── THE PLAYBOOK ── -->
+      <h2>How to Diagnose and Upgrade Your Infrastructure Stage</h2>
+
+      <p>
+        Moving between stages requires deliberate planning, not reactive tooling. Here's the playbook.
+      </p>
+
+      <div class="article__step" data-animate="fade-up">
+        <div class="article__step-num">1</div>
+        <div class="article__step-content">
+          <h3>Audit Your Current Stage Honestly</h3>
+          <p>
+            Map every tool in your stack and the data that flows between them. Draw the connections — literally, on a whiteboard or in a diagram. Where does customer data originate? Where does it go? How many systems have their own version of "the customer"? How many manual processes (exports, spreadsheets, copy-paste) exist between systems? Count the hours your team spends each week reconciling data between platforms. If that number is more than five hours per week, you've outgrown your current stage. If you can't answer basic questions — like "what is the true LTV of customers acquired from TikTok vs. Meta?" — without a multi-day manual analysis, that's an infrastructure gap, not a data gap.
+          </p>
+        </div>
+      </div>
+
+      <div class="article__step" data-animate="fade-up">
+        <div class="article__step-num">2</div>
+        <div class="article__step-content">
+          <h3>Identify Your Binding Constraint</h3>
+          <p>
+            Not every part of your infrastructure needs to upgrade at once. Find the one constraint that's most limiting your growth or margin, and solve that first. If your CPA is rising and you're still on browser-only tracking, the binding constraint is measurement — implement server-side tracking before anything else. If you're chronically out of stock on winners, the binding constraint is inventory-to-marketing connectivity — build that bridge before investing in a full data warehouse. If your retention rates are declining despite a "loyalty program," the constraint is customer segmentation — you need behavioral data infrastructure before you can personalize. Solve the binding constraint. Measure the impact. Then identify the next one.
+          </p>
+        </div>
+      </div>
+
+      <div class="article__step" data-animate="fade-up">
+        <div class="article__step-num">3</div>
+        <div class="article__step-content">
+          <h3>Build the Data Layer Before the Tool Layer</h3>
+          <p>
+            The most common mistake in infrastructure upgrades is buying tools before building the data foundation. A personalization engine is useless without unified customer profiles. An incrementality testing platform is useless without clean, granular spend and conversion data. A BI dashboard is useless without a data warehouse to query. Start with the plumbing: get your data into one place, with consistent schemas, reliable syncs, and clear ownership. Then layer tools on top that activate that data. This sequence matters. Brands that buy the tool first and figure out the data later end up with expensive software they use at 20% of its capability — or worse, software that produces misleading outputs because the underlying data is dirty.
+          </p>
+        </div>
+      </div>
+
+      <div class="article__step" data-animate="fade-up">
+        <div class="article__step-num">4</div>
+        <div class="article__step-content">
+          <h3>Staff for the Stage You're Building, Not the Stage You're On</h3>
+          <p>
+            Every infrastructure upgrade requires capabilities your current team may not have. Moving from Startup to Growth Stack requires someone who understands tracking infrastructure, server-side implementations, and data integration. Moving from Growth to Scale Stack requires a data engineer or analytics engineer who can build and maintain a warehouse. Moving from Scale to Enterprise requires a marketing technologist or solutions architect who can design real-time data pipelines and automation logic. You don't need these roles full-time at the start — a fractional hire or an agency with genuine technical depth can bridge the gap. But you need the capability. Buying Scale Stack tools with a Startup Stack team produces expensive shelfware, not competitive advantage.
+          </p>
+        </div>
+      </div>
+
+      <div class="article__step" data-animate="fade-up">
+        <div class="article__step-num">5</div>
+        <div class="article__step-content">
+          <h3>Plan Your App Ecosystem Deliberately</h3>
+          <p>
+            Shopify's app ecosystem is both its greatest strength and its biggest risk. Every app adds functionality, but it also adds a data silo, a script that affects page load speed, a vendor relationship to manage, and a potential point of failure. Audit your app stack ruthlessly. For every app, ask: does this app's data feed into our central data layer, or does it create an island? Does this app measurably impact a business outcome, or is it "nice to have"? Could this functionality be consolidated into a platform we already pay for? Most Shopify stores at $5M+ have 15-25 apps installed. The well-architected ones have 8-12, each chosen for a specific purpose, each integrated into the data layer, and each with a clear owner on the team.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── THE STRATEGIC TAKEAWAY ── -->
+      <h2>Brands Don't Scale Because of Better Ads. They Scale Because Their Systems Allow Them To.</h2>
+
+      <p>
+        The uncomfortable truth about scaling an ecommerce brand is that marketing eventually becomes the easy part. Creative strategy, media buying, and channel expansion are well-understood disciplines with established playbooks. The hard part — the part that separates 7-figure brands from 9-figure brands — is the invisible infrastructure that sits beneath the marketing.
+      </p>
+
+      <p>
+        A $100M brand doesn't spend 33x more on ads than a $3M brand. It has systems that make every dollar of ad spend more efficient: better tracking that feeds smarter algorithms, better data that enables precise segmentation, better operations that deliver a superior customer experience, and better measurement that ensures budget goes to channels that actually drive incremental growth. The infrastructure is the multiplier.
+      </p>
+
+      <p>
+        Most founders resist infrastructure investment because it's not sexy. It doesn't produce an immediate spike in revenue. You can't see it in an ad dashboard. But it's the reason some brands seem to scale effortlessly while others grind for every marginal dollar of growth. The brands that scale effortlessly built the systems first. The ones that grind are trying to scale marketing on top of infrastructure that was designed for a fraction of their current volume.
+      </p>
+
+      <blockquote>
+        <p>Your infrastructure is the ceiling on your growth. You can push marketing as hard as you want, but you'll never scale past what your systems can support. Build the infrastructure ahead of the growth, and the growth follows.</p>
+      </blockquote>
+
+      <p>
+        Stop asking "how do we get more customers?" and start asking "can our systems handle more customers without degrading the experience, the economics, or the data quality?" If the answer is no, that's not a marketing problem to solve later. That's the most important problem to solve now.
+      </p>
+
+    </div>
+  </article>
+
+  <!-- ════════════════════════════════════════════════════════
+       CTA
+       ════════════════════════════════════════════════════════ -->
+  <section class="section" data-animate="fade-up">
+    <div class="article-cta">
+      <hr class="article-cta__rule">
+      <p>
+        At Refractive, we help Shopify brands build the infrastructure that enables scale — from tracking and data architecture to operational systems and measurement frameworks. If your growth has plateaued and you suspect the problem isn't your ads, you're probably right.
+      </p>
+      <a href="../index.html#contact" class="btn btn--primary btn--lg">Book a Growth Audit</a>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       RELATED ARTICLES
+       ════════════════════════════════════════════════════════ -->
+  <section class="related-articles">
+    <div class="container">
+      <div class="related-articles__header">
+        <h2 class="related-articles__title">More Insights</h2>
+        <a href="index.html" class="related-articles__back">&larr; All articles</a>
+      </div>
+      <div class="related-articles__grid">
+        <a href="tracking-maturity-ladder.html" class="blog-card" data-animate="fade-up">
+          <span class="blog-card__category">Measurement</span>
+          <h3 class="blog-card__title">The Tracking Maturity Ladder: Why Server-Side Tracking Is Only Level 2</h3>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>10 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+        <a href="shopify-conversion-potential.html" class="blog-card" data-animate="fade-up">
+          <span class="blog-card__category">CRO</span>
+          <h3 class="blog-card__title">Why Most Shopify Stores Convert Below Their Potential</h3>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>10 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+        <a href="future-of-commerce-ai-discovery.html" class="blog-card" data-animate="fade-up">
+          <span class="blog-card__category">Strategy</span>
+          <h3 class="blog-card__title">The Future of Commerce: AI Discovery vs Traditional Marketing</h3>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>11 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="../index.html">
+            <img src="../../refractive-digital1.webflow/images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo">
+          </a>
+          <p class="footer__heading">Fuel for founder-operators.</p>
+          <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
+          <form class="footer__newsletter">
+            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+          </form>
+          <p class="footer__privacy-note">We care about your data in our <a href="#">privacy policy</a>.</p>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Solutions</h4>
+          <a href="../solutions.html#foundation">Brand Strategy</a>
+          <a href="../solutions.html#growth">Performance &amp; Acquisition</a>
+          <a href="../solutions.html#experience">Experience &amp; Conversion</a>
+          <a href="../solutions.html#retention">Retention &amp; Lifecycle</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Illuminate</h4>
+          <a href="../illuminate.html#attribution">Attribution</a>
+          <a href="../illuminate.html#incrementality">Incrementality</a>
+          <a href="../illuminate.html#features">Creative Performance</a>
+          <a href="../illuminate.html#ai">AI Enhanced</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">Insights</h4>
+          <a href="index.html">Blog</a>
+          <a href="#">Playbooks &amp; Templates</a>
+        </div>
+
+        <div class="footer__col">
+          <h4 class="footer__col-title">About</h4>
+          <a href="../about.html#team">Team</a>
+          <a href="../about.html#careers">Careers</a>
+          <a href="../index.html#contact">Contact</a>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>&copy; 2025 Refractive. All rights reserved.</span>
+        <div class="footer__bottom-right">
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 17.9895 4.3882 22.954 10.125 23.8542V15.4688H7.07812V12H10.125V9.35625C10.125 6.34875 11.9166 4.6875 14.6576 4.6875C15.9701 4.6875 17.3438 4.92188V7.875H15.8306C14.34 7.875 13.875 8.80008 13.875 9.75V12H17.2031L16.6711 15.4688H13.875V23.8542C19.6118 22.954 24 17.9895 24 12Z"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="#" class="footer__social-link" aria-label="X / Twitter">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://linkedin.com/company/refractive-co" class="footer__social-link" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.223 0H1.772C.792 0 0 .773 0 1.73v20.536C0 23.222.792 24 1.772 24h20.451C23.203 24 24 23.222 24 22.27V1.73C24 .773 23.203 0 22.223 0zM7.12 20.452H3.558V8.995H7.12v11.457zM5.339 7.434a2.064 2.064 0 110-4.125 2.064 2.064 0 010 4.125zM20.452 20.452h-3.556v-5.569c0-1.328-.024-3.037-1.852-3.037-1.851 0-2.136 1.445-2.136 2.939v5.667H9.351V8.995h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg>
+            </a>
+          </div>
+          <div class="footer__legal">
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════════════════════════════════════════════
+       SCRIPTS
+       ════════════════════════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/animations.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initNav();
+      initAnimations();
+    });
+  </script>
+
+</body>
+</html>
