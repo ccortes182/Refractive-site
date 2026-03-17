@@ -5,7 +5,7 @@
 /* ── Font Face ── */
 @font-face {
   font-family: 'adelphi-pe-variable';
-  src: url('../../refractive-digital1.webflow/fonts/AdelphiPEVFTRIAL-All.ttf') format('truetype');
+  src: url('../fonts/AdelphiPEVFTRIAL-All.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
