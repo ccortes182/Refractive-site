@@ -2,16 +2,7 @@
    Base — Reset, Fonts, Defaults
    ========================================================================== */
 
-/* ── Font Face ── */
-@font-face {
-  font-family: 'adelphi-pe-variable';
-  src: url('../fonts/AdelphiPEVFTRIAL-All.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+/* Font loaded via Adobe Typekit in <head> */
 
 /* ── Reset ── */
 *,
