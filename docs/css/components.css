@@ -259,11 +259,11 @@
 }
 
 .marquee__row--left .marquee__track {
-  animation: marquee-scroll 40s linear infinite;
+  animation: marquee-scroll 80s linear infinite;
 }
 
 .marquee__row--right .marquee__track {
-  animation: marquee-scroll-reverse 40s linear infinite;
+  animation: marquee-scroll-reverse 80s linear infinite;
 }
 
 .marquee__row .marquee__track img {
@@ -273,6 +273,24 @@
   filter: brightness(0) invert(1);
   transition: opacity var(--duration-normal);
   flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .marquee__row .marquee__track {
+    gap: var(--space-md);
+  }
+
+  .marquee__row .marquee__track img {
+    height: 22px;
+  }
+
+  .marquee__row--left .marquee__track {
+    animation: marquee-scroll 50s linear infinite;
+  }
+
+  .marquee__row--right .marquee__track {
+    animation: marquee-scroll-reverse 50s linear infinite;
+  }
 }
 
 .marquee__row .marquee__track img:hover {
