@@ -270,6 +270,7 @@
 
 .marquee__row .marquee__track img {
   height: 28px;
+  min-width: 40px;
   width: auto;
   opacity: 0.45;
   filter: brightness(0) invert(1);
