@@ -266,11 +266,13 @@
 }
 
 .hero__headline {
-  font-size: var(--text-hero);
-  font-weight: var(--font-weight-black);
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
+  font-size: clamp(1.6rem, 5.5vw, 5.5rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: 5px;
+  text-transform: uppercase;
   margin-bottom: var(--space-md);
+  white-space: nowrap;
 }
 
 .hero__subhead {

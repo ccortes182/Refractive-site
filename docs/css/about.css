@@ -56,7 +56,8 @@
   color: var(--color-text-secondary);
 }
 
-.story__content p {
+.story__content > p {
+  max-width: 760px;
   margin-bottom: var(--space-md);
 }
 
@@ -99,14 +100,15 @@
 }
 
 .story__pillar h3 {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: var(--font-weight-semibold);
   margin-bottom: var(--space-xs);
 }
 
 .story__pillar p {
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
   margin: 0;
 }
 
