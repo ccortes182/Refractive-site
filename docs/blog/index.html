@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insights — Operator-Level Marketing Frameworks | Refractive</title>
-  <meta name="description" content="Frameworks, playbooks, and contrarian insights for serious eCommerce operators. No fluff. No buzzwords. Just systems that scale.">
+  <title>The Refractive Index — Operator Frameworks for DTC Growth | Refractive</title>
+  <meta name="description" content="Operator-level marketing frameworks, playbooks, and contrarian thinking for DTC brands. Written by senior operators who run these programs for real brands, right now.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="../images/Social Icon.png">
@@ -20,8 +20,9 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/animations.css">
   <link rel="stylesheet" href="../css/blog.css">
+  <link rel="stylesheet" href="../css/tools.css">
 </head>
-<body>
+<body class="has-auth-bar">
 
   <!-- ════════════════════════════════════════════════════════
        NAVIGATION
@@ -39,6 +40,8 @@
         <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
         <a href="../solutions.html" class="nav__link">Solutions</a>
         <a href="../illuminate.html" class="nav__link">Illuminate</a>
+        <a href="../blog/index.html" class="nav__link nav__link--active">The Index</a>
+        <a href="../playbooks.html" class="nav__link">Playbooks</a>
         <a href="../about.html" class="nav__link">About</a>
         <a href="../index.html#contact" class="btn btn--primary btn--sm">Book a Growth Audit</a>
       </div>
@@ -56,27 +59,64 @@
     <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
     <a href="../solutions.html" class="nav__link">Solutions</a>
     <a href="../illuminate.html" class="nav__link">Illuminate</a>
+    <a href="../blog/index.html" class="nav__link">The Index</a>
+    <a href="../playbooks.html" class="nav__link">Playbooks</a>
     <a href="../about.html" class="nav__link">About</a>
     <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
   </div>
 
   <!-- ════════════════════════════════════════════════════════
-       BLOG HERO
+       AUTH BAR (sticky, shows login or welcome)
        ════════════════════════════════════════════════════════ -->
-  <section class="blog-hero" data-animate="fade-up">
-    <h1 class="blog-hero__title">Insights</h1>
-    <p class="blog-hero__subtitle">Frameworks, playbooks, and contrarian thinking for operators who measure what matters.</p>
+  <div class="auth-bar" id="auth-bar">
+    <div class="container">
+      <div class="auth-bar__inner">
+        <!-- Logged out state -->
+        <div class="auth-bar__logged-out" id="auth-logged-out">
+          <span class="auth-bar__text">Get free access to premium tools and dashboards.</span>
+          <a href="../playbooks.html" class="btn btn--primary btn--sm">Create Free Account &rarr;</a>
+        </div>
+        <!-- Logged in state -->
+        <div class="auth-bar__logged-in" id="auth-logged-in" style="display:none;">
+          <span class="auth-bar__welcome" id="auth-welcome">Welcome back</span>
+          <a href="../playbooks.html" class="btn btn--outline btn--sm">Playbooks &amp; Tools</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       HERO — The Index
+       ════════════════════════════════════════════════════════ -->
+  <section class="section section--hero index-hero" data-animate="fade-up">
+    <div class="container">
+      <div class="index-hero__grid">
+        <div class="index-hero__content">
+          <p class="eyebrow">The Refractive Index</p>
+          <h1 class="index-hero__title">Operator-level frameworks for DTC brands who measure what matters.</h1>
+          <p class="index-hero__subtitle">No fluff, no agency speak — just the mental models, playbooks, and contrarian takes we use to grow brands every day. Written by senior operators who run real programs for real brands doing $1M to $50M.</p>
+          <p class="index-hero__about">Built by the team at Refractive — a boutique growth partner for DTC brands. Every framework here has been stress-tested against real accounts, real budgets, and real founders.</p>
+        </div>
+        <div class="index-hero__image">
+          <img src="../images/the-index.png" alt="Christian Cortes, Founder of Refractive, speaking at a DTC growth conference" loading="eager">
+          <span class="index-hero__image-caption">Christian Cortes, Founder &amp; CEO</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ════════════════════════════════════════════════════════
-       BLOG GRID
+       FEATURED ARTICLES
        ════════════════════════════════════════════════════════ -->
   <section class="section">
     <div class="container">
-      <div class="blog-grid">
+      <h2 class="index-section__title" data-animate="fade-up">Featured Frameworks</h2>
+      <p class="index-section__desc" data-animate="fade-up">The most-read operator frameworks from The Refractive Index. Start here.</p>
+
+      <div class="blog-grid" data-animate="fade-up" data-animate-stagger>
 
         <!-- ── FEATURED: Last-Click Attribution ── -->
-        <a href="last-click-attribution-death-spiral.html" class="blog-card blog-card--featured" data-animate="fade-up">
+        <a href="last-click-attribution-death-spiral.html" class="blog-card blog-card--featured">
           <span class="blog-card__category">Measurement</span>
           <h2 class="blog-card__title">Why Last-Click Attribution Is Training Your Brand to Discount Itself Out of Business</h2>
           <p class="blog-card__excerpt">Last-click attribution over-credits bottom-funnel channels and systematically underfunds demand creation. Here's the four-stage death spiral — and the playbook to break it.</p>
@@ -89,60 +129,21 @@
         </a>
 
         <!-- ── Retention Illusion ── -->
-        <a href="retention-illusion.html" class="blog-card" data-animate="fade-up">
+        <a href="retention-illusion.html" class="blog-card">
           <span class="blog-card__category">Retention</span>
           <h2 class="blog-card__title">The Retention Illusion: Why Most "Retention Marketing" Doesn't Increase LTV</h2>
-          <p class="blog-card__excerpt">Most brands think retention means more emails. Real retention is decided by acquisition quality, first product experience, and post-purchase journey — before the second email is ever sent.</p>
+          <p class="blog-card__excerpt">Most brands think retention means more emails. Real retention is decided by acquisition quality, first product experience, and post-purchase journey.</p>
           <div class="blog-card__meta">
             <span>March 2025</span>
             <div class="blog-card__meta-divider"></div>
             <span>10 min read</span>
-          </div>
-          <span class="blog-card__read-more">Read article &rarr;</span>
-        </a>
-
-        <!-- ── Shopify Conversion ── -->
-        <a href="shopify-conversion-potential.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">CRO</span>
-          <h2 class="blog-card__title">Why Most Shopify Stores Convert Below Their Potential</h2>
-          <p class="blog-card__excerpt">CRO isn't about button colors. It's about reducing decision friction across five layers — from discovery to commitment. Most brands optimize elements instead of flow.</p>
-          <div class="blog-card__meta">
-            <span>March 2025</span>
-            <div class="blog-card__meta-divider"></div>
-            <span>10 min read</span>
-          </div>
-          <span class="blog-card__read-more">Read article &rarr;</span>
-        </a>
-
-        <!-- ── Blended LTV ── -->
-        <a href="blended-ltv-most-dangerous-metric.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Unit Economics</span>
-          <h2 class="blog-card__title">Blended LTV Is the Most Dangerous Metric in Your Business</h2>
-          <p class="blog-card__excerpt">Blended LTV hides massive cohort differences and leads to dangerously high CAC targets. Averages hide fragility. Cohorts reveal reality.</p>
-          <div class="blog-card__meta">
-            <span>March 2025</span>
-            <div class="blog-card__meta-divider"></div>
-            <span>10 min read</span>
-          </div>
-          <span class="blog-card__read-more">Read article &rarr;</span>
-        </a>
-
-        <!-- ── Post-Purchase Profit Engine ── -->
-        <a href="post-purchase-profit-engine.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Lifecycle</span>
-          <h2 class="blog-card__title">The Post-Purchase Profit Engine</h2>
-          <p class="blog-card__excerpt">The highest-ROI growth lever in ecommerce is post-purchase monetization. Most brands focus on acquisition and checkout — but ignore the moment immediately after purchase.</p>
-          <div class="blog-card__meta">
-            <span>March 2025</span>
-            <div class="blog-card__meta-divider"></div>
-            <span>9 min read</span>
           </div>
           <span class="blog-card__read-more">Read article &rarr;</span>
         </a>
 
         <!-- ── Creative Supply Chain ── -->
-        <a href="creative-supply-chain.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Creative</span>
+        <a href="creative-supply-chain.html" class="blog-card">
+          <span class="blog-card__category">Acquisition</span>
           <h2 class="blog-card__title">The Creative Supply Chain: Why Modern Growth Teams Operate Like Manufacturers</h2>
           <p class="blog-card__excerpt">Creative is no longer a marketing asset. It is a production pipeline. Quantity, quality, diversity — and the metrics that tie them together.</p>
           <div class="blog-card__meta">
@@ -153,8 +154,99 @@
           <span class="blog-card__read-more">Read article &rarr;</span>
         </a>
 
+        <!-- ── Blended LTV ── -->
+        <a href="blended-ltv-most-dangerous-metric.html" class="blog-card">
+          <span class="blog-card__category">Measurement</span>
+          <h2 class="blog-card__title">Blended LTV Is the Most Dangerous Metric in Your Business</h2>
+          <p class="blog-card__excerpt">Blended LTV hides massive cohort differences and leads to dangerously high CAC targets. Averages hide fragility. Cohorts reveal reality.</p>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>10 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       PLAYBOOKS & TEMPLATES SECTION
+       ════════════════════════════════════════════════════════ -->
+  <section class="section index-playbooks">
+    <div class="container">
+      <div class="index-playbooks__header" data-animate="fade-up">
+        <p class="eyebrow">Playbooks &amp; Templates</p>
+        <h2 class="index-section__title">Operator tools you can use today.</h2>
+        <p class="index-section__desc">Free calculators and premium dashboards built from real programs. No login required for free tools — create a free account to unlock premium resources.</p>
+      </div>
+
+      <div class="playbooks-grid" data-animate="fade-up" data-animate-stagger>
+
+        <!-- Health Check (Free) -->
+        <a href="../the-index/health-check.html" class="playbook-card">
+          <span class="playbook-card__badge playbook-card__badge--free">Free &middot; Calculator</span>
+          <h3 class="playbook-card__title">DTC Health Check</h3>
+          <p class="playbook-card__desc">Five inputs, six metrics, one operator read. Instant snapshot of your brand's unit economics and growth health.</p>
+          <span class="playbook-card__cta">Open Health Check &rarr;</span>
+        </a>
+
+        <!-- Growth Dashboard (Gated) -->
+        <a href="../playbooks.html" class="playbook-card playbook-card--locked">
+          <div class="playbook-card__lock-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <span class="playbook-card__badge playbook-card__badge--gated">Premium &middot; Dashboard</span>
+          <h3 class="playbook-card__title">Refractive Growth Dashboard</h3>
+          <p class="playbook-card__desc">Monthly P&L, acquisition metrics, retention KPIs, and contribution margin — all in one place. Free account required.</p>
+          <span class="playbook-card__cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Create Free Account to Unlock &rarr;
+          </span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       ALL ARTICLES
+       ════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="index-section__title" data-animate="fade-up">All Articles</h2>
+
+      <div class="blog-grid" data-animate="fade-up" data-animate-stagger>
+
+        <!-- ── Post-Purchase Profit Engine ── -->
+        <a href="post-purchase-profit-engine.html" class="blog-card">
+          <span class="blog-card__category">Retention</span>
+          <h2 class="blog-card__title">The Post-Purchase Profit Engine</h2>
+          <p class="blog-card__excerpt">The highest-ROI growth lever in ecommerce is post-purchase monetization. Most brands focus on acquisition and checkout — but ignore the moment immediately after purchase.</p>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>9 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+
+        <!-- ── Shopify Conversion ── -->
+        <a href="shopify-conversion-potential.html" class="blog-card">
+          <span class="blog-card__category">Conversion</span>
+          <h2 class="blog-card__title">Why Most Shopify Stores Convert Below Their Potential</h2>
+          <p class="blog-card__excerpt">CRO isn't about button colors. It's about reducing decision friction across five layers — from discovery to commitment.</p>
+          <div class="blog-card__meta">
+            <span>March 2025</span>
+            <div class="blog-card__meta-divider"></div>
+            <span>10 min read</span>
+          </div>
+          <span class="blog-card__read-more">Read article &rarr;</span>
+        </a>
+
         <!-- ── Loyalty Programs ── -->
-        <a href="loyalty-programs-dont-create-loyalty.html" class="blog-card" data-animate="fade-up">
+        <a href="loyalty-programs-dont-create-loyalty.html" class="blog-card">
           <span class="blog-card__category">Retention</span>
           <h2 class="blog-card__title">Loyalty Programs Don't Create Loyalty</h2>
           <p class="blog-card__excerpt">Most loyalty programs are discount systems with better branding. True loyalty comes from product experience, community, and identity — not points.</p>
@@ -167,8 +259,8 @@
         </a>
 
         <!-- ── Stop Day-Trading ── -->
-        <a href="stop-day-trading-your-ad-account.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Media Buying</span>
+        <a href="stop-day-trading-your-ad-account.html" class="blog-card">
+          <span class="blog-card__category">Acquisition</span>
           <h2 class="blog-card__title">Stop Day-Trading Your Ad Account</h2>
           <p class="blog-card__excerpt">Daily optimization decisions create volatility and destroy learning signals. Here's the weekly operating cadence that actually scales.</p>
           <div class="blog-card__meta">
@@ -179,19 +271,9 @@
           <span class="blog-card__read-more">Read article &rarr;</span>
         </a>
 
-        <!-- ── Newsletter CTA (mid-page) ── -->
-        <div class="blog-newsletter" data-animate="fade-up">
-          <h3 class="blog-newsletter__title">Get frameworks, not fluff.</h3>
-          <p class="blog-newsletter__desc">Operator-level marketing insights delivered to your inbox.</p>
-          <form class="blog-newsletter__form">
-            <input type="email" placeholder="Enter your email" class="form-input" autocomplete="email">
-            <button type="submit" class="btn btn--primary">Subscribe</button>
-          </form>
-        </div>
-
         <!-- ── SMS Strategy ── -->
-        <a href="sms-not-emails-cousin.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Lifecycle</span>
+        <a href="sms-not-emails-cousin.html" class="blog-card">
+          <span class="blog-card__category">Retention</span>
           <h2 class="blog-card__title">SMS Isn't Email's Faster Cousin — It's a Different Channel Entirely</h2>
           <p class="blog-card__excerpt">Most brands treat SMS like compressed email. That's why unsubscribe rates explode. SMS works when it feels like conversation, not campaign.</p>
           <div class="blog-card__meta">
@@ -203,8 +285,8 @@
         </a>
 
         <!-- ── One Campaign ── -->
-        <a href="why-most-meta-accounts-should-only-have-one-campaign.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Meta Ads</span>
+        <a href="why-most-meta-accounts-should-only-have-one-campaign.html" class="blog-card">
+          <span class="blog-card__category">Acquisition</span>
           <h2 class="blog-card__title">Why Most Meta Accounts Should Only Have One Campaign</h2>
           <p class="blog-card__excerpt">Fragmented campaign structures destroy learning signals and prevent scale. Consolidation creates learning velocity.</p>
           <div class="blog-card__meta">
@@ -216,7 +298,7 @@
         </a>
 
         <!-- ── Shopify Infrastructure ── -->
-        <a href="shopify-infrastructure-scale.html" class="blog-card" data-animate="fade-up">
+        <a href="shopify-infrastructure-scale.html" class="blog-card">
           <span class="blog-card__category">Infrastructure</span>
           <h2 class="blog-card__title">The Shopify Infrastructure That Separates 7-Figure Brands from 9-Figure Brands</h2>
           <p class="blog-card__excerpt">Growth eventually stops being a marketing problem and becomes a systems problem. Your tech stack determines your scale ceiling.</p>
@@ -229,7 +311,7 @@
         </a>
 
         <!-- ── Tracking Maturity Ladder ── -->
-        <a href="tracking-maturity-ladder.html" class="blog-card" data-animate="fade-up">
+        <a href="tracking-maturity-ladder.html" class="blog-card">
           <span class="blog-card__category">Measurement</span>
           <h2 class="blog-card__title">The Tracking Maturity Ladder</h2>
           <p class="blog-card__excerpt">Most brands stop at server-side tracking. Real optimization starts with predictive signals. Your tracking maturity determines how well algorithms learn.</p>
@@ -242,8 +324,8 @@
         </a>
 
         <!-- ── Paid Media Portfolio ── -->
-        <a href="paid-media-portfolio-mindset.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Strategy</span>
+        <a href="paid-media-portfolio-mindset.html" class="blog-card">
+          <span class="blog-card__category">Acquisition</span>
           <h2 class="blog-card__title">The Paid Media Portfolio Mindset</h2>
           <p class="blog-card__excerpt">Media buying is portfolio allocation, not channel management. Great marketers allocate capital like investors.</p>
           <div class="blog-card__meta">
@@ -255,8 +337,8 @@
         </a>
 
         <!-- ── Meta Is a Media Bank ── -->
-        <a href="meta-is-a-media-bank.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Meta Ads</span>
+        <a href="meta-is-a-media-bank.html" class="blog-card">
+          <span class="blog-card__category">Acquisition</span>
           <h2 class="blog-card__title">Meta Is a Media Bank</h2>
           <p class="blog-card__excerpt">Ad platforms reward inputs, not budgets. Your scale ceiling is determined by creative inputs, not spend.</p>
           <div class="blog-card__meta">
@@ -268,8 +350,8 @@
         </a>
 
         <!-- ── Branded Search KPI ── -->
-        <a href="branded-search-real-kpi.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Brand</span>
+        <a href="branded-search-real-kpi.html" class="blog-card">
+          <span class="blog-card__category">Measurement</span>
           <h2 class="blog-card__title">Why Your Brand's Real KPI Is Branded Search</h2>
           <p class="blog-card__excerpt">Branded search volume is one of the clearest leading indicators of brand strength. Raising the base matters more than spiking revenue.</p>
           <div class="blog-card__meta">
@@ -281,8 +363,8 @@
         </a>
 
         <!-- ── AI Discovery ── -->
-        <a href="future-of-commerce-ai-discovery.html" class="blog-card" data-animate="fade-up">
-          <span class="blog-card__category">Strategy</span>
+        <a href="future-of-commerce-ai-discovery.html" class="blog-card">
+          <span class="blog-card__category">Infrastructure</span>
           <h2 class="blog-card__title">The Future of Commerce: AI Discovery vs Traditional Marketing</h2>
           <p class="blog-card__excerpt">AI-driven discovery will change where demand begins, but traditional digital media will still drive it. The future is AI + marketing systems.</p>
           <div class="blog-card__meta">
@@ -293,16 +375,23 @@
           <span class="blog-card__read-more">Read article &rarr;</span>
         </a>
 
-        <!-- ── Newsletter CTA (bottom) ── -->
-        <div class="blog-newsletter" data-animate="fade-up">
-          <h3 class="blog-newsletter__title">Get frameworks, not fluff.</h3>
-          <p class="blog-newsletter__desc">Operator-level marketing insights delivered to your inbox.</p>
-          <form class="blog-newsletter__form">
-            <input type="email" placeholder="Enter your email" class="form-input" autocomplete="email">
-            <button type="submit" class="btn btn--primary">Subscribe</button>
-          </form>
-        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ════════════════════════════════════════════════════════
+       NEWSLETTER CTA
+       ════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="container container--narrow">
+      <div class="blog-newsletter" data-animate="fade-up">
+        <h3 class="blog-newsletter__title">Join The Refractive Index</h3>
+        <p class="blog-newsletter__desc">A newsletter for founder-operators who want the real story behind what&rsquo;s working in paid, CRO, retention, and measurement. Written by operators who run these programs for real brands, right now.</p>
+        <p class="blog-newsletter__tagline">Get frameworks, not fluff.</p>
+        <form class="blog-newsletter__form">
+          <input type="email" placeholder="Enter your email" class="form-input" autocomplete="email">
+          <button type="submit" class="btn btn--primary">Subscribe</button>
+        </form>
       </div>
     </div>
   </section>
@@ -343,9 +432,9 @@
         </div>
 
         <div class="footer__col">
-          <h4 class="footer__col-title">Insights</h4>
-          <a href="index.html">Blog</a>
-          <a href="#">Playbooks &amp; Templates</a>
+          <h4 class="footer__col-title">The Index</h4>
+          <a href="index.html">The Refractive Index</a>
+          <a href="../playbooks.html">Playbooks &amp; Templates</a>
         </div>
 
         <div class="footer__col">
@@ -388,12 +477,23 @@
        ════════════════════════════════════════════════════════ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/auth.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/animations.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
       initNav();
       initAnimations();
+
+      // Auth bar logic
+      if (window.RefractiveAuth && RefractiveAuth.isAuthenticated()) {
+        document.getElementById('auth-logged-out').style.display = 'none';
+        document.getElementById('auth-logged-in').style.display = '';
+        var name = RefractiveAuth.getDisplayName();
+        if (name) {
+          document.getElementById('auth-welcome').textContent = 'Welcome back, ' + name;
+        }
+      }
     });
   </script>
 
