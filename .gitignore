@@ -6,3 +6,5 @@ docs/videos/*.mov
 docs/videos/Kane_Shop_Video_2.6.25.mp4
 docs/videos/1007.mp4
 docs/videos/invasion.mp4
+
+node_modules/

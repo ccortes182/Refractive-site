@@ -136,6 +136,33 @@
   flex-shrink: 0;
 }
 
+.team-card__avatar-img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.team-card--founder .team-card__avatar-img {
+  width: 80px;
+  height: 80px;
+}
+
+.team-card__linkedin {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-blue);
+  text-decoration: none;
+  transition: text-decoration var(--duration-fast);
+}
+
+.team-card__linkedin:hover {
+  text-decoration: underline;
+}
+
 .team-card__avatar-placeholder {
   width: 64px;
   height: 64px;
