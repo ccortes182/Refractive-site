@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Scorecard — Refractive</title>
+  <meta name="description" content="Audit your creative production velocity, coverage, and fatigue risk in 60 seconds. Free DTC creative health tool.">
+
+  <link rel="icon" type="image/png" href="../images/Social Icon.png">
+  <link rel="apple-touch-icon" href="../images/webclip.png">
+  <link rel="stylesheet" href="https://use.typekit.net/egc1hmh.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/tools.css">
+</head>
+<body>
+
+  <div class="bottom-blur"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo" id="logo">
+        <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon">
+        <img src="../images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text">
+      </a>
+      <div class="nav__links">
+        <a href="../how-we-work.html" class="nav__link">How We Work</a>
+        <a href="../solutions.html" class="nav__link">Solutions</a>
+        <a href="../illuminate.html" class="nav__link">Illuminate</a>
+        <a href="../blog/index.html" class="nav__link">The Index</a>
+        <a href="../playbooks.html" class="nav__link">Playbooks</a>
+        <a href="../about.html" class="nav__link">About</a>
+        <a href="../index.html#contact" class="btn btn--primary btn--sm">Book a Growth Audit</a>
+      </div>
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile-overlay" id="mobile-nav">
+    <a href="../how-we-work.html" class="nav__link">How We Work</a>
+    <a href="../solutions.html" class="nav__link">Solutions</a>
+    <a href="../illuminate.html" class="nav__link">Illuminate</a>
+    <a href="../blog/index.html" class="nav__link">The Index</a>
+    <a href="../playbooks.html" class="nav__link">Playbooks</a>
+    <a href="../about.html" class="nav__link">About</a>
+    <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="section hc-hero">
+    <div class="container container--narrow">
+      <p class="eyebrow">The Refractive Index</p>
+      <h1>Creative Scorecard</h1>
+      <p class="hc-hero__subtitle">Audit your creative production health in 60 seconds.<br>No sign-up. No fluff.</p>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section class="section">
+    <div class="container container--narrow">
+
+      <div class="hc-inputs">
+        <div class="form-group">
+          <label class="form-label" for="cs-spend">Monthly Ad Spend</label>
+          <input type="text" id="cs-spend" class="form-input" placeholder="e.g. 50,000" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cs-creatives">New Creatives / Month</label>
+          <input type="text" id="cs-creatives" class="form-input" placeholder="e.g. 12" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cs-channels">Active Channels</label>
+          <input type="text" id="cs-channels" class="form-input" placeholder="e.g. 3" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cs-lifespan">Avg Creative Lifespan (days)</label>
+          <input type="text" id="cs-lifespan" class="form-input" placeholder="e.g. 14" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cs-winrate">Winning Creative %</label>
+          <input type="text" id="cs-winrate" class="form-input" placeholder="e.g. 25" inputmode="numeric">
+        </div>
+      </div>
+
+      <p class="hc-empty" id="cs-empty">Enter your numbers above to see your creative health score.</p>
+
+      <div class="hc-results" id="cs-results" style="display:none;">
+        <div class="hc-metric">
+          <span class="hc-metric__label">Creative Velocity</span>
+          <span class="hc-metric__value" id="val-velocity">--</span>
+          <span class="hc-metric__badge" id="badge-velocity"></span>
+          <span class="hc-metric__benchmark">You need at least 8 new creatives per channel per month to maintain learning velocity. Below 4 and algorithms can't optimize.</span>
+        </div>
+        <div class="hc-metric">
+          <span class="hc-metric__label">Spend per Creative</span>
+          <span class="hc-metric__value" id="val-spc">--</span>
+          <span class="hc-metric__badge" id="badge-spc"></span>
+          <span class="hc-metric__benchmark">If you're spending more than $5K per creative, you're over-concentrating risk. One fatigue event tanks your whole account.</span>
+        </div>
+        <div class="hc-metric">
+          <span class="hc-metric__label">Creative Coverage</span>
+          <span class="hc-metric__value" id="val-coverage">--</span>
+          <span class="hc-metric__badge" id="badge-coverage"></span>
+          <span class="hc-metric__benchmark">Coverage measures what % of the month has fresh creative running. Below 100% means you're running on stale ads part of the time.</span>
+        </div>
+        <div class="hc-metric">
+          <span class="hc-metric__label">Win Rate</span>
+          <span class="hc-metric__value" id="val-winrate">--</span>
+          <span class="hc-metric__badge" id="badge-winrate"></span>
+          <span class="hc-metric__benchmark">A 25-30% win rate is normal. Below 15% usually means briefs are misaligned with audience, not that production quality is low.</span>
+        </div>
+        <div class="hc-metric">
+          <span class="hc-metric__label">Fatigue Risk</span>
+          <span class="hc-metric__value" id="val-fatigue">--</span>
+          <span class="hc-metric__badge" id="badge-fatigue"></span>
+          <span class="hc-metric__benchmark">High fatigue risk means your creative pipeline can't keep up with spend. CPAs will rise and ROAS will decay without more production volume.</span>
+        </div>
+      </div>
+
+      <div class="hc-read" id="cs-read"></div>
+
+      <div class="hc-cta">
+        <p>Want to build a real creative supply chain?</p>
+        <p class="hc-cta__desc">Read the full framework on how modern growth teams operate creative production like a manufacturing pipeline.</p>
+        <div style="display:flex; gap:var(--space-sm); justify-content:center; flex-wrap:wrap;">
+          <a href="../blog/creative-supply-chain.html" class="btn btn--outline">Read the Framework &rarr;</a>
+          <a href="../playbooks.html" class="btn btn--primary">Explore All Tools &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="../index.html"><img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo"></a>
+          <p class="footer__heading">The Refractive Index</p>
+          <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
+          <form class="footer__newsletter">
+            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+          </form>
+          <p class="footer__privacy-note">We care about your data in our <a href="#">privacy policy</a>.</p>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Solutions</h4>
+          <a href="../solutions.html#foundation">Brand Strategy</a>
+          <a href="../solutions.html#growth">Performance &amp; Acquisition</a>
+          <a href="../solutions.html#experience">Experience &amp; Conversion</a>
+          <a href="../solutions.html#retention">Retention &amp; Lifecycle</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Illuminate</h4>
+          <a href="../illuminate.html#attribution">Attribution</a>
+          <a href="../illuminate.html#incrementality">Incrementality</a>
+          <a href="../illuminate.html#features">Creative Performance</a>
+          <a href="../illuminate.html#ai">AI Enhanced</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">The Index</h4>
+          <a href="../blog/index.html">The Refractive Index</a>
+          <a href="../playbooks.html">Playbooks &amp; Templates</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">About</h4>
+          <a href="../about.html#team">Team</a>
+          <a href="../about.html#careers">Careers</a>
+          <a href="../index.html#contact">Contact</a>
+          <a href="../investor.html">Investor Relations</a>
+          <a href="../portal.html">Client Portal</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2025 Refractive. All rights reserved.</span>
+        <div class="footer__bottom-right">
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 17.9895 4.3882 22.954 10.125 23.8542V15.4688H7.07812V12H10.125V9.35625C10.125 6.34875 11.9166 4.6875 14.6576 4.6875C15.9701 4.6875 17.3438 4.92188V7.875H15.8306C14.34 7.875 13.875 8.80008 13.875 9.75V12H17.2031L16.6711 15.4688H13.875V23.8542C19.6118 22.954 24 17.9895 24 12Z"/></svg></a>
+            <a href="#" class="footer__social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="#" class="footer__social-link" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="https://linkedin.com/company/refractive-co" class="footer__social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.223 0H1.772C.792 0 0 .773 0 1.73v20.536C0 23.222.792 24 1.772 24h20.451C23.203 24 24 23.222 24 22.27V1.73C24 .773 23.203 0 22.223 0zM7.12 20.452H3.558V8.995H7.12v11.457zM5.339 7.434a2.064 2.064 0 110-4.125 2.064 2.064 0 010 4.125zM20.452 20.452h-3.556v-5.569c0-1.328-.024-3.037-1.852-3.037-1.851 0-2.136 1.445-2.136 2.939v5.667H9.351V8.995h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg></a>
+          </div>
+          <div class="footer__legal">
+            <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/creative-scorecard.js"></script>
+
+</body>
+</html>

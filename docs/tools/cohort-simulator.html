@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retention Cohort Simulator — Refractive</title>
+  <meta name="description" content="Model LTV trajectories by cohort, find your CAC payback point, and see where retention breaks down.">
+
+  <link rel="icon" type="image/png" href="../images/Social Icon.png">
+  <link rel="apple-touch-icon" href="../images/webclip.png">
+  <link rel="stylesheet" href="https://use.typekit.net/egc1hmh.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/tools.css">
+</head>
+<body>
+
+  <!-- Auth guard -->
+  <script src="../js/auth.js"></script>
+  <script>
+    if (!window.RefractiveAuth || !RefractiveAuth.checkAccess('cohort-simulator')) {
+      window.location.href = '../playbooks.html';
+    }
+  </script>
+
+  <div class="bottom-blur"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="../index.html" class="nav__logo" id="logo">
+        <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon">
+        <img src="../images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text">
+      </a>
+      <div class="nav__links">
+        <a href="../how-we-work.html" class="nav__link">How We Work</a>
+        <a href="../solutions.html" class="nav__link">Solutions</a>
+        <a href="../illuminate.html" class="nav__link">Illuminate</a>
+        <a href="../blog/index.html" class="nav__link">The Index</a>
+        <a href="../playbooks.html" class="nav__link">Playbooks</a>
+        <a href="../about.html" class="nav__link">About</a>
+        <a href="../index.html#contact" class="btn btn--primary btn--sm">Book a Growth Audit</a>
+      </div>
+      <button class="nav__hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile-overlay" id="mobile-nav">
+    <a href="../how-we-work.html" class="nav__link">How We Work</a>
+    <a href="../solutions.html" class="nav__link">Solutions</a>
+    <a href="../illuminate.html" class="nav__link">Illuminate</a>
+    <a href="../blog/index.html" class="nav__link">The Index</a>
+    <a href="../playbooks.html" class="nav__link">Playbooks</a>
+    <a href="../about.html" class="nav__link">About</a>
+    <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+  </div>
+
+  <!-- Mobile Banner -->
+  <div class="dash-mobile-banner">
+    This simulator is best experienced on desktop. Scroll horizontally for all months.
+  </div>
+
+  <!-- Header -->
+  <section class="section dash-toolbar">
+    <div class="container container--wide">
+      <div class="dash-toolbar__left">
+        <h1 class="dash-toolbar__title">Retention Cohort Simulator</h1>
+        <span class="dash-toolbar__badge">Powered by Illuminate</span>
+      </div>
+      <div class="dash-toolbar__right">
+        <button class="btn btn--outline btn--sm" id="clear-data">Clear Data</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary Cards -->
+  <section class="section section--flush">
+    <div class="container container--wide">
+      <div class="cohort-summary">
+        <div class="cohort-summary__card">
+          <span class="cohort-summary__label">12-Month LTV</span>
+          <span class="cohort-summary__value" id="sum-ltv">$0</span>
+        </div>
+        <div class="cohort-summary__card">
+          <span class="cohort-summary__label">LTV:CAC</span>
+          <span class="cohort-summary__value" id="sum-ltv-cac">0x</span>
+        </div>
+        <div class="cohort-summary__card">
+          <span class="cohort-summary__label">Payback Month</span>
+          <span class="cohort-summary__value" id="sum-payback">--</span>
+        </div>
+        <div class="cohort-summary__card">
+          <span class="cohort-summary__label">12-Mo Repeat Rate</span>
+          <span class="cohort-summary__value" id="sum-repeat">0%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Acquisition Inputs -->
+  <section class="section">
+    <div class="container container--wide">
+      <h2 class="dash-section__title">Acquisition Inputs</h2>
+      <div class="cohort-inputs__grid">
+        <div class="form-group">
+          <label class="form-label" for="coh-cac">Blended CAC</label>
+          <input type="text" id="coh-cac" class="form-input" placeholder="e.g. 65" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="coh-aov">First Purchase AOV</label>
+          <input type="text" id="coh-aov" class="form-input" placeholder="e.g. 95" inputmode="numeric">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="coh-margin">Gross Margin %</label>
+          <input type="text" id="coh-margin" class="form-input" placeholder="e.g. 58" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LTV Chart -->
+  <section class="section section--flush">
+    <div class="container container--wide">
+      <div class="cohort-chart">
+        <div class="cohort-chart__title">Cumulative LTV vs CAC</div>
+        <div class="cohort-chart__bars" id="ltv-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cohort Behavior Table -->
+  <section class="section">
+    <div class="container container--wide">
+      <h2 class="dash-section__title">Cohort Behavior (per 1,000 customers)</h2>
+      <div class="cohort-table-wrap">
+        <table class="cohort-table" id="cohort-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>M5</th><th>M6</th>
+              <th>M7</th><th>M8</th><th>M9</th><th>M10</th><th>M11</th><th>M12</th>
+            </tr>
+          </thead>
+          <tbody id="cohort-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Operator Read -->
+  <section class="section section--flush">
+    <div class="container container--wide">
+      <div class="hc-read" id="cohort-read"></div>
+    </div>
+  </section>
+
+  <!-- Benchmark Reference -->
+  <section class="section">
+    <div class="container container--wide">
+      <div class="dash-benchmarks">
+        <h3 class="dash-benchmarks__title">Benchmark Reference</h3>
+        <p class="dash-benchmarks__subtitle">Refractive operator benchmarks — based on DTC brands doing $1M–$50M ARR.</p>
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Healthy</th><th>Watch</th><th>Critical</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LTV:CAC</td><td>&ge; 3.0x</td><td>2.0x &ndash; 2.9x</td><td>&lt; 2.0x</td></tr>
+            <tr><td>Payback Period</td><td>&le; 3 months</td><td>4 &ndash; 6 months</td><td>&gt; 6 months</td></tr>
+            <tr><td>12-Month Repeat Rate</td><td>&ge; 35%</td><td>20% &ndash; 34%</td><td>&lt; 20%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="../index.html"><img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo"></a>
+          <p class="footer__heading">The Refractive Index</p>
+          <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
+          <form class="footer__newsletter">
+            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
+          </form>
+          <p class="footer__privacy-note">We care about your data in our <a href="#">privacy policy</a>.</p>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Solutions</h4>
+          <a href="../solutions.html#foundation">Brand Strategy</a>
+          <a href="../solutions.html#growth">Performance &amp; Acquisition</a>
+          <a href="../solutions.html#experience">Experience &amp; Conversion</a>
+          <a href="../solutions.html#retention">Retention &amp; Lifecycle</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">Illuminate</h4>
+          <a href="../illuminate.html#attribution">Attribution</a>
+          <a href="../illuminate.html#incrementality">Incrementality</a>
+          <a href="../illuminate.html#features">Creative Performance</a>
+          <a href="../illuminate.html#ai">AI Enhanced</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">The Index</h4>
+          <a href="../blog/index.html">The Refractive Index</a>
+          <a href="../playbooks.html">Playbooks &amp; Templates</a>
+        </div>
+        <div class="footer__col">
+          <h4 class="footer__col-title">About</h4>
+          <a href="../about.html#team">Team</a>
+          <a href="../about.html#careers">Careers</a>
+          <a href="../index.html#contact">Contact</a>
+          <a href="../investor.html">Investor Relations</a>
+          <a href="../portal.html">Client Portal</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2025 Refractive. All rights reserved.</span>
+        <div class="footer__bottom-right">
+          <div class="footer__social">
+            <a href="#" class="footer__social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 17.9895 4.3882 22.954 10.125 23.8542V15.4688H7.07812V12H10.125V9.35625C10.125 6.34875 11.9166 4.6875 14.6576 4.6875C15.9701 4.6875 17.3438 4.92188V7.875H15.8306C14.34 7.875 13.875 8.80008 13.875 9.75V12H17.2031L16.6711 15.4688H13.875V23.8542C19.6118 22.954 24 17.9895 24 12Z"/></svg></a>
+            <a href="#" class="footer__social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="#" class="footer__social-link" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="https://linkedin.com/company/refractive-co" class="footer__social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.223 0H1.772C.792 0 0 .773 0 1.73v20.536C0 23.222.792 24 1.772 24h20.451C23.203 24 24 23.222 24 22.27V1.73C24 .773 23.203 0 22.223 0zM7.12 20.452H3.558V8.995H7.12v11.457zM5.339 7.434a2.064 2.064 0 110-4.125 2.064 2.064 0 010 4.125zM20.452 20.452h-3.556v-5.569c0-1.328-.024-3.037-1.852-3.037-1.851 0-2.136 1.445-2.136 2.939v5.667H9.351V8.995h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z"/></svg></a>
+          </div>
+          <div class="footer__legal">
+            <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/cohort-simulator.js"></script>
+
+</body>
+</html>

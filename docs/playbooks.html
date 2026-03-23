@@ -96,18 +96,61 @@
           <span class="playbook-card__cta">Open Health Check &rarr;</span>
         </a>
 
-        <!-- Card 2: Growth Dashboard (Gated) -->
-        <div class="playbook-card playbook-card--locked" id="dashboard-card" data-resource="growth-dashboard" data-href="tools/growth-dashboard.html">
-          <div class="playbook-card__lock-icon" id="dashboard-lock">
+        <!-- Card 2: Creative Scorecard (Free) -->
+        <a href="the-index/creative-scorecard.html" class="playbook-card">
+          <span class="playbook-card__badge playbook-card__badge--free">Free &middot; Scorecard</span>
+          <h3 class="playbook-card__title">Creative Scorecard</h3>
+          <p class="playbook-card__desc">Audit your creative production velocity, coverage, and fatigue risk in 60 seconds.</p>
+          <span class="playbook-card__cta">Open Scorecard &rarr;</span>
+        </a>
+
+        <!-- Card 3: Growth Dashboard (Gated) -->
+        <div class="playbook-card playbook-card--locked gated-card" data-resource="growth-dashboard" data-href="tools/growth-dashboard.html">
+          <div class="playbook-card__lock-icon gated-lock">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <span class="playbook-card__badge playbook-card__badge--gated" id="dashboard-badge">Premium &middot; Dashboard</span>
+          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Premium &middot; Dashboard</span>
           <h3 class="playbook-card__title">Refractive Growth Dashboard</h3>
           <p class="playbook-card__desc">Monthly P&L, acquisition metrics, retention KPIs, and contribution margin — all in one place. Includes operator benchmarks for every metric.</p>
-          <span class="playbook-card__cta" id="dashboard-cta">
+          <span class="playbook-card__cta gated-cta">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Enter Email to Unlock &rarr;
           </span>
+        </div>
+
+        <!-- Card 4: Cohort Simulator (Gated) -->
+        <div class="playbook-card playbook-card--locked gated-card" data-resource="cohort-simulator" data-href="tools/cohort-simulator.html">
+          <div class="playbook-card__lock-icon gated-lock">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Premium &middot; Simulator</span>
+          <h3 class="playbook-card__title">Retention Cohort Simulator</h3>
+          <p class="playbook-card__desc">Model LTV by cohort, find your CAC payback point, and see where retention breaks down.</p>
+          <span class="playbook-card__cta gated-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Enter Email to Unlock &rarr;
+          </span>
+        </div>
+
+        <!-- Coming Soon: CAC Payback Calculator -->
+        <div class="playbook-card playbook-card--coming-soon">
+          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
+          <h3 class="playbook-card__title">CAC Payback Calculator</h3>
+          <p class="playbook-card__desc">Time-to-payback curves and unit economics roadmap. See how AOV and retention decisions affect your payback timeline.</p>
+        </div>
+
+        <!-- Coming Soon: Media Mix Allocator -->
+        <div class="playbook-card playbook-card--coming-soon">
+          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
+          <h3 class="playbook-card__title">Media Mix Allocator</h3>
+          <p class="playbook-card__desc">Optimal channel budget allocation based on marginal return, with what-if sensitivity analysis.</p>
+        </div>
+
+        <!-- Coming Soon: Attribution Impact Calculator -->
+        <div class="playbook-card playbook-card--coming-soon">
+          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
+          <h3 class="playbook-card__title">Attribution Impact Calculator</h3>
+          <p class="playbook-card__desc">See the revenue impact of switching attribution models. Ties directly to Illuminate incrementality data.</p>
         </div>
 
       </div>
@@ -234,27 +277,8 @@
   <script src="js/nav.js"></script>
   <script src="js/animations.js"></script>
   <script>
-    // Auth bar logic
     (function() {
       document.addEventListener('DOMContentLoaded', function() {
-        if (window.RefractiveAuth && RefractiveAuth.isAuthenticated()) {
-          var loggedOut = document.getElementById('auth-logged-out');
-          var loggedIn = document.getElementById('auth-logged-in');
-          if (loggedOut) loggedOut.style.display = 'none';
-          if (loggedIn) loggedIn.style.display = '';
-          var name = RefractiveAuth.getDisplayName();
-          var welcomeEl = document.getElementById('auth-welcome');
-          if (name && welcomeEl) welcomeEl.textContent = 'Welcome back, ' + name;
-        }
-      });
-    })();
-
-    // Playbooks page — gate logic
-    (function() {
-      document.addEventListener('DOMContentLoaded', function() {
-        var card      = document.getElementById('dashboard-card');
-        var badge     = document.getElementById('dashboard-badge');
-        var cta       = document.getElementById('dashboard-cta');
         var overlay   = document.getElementById('gate-overlay');
         var closeBtn  = document.getElementById('gate-close');
         var form      = document.getElementById('gate-form');
@@ -265,22 +289,41 @@
         var companyIn = document.getElementById('gate-company');
         var errorEl   = document.getElementById('gate-error');
         var submitBtn = document.getElementById('gate-submit');
+        var activeResource = null;
+        var activeHref = null;
 
-        if (!card || !overlay) return;
+        if (!overlay) return;
 
-        // Check if already unlocked
-        if (window.RefractiveAuth && RefractiveAuth.checkAccess('growth-dashboard')) {
-          unlockCard();
+        // Auth bar
+        if (window.RefractiveAuth && RefractiveAuth.isAuthenticated()) {
+          var loggedOut = document.getElementById('auth-logged-out');
+          var loggedIn = document.getElementById('auth-logged-in');
+          if (loggedOut) loggedOut.style.display = 'none';
+          if (loggedIn) loggedIn.style.display = '';
+          var name = RefractiveAuth.getDisplayName();
+          var welcomeEl = document.getElementById('auth-welcome');
+          if (name && welcomeEl) welcomeEl.textContent = 'Welcome back, ' + name;
         }
 
-        // Click locked card → show modal
-        card.addEventListener('click', function(e) {
-          e.stopPropagation();
-          if (RefractiveAuth.checkAccess('growth-dashboard')) {
-            window.location.href = card.dataset.href;
-          } else {
-            openModal();
+        // Check and unlock all gated cards that user already has access to
+        var gatedCards = document.querySelectorAll('.gated-card');
+        gatedCards.forEach(function(card) {
+          var resource = card.dataset.resource;
+          if (RefractiveAuth.checkAccess(resource)) {
+            unlockCard(card);
           }
+
+          // Click handler for each gated card
+          card.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (RefractiveAuth.checkAccess(resource)) {
+              window.location.href = card.dataset.href;
+            } else {
+              activeResource = resource;
+              activeHref = card.dataset.href;
+              openModal();
+            }
+          });
         });
 
         // Close modal
@@ -296,7 +339,7 @@
           if (e.key === 'Escape' && overlay.classList.contains('is-visible')) closeModal();
         });
 
-        // Form submit
+        // Form submit — grants access to whichever resource triggered the modal
         form.addEventListener('submit', function(e) {
           e.preventDefault();
           var first = firstIn.value.trim();
@@ -318,16 +361,16 @@
             lastName: last,
             jobTitle: titleIn.value.trim(),
             company: companyIn.value.trim()
-          }, 'growth-dashboard');
+          }, activeResource);
 
           setTimeout(function() {
-            window.location.href = card.dataset.href;
+            window.location.href = activeHref;
           }, 300);
         });
 
         function openModal() {
           overlay.classList.add('is-visible');
-          emailIn.focus();
+          firstIn.focus();
         }
 
         function closeModal() {
@@ -336,16 +379,22 @@
           form.reset();
           submitBtn.disabled = false;
           submitBtn.textContent = 'Unlock Dashboard \u2192';
+          activeResource = null;
+          activeHref = null;
         }
 
-        function unlockCard() {
+        function unlockCard(card) {
           card.classList.remove('playbook-card--locked');
           card.classList.add('playbook-card--unlocked');
-          badge.className = 'playbook-card__badge playbook-card__badge--unlocked';
-          badge.textContent = 'Unlocked \u00b7 Dashboard';
-          var lockIcon = document.getElementById('dashboard-lock');
+          var badge = card.querySelector('.gated-badge');
+          if (badge) {
+            badge.className = 'playbook-card__badge playbook-card__badge--unlocked';
+            badge.textContent = 'Unlocked';
+          }
+          var lockIcon = card.querySelector('.gated-lock');
           if (lockIcon) lockIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
-          cta.innerHTML = 'Open Dashboard \u2192';
+          var cta = card.querySelector('.gated-cta');
+          if (cta) cta.innerHTML = 'Open \u2192';
         }
       });
     })();
