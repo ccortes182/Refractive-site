@@ -23,6 +23,9 @@
   transition: transform var(--duration-normal) var(--ease-out),
               opacity var(--duration-normal) var(--ease-out);
   pointer-events: none;
+  margin-left: 3vw;
+  margin-right: 3vw;
+ 
 }
 
 .anchor-nav.is-visible {
@@ -32,7 +35,7 @@
 }
 
 .anchor-nav__inner {
-  max-width: var(--container-wide);
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--gutter);
   display: flex;
@@ -788,4 +791,9 @@
     padding: 0.625rem 0.625rem;
     font-size: 0.65rem;
   }
+ .anchor-nav {
+      margin-left: 0;
+  margin-right: 0;
+  }
+
 }

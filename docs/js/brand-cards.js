@@ -20,6 +20,16 @@ function initBrandCards() {
       video.play().catch(() => {
         // Silently handle autoplay restrictions
       });
+
+      // Animate stat counter on hover
+      const stat = card.querySelector('.brand-card__stat');
+      if (stat) {
+        const numEl = stat.querySelector('.brand-card__stat-number');
+        const target = parseInt(stat.dataset.statValue, 10);
+        if (numEl && target) {
+          animateCounter(numEl, target);
+        }
+      }
     });
 
     card.addEventListener('mouseleave', () => {
@@ -27,4 +37,25 @@ function initBrandCards() {
       video.currentTime = 0;
     });
   });
+}
+
+function animateCounter(el, target) {
+  const duration = 800;
+  const start = performance.now();
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease-out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current + '%';
+
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    }
+  }
+
+  el.textContent = '0%';
+  requestAnimationFrame(tick);
 }

@@ -333,7 +333,7 @@
   transform: translateX(-50%);
   width: 40px;
   height: 80px;
-  z-index: 3;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -485,6 +485,21 @@
   gap: var(--space-sm);
 }
 
+@media (min-width: 769px) {
+  .services-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .services-grid .service-card {
+    grid-column: span 2;
+  }
+
+  /* Center last 2 cards when there are 8 total (3n+2 pattern) */
+  .services-grid .service-card:nth-last-child(2):nth-child(3n + 1) {
+    grid-column: 2 / span 2;
+  }
+}
+
 /* ── FAQ Layout ── */
 .faq-list {
   max-width: var(--container-narrow);
@@ -508,6 +523,10 @@
   background-image: radial-gradient(circle at 100% 100%, #292831, #414046 87%, #4b4a4e);
   padding: 4rem 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.footer > .container {
+  max-width: var(--container-wide);
 }
 
 .footer__top {
@@ -541,7 +560,7 @@
 .footer__bottom {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.875rem;
@@ -607,6 +626,11 @@
   /* Timeline goes to left side on tablet — show all content stacked */
   .process-steps {
     padding-left: 2.5rem;
+    overflow: visible;
+  }
+
+  .process-step__dot {
+    box-shadow: 0 0 15px rgba(147, 83, 255, 0.3), 0 0 40px rgba(67, 169, 223, 0.08);
   }
 
   .process-timeline {
@@ -763,9 +787,9 @@
 
 @media (max-width: 479px) {
 
-  /* Brand grid single column */
+  /* Brand grid — 2 columns on small mobile */
   .brand-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /* Services grid single column */

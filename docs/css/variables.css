@@ -58,7 +58,7 @@
   --tracking-tight: -0.02em;
   --tracking-normal: 0;
   --tracking-wide: 0.08em;
-  --tracking-wider: 0.15em;
+  --tracking-wider: 0.35em;
 
   /* ── Spacing ── */
   --space-2xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
