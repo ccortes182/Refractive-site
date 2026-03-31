@@ -19,9 +19,10 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/tools.css">
   <link rel="stylesheet" href="../css/blog.css">
 </head>
-<body>
+<body class="has-auth-bar">
 
   <!-- ════════════════════════════════════════════════════════
        NAVIGATION
@@ -60,6 +61,20 @@
     <a href="../blog/index.html" class="nav__link">The Index</a>
     <a href="../about.html" class="nav__link">About</a>
     <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
+  </div>
+
+  <!-- Auth Bar -->
+  <div class="auth-bar" id="auth-bar">
+    <div class="container">
+      <div class="auth-bar__inner">
+        <div class="auth-bar__logged-out" id="auth-logged-out">
+          <span class="auth-bar__text">Create a free account to unlock premium tools and dashboards.</span>
+        </div>
+        <div class="auth-bar__logged-in" id="auth-logged-in" style="display:none;">
+          <span class="auth-bar__welcome" id="auth-welcome">Welcome back</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════════════════════════════
@@ -449,5 +464,6 @@
     });
   </script>
 
+  <script src="../js/auth.js"></script>
 </body>
 </html>

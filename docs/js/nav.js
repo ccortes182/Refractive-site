@@ -3,10 +3,14 @@
    ========================================================================== */
 
 function initNav() {
+  if (initNav._initialized) return;
+  initNav._initialized = true;
+
   const nav = document.getElementById('nav');
+  if (!nav) return;
   const hamburger = document.querySelector('.nav__hamburger');
   const mobileOverlay = document.getElementById('mobile-nav');
-  const mobileLinks = mobileOverlay.querySelectorAll('a');
+  const mobileLinks = mobileOverlay ? mobileOverlay.querySelectorAll('a') : [];
 
   // Scroll detection — add scrolled class for background
   let ticking = false;
@@ -30,6 +34,7 @@ function initNav() {
 
   // Mobile hamburger toggle
   function toggleMobileNav() {
+    if (!hamburger || !mobileOverlay) return;
     const isActive = hamburger.classList.toggle('is-active');
     mobileOverlay.classList.toggle('is-active');
     hamburger.setAttribute('aria-expanded', isActive);
@@ -37,13 +42,14 @@ function initNav() {
   }
 
   function closeMobileNav() {
+    if (!hamburger || !mobileOverlay) return;
     hamburger.classList.remove('is-active');
     mobileOverlay.classList.remove('is-active');
     hamburger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
-  hamburger.addEventListener('click', toggleMobileNav);
+  if (hamburger) hamburger.addEventListener('click', toggleMobileNav);
 
   // Close mobile nav on link click
   mobileLinks.forEach(link => {
@@ -52,7 +58,7 @@ function initNav() {
 
   // Close on escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileOverlay.classList.contains('is-active')) {
+    if (e.key === 'Escape' && mobileOverlay && mobileOverlay.classList.contains('is-active')) {
       closeMobileNav();
     }
   });
@@ -69,4 +75,11 @@ function initNav() {
       }
     });
   });
+}
+
+// Auto-initialize when DOM is ready (safe to call multiple times due to guard)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initNav);
+} else {
+  initNav();
 }

@@ -19,7 +19,7 @@
 
 /* Offset page content below both nav + auth bar */
 .has-auth-bar {
-  padding-top: 100px;
+  padding-top: 130px;
 }
 
 .auth-bar__inner {
@@ -154,7 +154,7 @@
 
 .hc-hero {
   min-height: auto;
-  padding-top: var(--space-lg);
+  padding-top: calc(80px + var(--space-lg));
   padding-bottom: var(--space-sm);
 }
 
