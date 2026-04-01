@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark theme (default) — matches Refractive site */
+  --bg-primary: #212429;
+  --bg-secondary: #1a1a1f;
+  --bg-card: rgba(20, 20, 24, 0.6);
+  --bg-card-solid: #171717;
+  --bg-card-hover: #1e1e24;
+  --bg-surface: #2a2a32;
+  --bg-table-stripe: rgba(255, 255, 255, 0.02);
+  --bg-nav: rgba(33, 36, 41, 0.92);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --accent-blue: #43a9df;
+  --accent-violet: #8e68ad;
+  --accent-cyan: #c2dcd4;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --tooltip-bg: rgba(20, 20, 24, 0.9);
+  --tooltip-border: rgba(255, 255, 255, 0.1);
+  --chart-grid: rgba(255, 255, 255, 0.06);
+  --chart-tick: rgba(255, 255, 255, 0.4);
+  --badge-positive-bg: rgba(52, 211, 153, 0.15);
+  --badge-positive-text: #34d399;
+  --badge-negative-bg: rgba(248, 113, 113, 0.15);
+  --badge-negative-text: #f87171;
+  --toggle-bg: rgba(255, 255, 255, 0.06);
+  --toggle-active-bg: rgba(67, 169, 223, 0.15);
+  --toggle-active-text: #43a9df;
+  --toggle-active-border: rgba(67, 169, 223, 0.3);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-solid: #ffffff;
+  --bg-card-hover: #f9fafb;
+  --bg-surface: #e2e8f0;
+  --bg-table-stripe: #f8fafc;
+  --bg-nav: rgba(255, 255, 255, 0.92);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --accent-blue: #2b8abf;
+  --accent-violet: #7c5a9b;
+  --accent-cyan: #0e7490;
+  --success: #059669;
+  --warning: #d97706;
+  --error: #dc2626;
+  --tooltip-bg: #ffffff;
+  --tooltip-border: #e2e8f0;
+  --chart-grid: #e2e8f0;
+  --chart-tick: #94a3b8;
+  --badge-positive-bg: #ecfdf5;
+  --badge-positive-text: #059669;
+  --badge-negative-bg: #fef2f2;
+  --badge-negative-text: #dc2626;
+  --toggle-bg: #f1f5f9;
+  --toggle-active-bg: rgba(43, 138, 191, 0.1);
+  --toggle-active-text: #2b8abf;
+  --toggle-active-border: rgba(43, 138, 191, 0.3);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Recharts tooltip override */
+.recharts-default-tooltip {
+  background: var(--tooltip-bg) !important;
+  border-color: var(--tooltip-border) !important;
+}
