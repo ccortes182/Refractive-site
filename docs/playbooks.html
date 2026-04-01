@@ -73,18 +73,36 @@
   </div>
 
   <!-- Hero -->
-  <section class="section section--hero">
-    <div class="container container--narrow">
-      <p class="eyebrow">Playbooks &amp; Templates</p>
-      <h1>Operator tools for DTC growth teams.</h1>
-      <p style="font-size: var(--text-lg); color: var(--color-text-secondary); margin-top: var(--space-xs);">Free calculators, dashboards, and frameworks built from real programs. No fluff.</p>
+  <section class="section section--hero member-page-hero">
+    <div class="container">
+      <div class="index-member-panel__grid">
+        <div>
+          <p class="eyebrow">Member Library</p>
+          <h1 class="member-page-hero__title">Your operator account for frameworks, calculators, and premium tools.</h1>
+          <p class="member-page-hero__desc">Use your Refractive account to move from quick diagnostics into deeper operating systems. Open the free tools immediately, then unlock premium dashboards and simulators built for real DTC decision-making.</p>
+          <div class="index-hero__actions">
+            <a href="#member-tools" class="btn btn--primary btn--lg">Unlock Member Tools</a>
+            <a href="#free-tools" class="btn btn--outline btn--lg">Open Free Tools</a>
+          </div>
+        </div>
+        <ul class="index-member-list">
+          <li>Free tools for fast benchmarking and directional reads.</li>
+          <li>Premium dashboards and simulators unlocked with your free member account.</li>
+          <li>A future-ready account layer built to become the front door to deeper Refractive product experiences.</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- Resource Cards -->
-  <section class="section">
+  <section class="section" id="free-tools">
     <div class="container">
-      <div class="playbooks-grid" data-animate="fade-up" data-animate-stagger>
+      <div class="member-resource-section" data-animate="fade-up">
+        <p class="index-section__kicker">Open Now</p>
+        <h2 class="index-section__title">Free tools for quick operator reads.</h2>
+        <p class="index-section__desc">Use these instantly when you need a fast pulse on creative health, conversion pressure, or topline unit economics.</p>
+      </div>
+      <div class="playbooks-grid member-page-card-grid" data-animate="fade-up" data-animate-stagger>
 
         <!-- Card 1: Health Check (Free) -->
         <a href="the-index/health-check.html" class="playbook-card">
@@ -101,18 +119,29 @@
           <p class="playbook-card__desc">Audit your creative production velocity, coverage, and fatigue risk in 60 seconds.</p>
           <span class="playbook-card__cta">Open Scorecard &rarr;</span>
         </a>
+      </div>
+    </div>
+  </section>
 
+  <section class="section section--deep" id="member-tools">
+    <div class="container">
+      <div class="member-resource-section" data-animate="fade-up">
+        <p class="index-section__kicker">Member Access</p>
+        <h2 class="index-section__title">Premium tools that unlock with your free account.</h2>
+        <p class="index-section__desc">These resources go beyond directional advice and into operating rhythm. Unlock them once, then come back to the same system as your needs evolve.</p>
+      </div>
+      <div class="playbooks-grid member-page-card-grid" data-animate="fade-up" data-animate-stagger>
         <!-- Card 3: Growth Dashboard (Gated) -->
         <div class="playbook-card playbook-card--locked gated-card" data-resource="growth-dashboard" data-href="tools/growth-dashboard.html">
           <div class="playbook-card__lock-icon gated-lock">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Premium &middot; Dashboard</span>
+          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Member Access &middot; Dashboard</span>
           <h3 class="playbook-card__title">Refractive Growth Dashboard</h3>
           <p class="playbook-card__desc">Monthly P&L, acquisition metrics, retention KPIs, and contribution margin — all in one place. Includes operator benchmarks for every metric.</p>
           <span class="playbook-card__cta gated-cta">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Enter Email to Unlock &rarr;
+            Unlock Free Account &rarr;
           </span>
         </div>
 
@@ -121,36 +150,46 @@
           <div class="playbook-card__lock-icon gated-lock">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Premium &middot; Simulator</span>
+          <span class="playbook-card__badge playbook-card__badge--gated gated-badge">Member Access &middot; Simulator</span>
           <h3 class="playbook-card__title">Retention Cohort Simulator</h3>
           <p class="playbook-card__desc">Model LTV by cohort, find your CAC payback point, and see where retention breaks down.</p>
           <span class="playbook-card__cta gated-cta">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Enter Email to Unlock &rarr;
+            Unlock Free Account &rarr;
           </span>
         </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="section">
+    <div class="container">
+      <div class="member-resource-section" data-animate="fade-up">
+        <p class="index-section__kicker">Resource Roadmap</p>
+        <h2 class="index-section__title">Next tools on deck.</h2>
+        <p class="index-section__desc">These are planned additions to the member library. They stay visible as a signal of direction, without crowding the live resource experience.</p>
+      </div>
+      <div class="roadmap-grid" data-animate="fade-up" data-animate-stagger>
         <!-- Coming Soon: CAC Payback Calculator -->
-        <div class="playbook-card playbook-card--coming-soon">
-          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
-          <h3 class="playbook-card__title">CAC Payback Calculator</h3>
-          <p class="playbook-card__desc">Time-to-payback curves and unit economics roadmap. See how AOV and retention decisions affect your payback timeline.</p>
+        <div class="roadmap-card">
+          <span class="roadmap-card__eyebrow">Coming Soon</span>
+          <h3 class="roadmap-card__title">CAC Payback Calculator</h3>
+          <p class="roadmap-card__desc">Time-to-payback curves and a cleaner view into how AOV, margin, and retention decisions affect cash efficiency.</p>
         </div>
 
         <!-- Coming Soon: Media Mix Allocator -->
-        <div class="playbook-card playbook-card--coming-soon">
-          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
-          <h3 class="playbook-card__title">Media Mix Allocator</h3>
-          <p class="playbook-card__desc">Optimal channel budget allocation based on marginal return, with what-if sensitivity analysis.</p>
+        <div class="roadmap-card">
+          <span class="roadmap-card__eyebrow">Coming Soon</span>
+          <h3 class="roadmap-card__title">Media Mix Allocator</h3>
+          <p class="roadmap-card__desc">Scenario planning for channel budgets based on marginal return, portfolio logic, and operator tradeoffs.</p>
         </div>
 
         <!-- Coming Soon: Attribution Impact Calculator -->
-        <div class="playbook-card playbook-card--coming-soon">
-          <span class="playbook-card__badge playbook-card__badge--soon">Coming Soon</span>
-          <h3 class="playbook-card__title">Attribution Impact Calculator</h3>
-          <p class="playbook-card__desc">See the revenue impact of switching attribution models. Ties directly to Illuminate incrementality data.</p>
+        <div class="roadmap-card">
+          <span class="roadmap-card__eyebrow">Coming Soon</span>
+          <h3 class="roadmap-card__title">Attribution Impact Calculator</h3>
+          <p class="roadmap-card__desc">A practical way to pressure-test attribution assumptions and see the planning implications before you reallocate spend.</p>
         </div>
-
       </div>
     </div>
   </section>
@@ -159,8 +198,8 @@
   <div class="gate-overlay" id="gate-overlay">
     <div class="gate-modal">
       <button class="gate-modal__close" id="gate-close" aria-label="Close">&times;</button>
-      <h2 class="gate-modal__title">Unlock the Growth Dashboard</h2>
-      <p class="gate-modal__desc">Tell us a bit about yourself to get instant access. No password, no confirmation email.</p>
+      <h2 class="gate-modal__title" id="gate-modal-title">Unlock member access</h2>
+      <p class="gate-modal__desc" id="gate-modal-desc">Tell us a bit about yourself to unlock this operator tool instantly. Your free account will carry across future member resources too.</p>
       <form class="gate-modal__form" id="gate-form">
         <div class="gate-modal__row">
           <div class="form-group">
@@ -186,7 +225,7 @@
             <input type="text" class="form-input" placeholder="Your Brand" id="gate-company" autocomplete="organization">
           </div>
         </div>
-        <button type="submit" class="btn btn--primary btn--full" id="gate-submit">Unlock Dashboard &rarr;</button>
+        <button type="submit" class="btn btn--primary btn--full" id="gate-submit">Unlock Free Account &rarr;</button>
         <p class="gate-modal__error" id="gate-error" hidden>Please enter your name and a valid email address.</p>
       </form>
       <p class="gate-modal__note">No spam. Unsubscribe any time.</p>
@@ -276,6 +315,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/account-ui.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/animations.js"></script>
   <script>
@@ -296,17 +336,6 @@
 
         if (!overlay) return;
 
-        // Auth bar
-        if (window.RefractiveAuth && RefractiveAuth.isAuthenticated()) {
-          var loggedOut = document.getElementById('auth-logged-out');
-          var loggedIn = document.getElementById('auth-logged-in');
-          if (loggedOut) loggedOut.style.display = 'none';
-          if (loggedIn) loggedIn.style.display = '';
-          var name = RefractiveAuth.getDisplayName();
-          var welcomeEl = document.getElementById('auth-welcome');
-          if (name && welcomeEl) welcomeEl.textContent = 'Welcome back, ' + name;
-        }
-
         // Check and unlock all gated cards that user already has access to
         var gatedCards = document.querySelectorAll('.gated-card');
         gatedCards.forEach(function(card) {
@@ -323,6 +352,9 @@
             } else {
               activeResource = resource;
               activeHref = card.dataset.href;
+              var title = card.querySelector('.playbook-card__title');
+              document.getElementById('gate-modal-title').textContent = 'Unlock ' + (title ? title.textContent : 'member access');
+              document.getElementById('gate-modal-desc').textContent = 'Tell us a bit about yourself to unlock this operator tool instantly. Your free account will carry across future member resources too.';
               openModal();
             }
           });
@@ -380,7 +412,7 @@
           errorEl.hidden = true;
           form.reset();
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Unlock Dashboard \u2192';
+          submitBtn.textContent = 'Unlock Free Account \u2192';
           activeResource = null;
           activeHref = null;
         }

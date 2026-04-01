@@ -8,6 +8,7 @@ function initNav() {
 
   const nav = document.getElementById('nav');
   if (!nav) return;
+  const authBar = document.getElementById('auth-bar');
   const hamburger = document.querySelector('.nav__hamburger');
   const mobileOverlay = document.getElementById('mobile-nav');
   const mobileLinks = mobileOverlay ? mobileOverlay.querySelectorAll('a') : [];
@@ -20,8 +21,10 @@ function initNav() {
       requestAnimationFrame(() => {
         if (window.scrollY > 0) {
           nav.classList.add('nav--scrolled');
+          if (authBar) authBar.classList.add('auth-bar--scrolled');
         } else {
           nav.classList.remove('nav--scrolled');
+          if (authBar) authBar.classList.remove('auth-bar--scrolled');
         }
         ticking = false;
       });
