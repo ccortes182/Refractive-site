@@ -12,7 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initContactForm();
   initServiceCards();
+  initBrandExpand();
 });
+
+/* ── Brand Cards Expand Toggle (mobile) ── */
+function initBrandExpand() {
+  const btn = document.getElementById('brand-expand');
+  const grid = document.querySelector('.brand-grid');
+  if (!btn || !grid) return;
+
+  btn.addEventListener('click', () => {
+    const isExpanded = grid.classList.toggle('is-expanded');
+    btn.setAttribute('aria-expanded', isExpanded);
+    btn.querySelector('.brand-expand__text').textContent = isExpanded ? 'Show less' : 'See all results';
+  });
+}
 
 /* ── Service Cards Mouse-Follow Glow Effect ── */
 function initServiceCards() {

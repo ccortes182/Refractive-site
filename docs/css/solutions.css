@@ -215,6 +215,145 @@
   align-self: flex-start;
 }
 
+/* ── Pillar Animated Graphics ── */
+.pillar-graphic {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.pillar-graphic svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pillar-graphic__ring {
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  animation: pillar-ring-draw 2s var(--ease-out) forwards;
+  animation-play-state: paused;
+}
+
+.pillar-graphic__ring--inner {
+  animation-delay: 0.4s;
+  animation-duration: 1.8s;
+}
+
+/* Trigger animations when pillar header is visible */
+.pillar-header.is-visible .pillar-graphic__ring,
+.pillar-header.is-visible .pillar-graphic__dot,
+.pillar-header.is-visible .pillar-graphic__path {
+  animation-play-state: running;
+}
+
+.pillar-graphic__dot {
+  opacity: 0;
+  animation: pillar-dot-appear 0.5s var(--ease-out) 0.8s forwards;
+  animation-play-state: paused;
+}
+
+.pillar-graphic__dot--delay {
+  animation-delay: 1.1s;
+}
+
+.pillar-graphic__dot--delay2 {
+  animation-delay: 1.4s;
+}
+
+.pillar-graphic__path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: pillar-path-draw 1.5s var(--ease-out) 0.5s forwards;
+  animation-play-state: paused;
+}
+
+/* Subtle continuous rotation on the outer ring */
+@keyframes pillar-ring-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pillar-dot-appear {
+  0% { opacity: 0; transform: scale(0); }
+  70% { transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pillar-path-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Slow orbit pulse on dots */
+.pillar-header.is-visible .pillar-graphic__dot {
+  animation: pillar-dot-appear 0.5s var(--ease-out) 0.8s forwards,
+             pillar-dot-pulse 3s ease-in-out 2s infinite;
+  animation-play-state: running;
+}
+
+.pillar-header.is-visible .pillar-graphic__dot--delay {
+  animation: pillar-dot-appear 0.5s var(--ease-out) 1.1s forwards,
+             pillar-dot-pulse 3s ease-in-out 2.3s infinite;
+  animation-play-state: running;
+}
+
+.pillar-header.is-visible .pillar-graphic__dot--delay2 {
+  animation: pillar-dot-appear 0.5s var(--ease-out) 1.4s forwards,
+             pillar-dot-pulse 3s ease-in-out 2.6s infinite;
+  animation-play-state: running;
+}
+
+@keyframes pillar-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Pillar Section Background Glows ── */
+#foundation,
+#growth,
+#experience,
+#retention {
+  overflow: hidden;
+}
+
+#foundation::after,
+#growth::after,
+#experience::after,
+#retention::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 500px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#foundation > *,
+#growth > *,
+#experience > *,
+#retention > * {
+  position: relative;
+  z-index: 1;
+}
+
+#foundation::after {
+  background: radial-gradient(ellipse at center, rgba(67, 169, 223, 0.04) 0%, transparent 65%);
+}
+
+#growth::after {
+  background: radial-gradient(ellipse at center, rgba(142, 104, 173, 0.04) 0%, transparent 65%);
+}
+
+#experience::after {
+  background: radial-gradient(ellipse at center, rgba(67, 169, 223, 0.03) 0%, rgba(142, 104, 173, 0.02) 40%, transparent 65%);
+}
+
+#retention::after {
+  background: radial-gradient(ellipse at center, rgba(194, 220, 212, 0.04) 0%, transparent 65%);
+}
+
 /* ── Pillar Section Header ── */
 .pillar-header {
   display: flex;
@@ -224,14 +363,16 @@
 }
 
 .pillar-header__num {
-  font-size: var(--text-3xl);
+  font-size: var(--text-lg);
   font-weight: var(--font-weight-black);
   background: var(--color-accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
-  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  margin-bottom: var(--space-xs);
 }
 
 .pillar-header__title {
@@ -480,8 +621,13 @@
     gap: var(--space-sm);
   }
 
+  .pillar-graphic {
+    width: 80px;
+    height: 80px;
+  }
+
   .pillar-header__num {
-    font-size: var(--text-2xl);
+    font-size: var(--text-base);
   }
 
   .sol-hero__headline {
