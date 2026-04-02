@@ -178,7 +178,9 @@ function initPrism() {
     canvas.height = Math.round(h * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.uniform2f(loc.iResolution, canvas.width, canvas.height);
-    gl.uniform1f(loc.uPxScale, 1 / (canvas.height * 0.1 * SCALE));
+    // Zoom out on mobile so the prism isn't as concentrated/intense
+    const scale = w <= 768 ? SCALE * 0.55 : SCALE;
+    gl.uniform1f(loc.uPxScale, 1 / (canvas.height * 0.1 * scale));
   }
 
   const ro = new ResizeObserver(resize);
