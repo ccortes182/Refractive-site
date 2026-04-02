@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: dark;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#212429">
   <title>Growth Dashboard — Refractive</title>
   <meta name="description" content="Full-funnel operating dashboard — monthly P&L, growth metrics, channel breakdown, and operator benchmarks.">
 
@@ -12,6 +13,7 @@
   <link rel="apple-touch-icon" href="../images/webclip.png">
 
   <!-- Fonts -->
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
   <link rel="stylesheet" href="https://use.typekit.net/egc1hmh.css">
 
   <!-- Styles -->
@@ -23,6 +25,9 @@
   <link rel="stylesheet" href="../css/tools.css">
 </head>
 <body class="has-auth-bar">
+
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
   <!-- Auth guard -->
   <script src="../js/auth.js"></script>
@@ -87,7 +92,7 @@
   </div>
 
   <!-- Toolbar -->
-  <section class="section dash-toolbar">
+  <section class="section dash-toolbar" id="main-content">
     <div class="container container--wide">
       <div class="dash-toolbar__left">
         <h1 class="dash-toolbar__title">Growth Dashboard</h1>
@@ -217,7 +222,7 @@
           <p class="footer__heading">The Refractive Index</p>
           <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
           <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="../privacy.html">privacy policy</a>.</p>

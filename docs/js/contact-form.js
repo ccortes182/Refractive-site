@@ -54,6 +54,8 @@ function initContactForm() {
     const email = form.querySelector('#email');
     const revenue = form.querySelector('#revenue');
 
+    if (!firstName || !email || !revenue) return;
+
     let valid = true;
     let firstInvalid = null;
 
@@ -89,9 +91,6 @@ function initContactForm() {
     // Collect form data
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-
-    // For now, log data and show success (wire up backend later)
-    console.log('Form submission:', data);
 
     setTimeout(() => {
       form.style.display = 'none';

@@ -17,9 +17,16 @@
     var portalType = document.body.dataset.portal || 'default';
     var storageKey = 'refractive_' + portalType + '_auth';
 
-    // Credentials
-    var VALID_EMAIL = 'growth@refractive.co';
-    var VALID_PASS  = 'Illuminate2026';
+    // Hashed credentials (SHA-256)
+    var VALID_HASH = 'e82c3ca2482ea3c6fe829d1ac274662d30e1c7195e588b0a1505ec434c5610f5';
+
+    async function hashInput(email, pass) {
+      var raw = email + ':' + pass;
+      var encoded = new TextEncoder().encode(raw);
+      var buffer = await crypto.subtle.digest('SHA-256', encoded);
+      var arr = Array.from(new Uint8Array(buffer));
+      return arr.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    }
 
     // Check existing session
     if (sessionStorage.getItem(storageKey) === 'true') {
@@ -27,13 +34,14 @@
     }
 
     // Form submit
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
 
       var email = form.querySelector('[name="email"]').value.trim().toLowerCase();
       var pass  = form.querySelector('[name="password"]').value;
+      var hash  = await hashInput(email, pass);
 
-      if (email === VALID_EMAIL && pass === VALID_PASS) {
+      if (hash === VALID_HASH) {
         sessionStorage.setItem(storageKey, 'true');
         showLanding();
       } else {

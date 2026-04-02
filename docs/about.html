@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: dark;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#212429">
   <title>About — Refractive</title>
   <meta name="description" content="We're a growth partner built by former in-house operators. Fewer clients, deeper work, measurable outcomes.">
 
@@ -11,6 +12,7 @@
   <link rel="apple-touch-icon" href="images/webclip.png">
 
   <!-- Fonts -->
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
   <link rel="stylesheet" href="https://use.typekit.net/egc1hmh.css">
 
   <!-- Styles -->
@@ -23,6 +25,9 @@
 </head>
 <body>
 
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
   <!-- ════════════════════════════════════════════════════════
        NAVIGATION
        ════════════════════════════════════════════════════════ -->
@@ -31,8 +36,8 @@
   <nav class="nav" id="nav">
     <div class="nav__inner">
       <a href="index.html" class="nav__logo" id="logo">
-        <img src="images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon">
-        <img src="images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text">
+        <img src="images/REFRACTIVE-DIGITAL.svg" alt="Refractive icon" class="nav__logo-icon" width="32" height="32">
+        <img src="images/REFRACTIVE.svg" alt="Refractive" class="nav__logo-text" width="120" height="16">
       </a>
 
       <div class="nav__links">
@@ -65,7 +70,7 @@
   <!-- ════════════════════════════════════════════════════════
        1. ABOUT HERO
        ════════════════════════════════════════════════════════ -->
-  <section class="section section--about-hero">
+  <section class="section section--about-hero" id="main-content">
     <div class="container">
       <span class="eyebrow" data-animate="fade-up">About Us</span>
       <h1 class="about-hero__headline" data-animate="fade-up">Built by operators,<br>for operators.</h1>
@@ -97,7 +102,7 @@
         <div class="story__pillars">
           <div class="story__pillar" data-animate="fade-up">
             <div class="story__pillar-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                 <circle cx="9" cy="7" r="4"/>
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
@@ -110,7 +115,7 @@
 
           <div class="story__pillar" data-animate="fade-up">
             <div class="story__pillar-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="12" y1="1" x2="12" y2="23"/>
                 <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
               </svg>
@@ -121,7 +126,7 @@
 
           <div class="story__pillar" data-animate="fade-up">
             <div class="story__pillar-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
               </svg>
             </div>
@@ -146,7 +151,7 @@
         <!-- Christian Cortes -->
         <article class="team-card team-card--founder">
           <div class="team-card__avatar">
-            <img class="team-card__avatar-img" src="images/Christian-Cortes-Founder.png" alt="Christian Cortes" loading="lazy">
+            <img class="team-card__avatar-img" src="images/Christian-Cortes-Founder.png" alt="Christian Cortes" loading="lazy" width="64" height="64">
           </div>
           <div class="team-card__info">
             <h3 class="team-card__name">Christian Cortes</h3>
@@ -163,38 +168,40 @@
           </div>
         </article>
 
-        <!-- Director of Strategic Operations -->
+        <!-- Dan Dlugozima -->
         <article class="team-card">
           <div class="team-card__avatar">
-            <div class="team-card__avatar-placeholder">SO</div>
+            <div class="team-card__avatar-placeholder">DD</div>
           </div>
           <div class="team-card__info">
-            <h3 class="team-card__name">Director of Strategic Operations</h3>
-            <p class="team-card__role">Growth Ops &amp; Program Management</p>
-            <p class="team-card__bio">Translates strategy into execution. Owns weekly cadences, cross-channel reporting, and outcomes alignment. Keeps every workstream on track and accountable.</p>
+            <h3 class="team-card__name">Dan Dlugozima</h3>
+            <p class="team-card__role">Director of Strategic Operations</p>
+            <p class="team-card__bio">Built and scaled a national athletic apparel brand over 15 years before a successful exit. Previously led operations at Lax.com alongside Christian. Brings founder-level program management, cross-functional coordination, and growth ops discipline to every client engagement.</p>
             <div class="team-card__tags">
               <span class="tag">Growth Ops</span>
               <span class="tag">Reporting</span>
               <span class="tag">Sprint Rituals</span>
             </div>
+            <a href="https://linkedin.com/in/dan-dlugozima" class="team-card__linkedin" target="_blank" rel="noopener">LinkedIn &rarr;</a>
           </div>
         </article>
 
-        <!-- Director of Technology -->
+        <!-- Ty Dlugozima -->
         <article class="team-card">
           <div class="team-card__avatar">
-            <div class="team-card__avatar-placeholder">DT</div>
+            <div class="team-card__avatar-placeholder">TD</div>
           </div>
           <div class="team-card__info">
-            <h3 class="team-card__name">Director of Technology</h3>
-            <p class="team-card__role">Engineering, AI &amp; Systems Integration</p>
-            <p class="team-card__bio">Shopify architecture, AI-led systems, and end-to-end integrations. Builds the infrastructure that connects your store, data, and automation into one operating system.</p>
+            <h3 class="team-card__name">Ty Dlugozima</h3>
+            <p class="team-card__role">Director of Technology</p>
+            <p class="team-card__bio">Strategic development and systems leadership at KELYN Technologies. Previously at Lax.com alongside Christian and Dan. Builds scalable systems, AI-led workflows, and end-to-end integrations that connect your store, data, and automation into one operating system.</p>
             <div class="team-card__tags">
               <span class="tag">Shopify</span>
               <span class="tag">AI</span>
               <span class="tag">Systems Integration</span>
               <span class="tag">Architecture</span>
             </div>
+            <a href="https://linkedin.com/in/tydlugozima" class="team-card__linkedin" target="_blank" rel="noopener">LinkedIn &rarr;</a>
           </div>
         </article>
       </div>
@@ -262,12 +269,12 @@
       <div class="footer__top">
         <div class="footer__brand">
           <a href="index.html">
-            <img src="images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo">
+            <img src="images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo" width="32" height="32">
           </a>
           <p class="footer__heading">Fuel for founder-operators.</p>
           <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
           <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="privacy.html">privacy policy</a>.</p>

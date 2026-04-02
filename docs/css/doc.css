@@ -21,7 +21,7 @@
   padding: 0.75em 1.5em;
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
-  color: #fff;
+  color: var(--color-text-primary);
   background: var(--color-accent-gradient);
   border: none;
   border-radius: var(--radius-full);
@@ -185,7 +185,7 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-bg-deep);
   border: 2px solid var(--color-accent-blue);
 }
 
@@ -250,7 +250,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .doc {
     padding: var(--space-xl) var(--space-sm) var(--space-lg);
   }

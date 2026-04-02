@@ -151,7 +151,7 @@
 .nav__links {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
@@ -254,7 +254,7 @@
 .nav__mobile-overlay .nav__link {
   font-size: var(--text-xl);
   color: var(--color-text-primary);
-  letter-spacing: 5px;
+  letter-spacing: var(--tracking-wider);
 }
 
 .nav__account-cta {
@@ -408,7 +408,7 @@
   }
 
   .nav__links {
-    gap: 0.7rem;
+    gap: 1.5rem;
   }
 
   .nav__link {
@@ -672,9 +672,9 @@
 .footer__heading {
   font-size: 1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-text-primary);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.15em;
   margin-bottom: 0.5rem;
 }
 
@@ -692,7 +692,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: var(--tracking-wider);
   color: var(--color-text-primary);
   margin-bottom: 1rem;
 }

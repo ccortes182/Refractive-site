@@ -176,7 +176,7 @@
   justify-content: center;
   font-size: var(--text-base);
   font-weight: var(--font-weight-bold);
-  color: #fff;
+  color: var(--color-text-primary);
   letter-spacing: 0.05em;
 }
 

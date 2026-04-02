@@ -9,7 +9,7 @@
   margin-bottom: var(--space-lg);
   line-height: var(--leading-snug);
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: var(--tracking-wider);
 }
 
 .section__heading--center {
@@ -243,7 +243,7 @@
   font-weight: var(--font-weight-medium);
   color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 0.15em;
 }
 
 /* ── Brand Cards Mobile: hero-style stacked + expand ── */
@@ -394,7 +394,7 @@
   color: var(--color-text-secondary);
   padding: var(--space-lg) 0;
   text-transform: uppercase;
-  letter-spacing: 5px;
+  letter-spacing: var(--tracking-wider);
 }
 
 .mission-text .gradient-text {
@@ -476,14 +476,14 @@
   border-top: 2px solid transparent;
 }
 
-.service-card:nth-child(1) { --card-accent: #43a9df; }
-.service-card:nth-child(2) { --card-accent: #5f8fd9; }
-.service-card:nth-child(3) { --card-accent: #7b76d3; }
-.service-card:nth-child(4) { --card-accent: #8e68ad; }
-.service-card:nth-child(5) { --card-accent: #a05c97; }
-.service-card:nth-child(6) { --card-accent: #b28e8e; }
-.service-card:nth-child(7) { --card-accent: #c2dcd4; }
-.service-card:nth-child(8) { --card-accent: #9ec8c8; }
+.service-card:nth-child(1) { --card-accent: var(--color-accent-blue); }
+.service-card:nth-child(2) { --card-accent: var(--color-accent-blue-mid); }
+.service-card:nth-child(3) { --card-accent: var(--color-accent-indigo); }
+.service-card:nth-child(4) { --card-accent: var(--color-accent-violet); }
+.service-card:nth-child(5) { --card-accent: var(--color-accent-plum); }
+.service-card:nth-child(6) { --card-accent: var(--color-accent-rose); }
+.service-card:nth-child(7) { --card-accent: var(--color-accent-cyan); }
+.service-card:nth-child(8) { --card-accent: var(--color-accent-teal); }
 
 .service-card {
   border-top-color: var(--card-accent);
@@ -765,7 +765,7 @@
   line-height: var(--leading-relaxed);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .pricing-grid {
     grid-template-columns: 1fr;
   }
@@ -894,6 +894,8 @@
 
 .form-select {
   appearance: none;
+  background-color: var(--color-bg-card);
+  color: var(--color-text-primary);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 14px center;

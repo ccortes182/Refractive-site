@@ -231,7 +231,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .portal-login__card {
     padding: var(--space-lg) var(--space-md);
   }

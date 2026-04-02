@@ -222,9 +222,11 @@
   flex-shrink: 0;
 }
 
-.pillar-graphic svg {
+.pillar-graphic svg,
+.pillar-graphic img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .pillar-graphic__ring {
@@ -304,6 +306,18 @@
 @keyframes pillar-dot-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .pillar-graphic__ring,
+  .pillar-graphic__dot,
+  .pillar-graphic__path {
+    animation: none !important;
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
 }
 
 /* ── Pillar Section Background Glows ── */

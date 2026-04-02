@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme: dark;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#212429">
   <title>Loyalty Programs Don't Create Loyalty | Refractive</title>
   <meta name="description" content="Most loyalty programs are just discount systems with better branding. True loyalty comes from product experience, community, and identity — not points balances. Here's the hierarchy that separates real retention from expensive bribery.">
 
@@ -11,6 +12,7 @@
   <link rel="apple-touch-icon" href="../images/webclip.png">
 
   <!-- Fonts -->
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
   <link rel="stylesheet" href="https://use.typekit.net/egc1hmh.css">
 
   <!-- Styles -->
@@ -23,6 +25,9 @@
   <link rel="stylesheet" href="../css/blog.css">
 </head>
 <body class="has-auth-bar">
+
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
   <!-- ════════════════════════════════════════════════════════
        NAVIGATION
@@ -80,7 +85,7 @@
   <!-- ════════════════════════════════════════════════════════
        ARTICLE HERO
        ════════════════════════════════════════════════════════ -->
-  <section class="article-hero" data-animate="fade-up">
+  <section class="article-hero" id="main-content" data-animate="fade-up">
     <span class="article-hero__category">Retention</span>
     <h1 class="article-hero__title">
       Loyalty Programs <span class="gradient-text">Don't Create Loyalty</span>
@@ -399,7 +404,7 @@
           <p class="footer__heading">Fuel for founder-operators.</p>
           <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
           <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email" class="form-input form-input--sm" autocomplete="email">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="../privacy.html">privacy policy</a>.</p>

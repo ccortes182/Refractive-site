@@ -16,7 +16,7 @@
   position: fixed;
   top: var(--space-xs);
   left: var(--space-sm);
-  z-index: 20;
+  z-index: var(--z-sticky);
   font-size: 0.65rem;
   color: var(--color-text-muted);
   text-decoration: none;
@@ -396,7 +396,7 @@
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: var(--z-card);
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -449,7 +449,7 @@
   right: 0;
   height: 3px;
   background: rgba(255, 255, 255, 0.04);
-  z-index: 10;
+  z-index: var(--z-card);
 }
 
 .deck-progress__bar {
@@ -673,7 +673,7 @@
    Responsive — Tablet
    ═══════════════════════════════════════════ */
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .deck-slide {
     padding: 10px 56px;
   }
@@ -687,7 +687,7 @@
    Responsive — Mobile
    ═══════════════════════════════════════════ */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .deck-slide {
     padding: 8px 48px;
   }
@@ -754,7 +754,7 @@
   .deck-fund-row__bar { display: none; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .deck-slide {
     padding: 6px 40px;
   }

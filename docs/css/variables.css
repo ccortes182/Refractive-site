@@ -22,6 +22,12 @@
   --color-accent-gradient-text: linear-gradient(135deg, #43a9df 0%, #8e68ad 50%, #c2dcd4 100%);
   --color-accent-gradient-full: linear-gradient(66deg, #fdfdf9 0%, #8e68ad 1%, #43a9df 61%, #c2dcd4 99%, #fdfdf9 100%);
 
+  --color-accent-blue-mid: #5f8fd9;
+  --color-accent-indigo: #7b76d3;
+  --color-accent-plum: #a05c97;
+  --color-accent-rose: #b28e8e;
+  --color-accent-teal: #9ec8c8;
+
   --color-border: rgba(255, 255, 255, 0.06);
   --color-border-hover: rgba(255, 255, 255, 0.12);
 
@@ -96,6 +102,7 @@
   /* ── Z-index ── */
   --z-base: 1;
   --z-card: 10;
+  --z-sticky: 30;
   --z-overlay: 50;
   --z-nav: 100;
   --z-modal: 200;
