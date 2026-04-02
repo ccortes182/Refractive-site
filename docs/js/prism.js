@@ -221,6 +221,14 @@ function initPrism() {
     raf = requestAnimationFrame(render);
   }
 
+  // ── Respect reduced motion ──
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    // Render a single static frame
+    render(performance.now());
+    return;
+  }
+
   // ── Suspend when offscreen ──
   const io = new IntersectionObserver(entries => {
     const vis = entries.some(e => e.isIntersecting);

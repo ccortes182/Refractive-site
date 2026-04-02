@@ -6,6 +6,35 @@ function initAnimations() {
   gsap.registerPlugin(ScrollTrigger);
   document.documentElement.classList.add('gsap-ready');
 
+  // ── Respect reduced motion preference ──
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    // Reveal all animated elements immediately without motion
+    document.querySelectorAll('[data-animate], [data-animate-stagger] > *').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    document.querySelectorAll('.hero__headline .char').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    // Reveal hero subhead and CTA
+    document.querySelectorAll('.hero__subhead, .hero__content .btn').forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    // Reveal mission text words
+    document.querySelectorAll('[data-animate="text-reveal"] .word').forEach(el => {
+      el.classList.add('is-revealed');
+    });
+    // Show glow dividers
+    document.querySelectorAll('.section--glow-top').forEach(el => {
+      el.classList.add('is-visible');
+    });
+    return;
+  }
+
   // ── Hero Headline Letter Animation ──
   animateHeroHeadline();
 
@@ -15,8 +44,20 @@ function initAnimations() {
   // ── Process Step Reveal ──
   initProcessStepAnimations();
 
+  // ── Animated Stat Counters on Brand Cards ──
+  initStatCounters();
+
   // ── ScrollTrigger Fade-Up for [data-animate] elements ──
   initScrollAnimations();
+
+  // ── Mission Text Word Reveal ──
+  initTextReveal();
+
+  // ── Parallax on Process Step Images ──
+  initProcessParallax();
+
+  // ── Section Divider Draw-on-Scroll ──
+  initDividerAnimations();
 
   // ── Staggered children animations ──
   initStaggerAnimations();
@@ -148,8 +189,35 @@ function initProcessStepAnimations() {
   });
 }
 
+function initStatCounters() {
+  const stats = document.querySelectorAll('.brand-card__stat');
+
+  stats.forEach(stat => {
+    const numberEl = stat.querySelector('.brand-card__stat-number');
+    const value = parseInt(stat.getAttribute('data-stat-value'), 10);
+    if (!numberEl || isNaN(value)) return;
+
+    const suffix = numberEl.textContent.replace(/[\d,]/g, ''); // e.g. "%"
+    const counter = { val: 0 };
+
+    gsap.to(counter, {
+      val: value,
+      duration: 1.5,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: stat.closest('.brand-card'),
+        start: 'top 80%',
+        once: true
+      },
+      onUpdate: function() {
+        numberEl.textContent = Math.round(counter.val) + suffix;
+      }
+    });
+  });
+}
+
 function initScrollAnimations() {
-  const elements = document.querySelectorAll('[data-animate]:not([data-animate-stagger])');
+  const elements = document.querySelectorAll('[data-animate]:not([data-animate-stagger]):not([data-animate="text-reveal"])');
 
   elements.forEach(el => {
     const type = el.getAttribute('data-animate');
@@ -169,6 +237,78 @@ function initScrollAnimations() {
         start: 'top 85%',
         once: true
       }
+    });
+  });
+}
+
+function initTextReveal() {
+  const elements = document.querySelectorAll('[data-animate="text-reveal"]');
+
+  elements.forEach(el => {
+    // Split text into words, preserving gradient-text spans
+    const html = el.innerHTML;
+    // Process: split by gradient-text spans, then split remaining text into words
+    const parts = html.split(/(<span class="gradient-text">.*?<\/span>)/gs);
+
+    el.innerHTML = parts.map(part => {
+      if (part.startsWith('<span class="gradient-text">')) {
+        // Extract inner text of gradient span and wrap each word
+        const inner = part.replace(/<span class="gradient-text">/, '').replace(/<\/span>/, '');
+        return inner.split(/\s+/).filter(Boolean).map(word =>
+          `<span class="word word--gradient">${word}</span>`
+        ).join(' ');
+      }
+      // Regular text — wrap each word
+      return part.split(/\s+/).filter(Boolean).map(word =>
+        `<span class="word">${word}</span>`
+      ).join(' ');
+    }).join(' ');
+
+    // Animate words in with staggered ScrollTrigger
+    const words = el.querySelectorAll('.word');
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 75%',
+      end: 'bottom 25%',
+      onEnter: () => {
+        words.forEach((word, i) => {
+          setTimeout(() => word.classList.add('is-revealed'), i * 50);
+        });
+      }
+    });
+  });
+}
+
+function initProcessParallax() {
+  // Only apply parallax on desktop — mobile stacks single column
+  if (window.innerWidth < 768) return;
+
+  const images = document.querySelectorAll('.process-step__visual img');
+
+  images.forEach(img => {
+    gsap.to(img, {
+      y: -30,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: img.closest('.process-step'),
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.5
+      }
+    });
+  });
+}
+
+function initDividerAnimations() {
+  const glowSections = document.querySelectorAll('.section--glow-top');
+
+  glowSections.forEach(section => {
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => section.classList.add('is-visible')
     });
   });
 }

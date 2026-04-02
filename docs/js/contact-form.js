@@ -8,37 +8,77 @@ function initContactForm() {
 
   if (!form) return;
 
+  // Create error elements for required fields
+  const errorMap = {};
+  const requiredFields = [
+    { id: 'first-name', message: 'First name is required.' },
+    { id: 'email', message: 'Please enter a valid email address.' },
+    { id: 'revenue', message: 'Please select a revenue range.' }
+  ];
+
+  requiredFields.forEach(({ id, message }) => {
+    const field = form.querySelector('#' + id);
+    if (!field) return;
+    const errorEl = document.createElement('span');
+    errorEl.className = 'form-error';
+    errorEl.id = id + '-error';
+    errorEl.setAttribute('role', 'alert');
+    errorEl.textContent = message;
+    errorEl.hidden = true;
+    field.parentNode.appendChild(errorEl);
+    field.setAttribute('aria-describedby', errorEl.id);
+    errorMap[id] = { field, errorEl };
+  });
+
+  function showError(id) {
+    const entry = errorMap[id];
+    if (!entry) return;
+    entry.field.style.borderColor = 'var(--color-error)';
+    entry.field.setAttribute('aria-invalid', 'true');
+    entry.errorEl.hidden = false;
+  }
+
+  function clearErrors() {
+    Object.values(errorMap).forEach(({ field, errorEl }) => {
+      field.style.borderColor = '';
+      field.removeAttribute('aria-invalid');
+      errorEl.hidden = true;
+    });
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    clearErrors();
 
-    // Basic validation
     const firstName = form.querySelector('#first-name');
     const email = form.querySelector('#email');
     const revenue = form.querySelector('#revenue');
 
-    // Clear previous errors
-    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
-      input.style.borderColor = '';
-    });
-
     let valid = true;
+    let firstInvalid = null;
 
     if (!firstName.value.trim()) {
-      firstName.style.borderColor = 'var(--color-error)';
+      showError('first-name');
+      if (!firstInvalid) firstInvalid = firstName;
       valid = false;
     }
 
     if (!email.value.trim() || !isValidEmail(email.value)) {
-      email.style.borderColor = 'var(--color-error)';
+      showError('email');
+      if (!firstInvalid) firstInvalid = email;
       valid = false;
     }
 
     if (!revenue.value) {
-      revenue.style.borderColor = 'var(--color-error)';
+      showError('revenue');
+      if (!firstInvalid) firstInvalid = revenue;
       valid = false;
     }
 
-    if (!valid) return;
+    if (!valid) {
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
 
     // Simulate form submission (replace with real endpoint)
     const submitBtn = form.querySelector('button[type="submit"]');

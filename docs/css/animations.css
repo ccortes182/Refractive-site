@@ -82,6 +82,159 @@ html:not(.gsap-ready) [data-animate-stagger] > * {
   display: none;
 }
 
+/* ── Mission Text Word Reveal ── */
+[data-animate="text-reveal"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+[data-animate="text-reveal"] .word {
+  display: inline-block;
+  opacity: 0.15;
+  filter: blur(4px);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+
+[data-animate="text-reveal"] .word.is-revealed {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Preserve gradient on revealed gradient-text words */
+[data-animate="text-reveal"] .word--gradient {
+  background: var(--color-accent-gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Section Top Glow — light bleeding from behind ── */
+.section--glow-top {
+  overflow: visible;
+}
+
+/* Seam line — sits at the very top of the section */
+.section--glow-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  transform: none;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 5%,
+    rgba(67, 169, 223, 0.1) 20%,
+    rgba(142, 104, 173, 0.3) 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(142, 104, 173, 0.3) 60%,
+    rgba(194, 220, 212, 0.1) 80%,
+    transparent 95%
+  );
+  z-index: 2;
+}
+
+/* Radial glow centered on the seam, spills above and below */
+.section--glow-top::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 5%;
+  right: 5%;
+  height: 120px;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgba(142, 104, 173, 0.18) 0%,
+    rgba(67, 169, 223, 0.08) 30%,
+    rgba(194, 220, 212, 0.025) 55%,
+    transparent 80%
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-out);
+}
+
+.section--glow-top.is-visible::after {
+  opacity: 1;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.section--glow-top.is-visible::after {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section--glow-top::after {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}
+
+/* ── Subtle Section Background Glows ── */
+/* Ensure section content sits above the glow */
+#services > *,
+#founder > *,
+#contact > * {
+  position: relative;
+  z-index: 1;
+}
+
+#services::after,
+#founder::after,
+#contact::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#services::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(67, 169, 223, 0.04) 0%,
+    rgba(142, 104, 173, 0.02) 40%,
+    transparent 70%
+  );
+}
+
+#founder::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(142, 104, 173, 0.05) 0%,
+    rgba(67, 169, 223, 0.02) 40%,
+    transparent 70%
+  );
+}
+
+#contact::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(67, 169, 223, 0.12) 0%,
+    rgba(142, 104, 173, 0.06) 40%,
+    transparent 70%
+  );
+  animation: contact-glow-pulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes contact-glow-pulse {
+  0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
 /* ── Glow Background Effect (for hero and contact) ── */
 .hero::after {
   content: '';

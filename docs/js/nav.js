@@ -35,13 +35,19 @@ function initNav() {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll(); // Check initial state
 
+  const mainContent = document.getElementById('main-content');
+
   // Mobile hamburger toggle
-  function toggleMobileNav() {
+  function openMobileNav() {
     if (!hamburger || !mobileOverlay) return;
-    const isActive = hamburger.classList.toggle('is-active');
-    mobileOverlay.classList.toggle('is-active');
-    hamburger.setAttribute('aria-expanded', isActive);
-    document.body.style.overflow = isActive ? 'hidden' : '';
+    hamburger.classList.add('is-active');
+    mobileOverlay.classList.add('is-active');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    if (mainContent) mainContent.setAttribute('aria-hidden', 'true');
+    // Move focus to first link in overlay
+    const firstLink = mobileOverlay.querySelector('a');
+    if (firstLink) firstLink.focus();
   }
 
   function closeMobileNav() {
@@ -50,6 +56,17 @@ function initNav() {
     mobileOverlay.classList.remove('is-active');
     hamburger.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
+    if (mainContent) mainContent.removeAttribute('aria-hidden');
+    hamburger.focus();
+  }
+
+  function toggleMobileNav() {
+    if (!hamburger || !mobileOverlay) return;
+    if (hamburger.classList.contains('is-active')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
   }
 
   if (hamburger) hamburger.addEventListener('click', toggleMobileNav);
@@ -59,10 +76,28 @@ function initNav() {
     link.addEventListener('click', closeMobileNav);
   });
 
-  // Close on escape key
+  // Focus trap + escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileOverlay && mobileOverlay.classList.contains('is-active')) {
+    if (!mobileOverlay || !mobileOverlay.classList.contains('is-active')) return;
+
+    if (e.key === 'Escape') {
       closeMobileNav();
+      return;
+    }
+
+    // Focus trap within mobile overlay
+    if (e.key === 'Tab') {
+      const focusable = mobileOverlay.querySelectorAll('a, button');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   });
 

@@ -25,6 +25,31 @@
   padding: 0;
 }
 
+.section__cta {
+  text-align: center;
+  margin-top: var(--space-lg);
+}
+
+/* ── Section Spacing Rhythm ── */
+/* Statement sections get more breathing room */
+#mission {
+  padding: var(--space-2xl) 0;
+}
+
+#founder {
+  padding: var(--space-2xl) 0;
+}
+
+/* Tighten connected sections */
+#brands {
+  padding-bottom: var(--space-lg);
+}
+
+#tech-partners {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+
 /* ── Container ── */
 .container {
   width: 100%;
@@ -163,16 +188,24 @@
   transition: width var(--duration-normal) var(--ease-out);
 }
 
-.nav__link:hover::after {
+.nav__link:hover::after,
+.nav__link[aria-current="page"]::after {
   width: 100%;
+}
+
+.nav__link[aria-current="page"] {
+  color: var(--color-text-primary);
 }
 
 .nav__hamburger {
   display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
-  width: 28px;
-  padding: 4px 0;
+  width: 44px;
+  height: 44px;
+  padding: 10px 8px;
 }
 
 .nav__hamburger span {
@@ -607,8 +640,8 @@
 
 /* ── Footer Layout ── */
 .footer {
-  background-color: #414046;
-  background-image: radial-gradient(circle at 100% 100%, #292831, #414046 87%, #4b4a4e);
+  background-color: var(--color-bg-footer);
+  background-image: radial-gradient(circle at 100% 100%, var(--color-bg-footer-deep), var(--color-bg-footer) 87%, var(--color-bg-footer-accent));
   padding: 4rem 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -660,7 +693,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 5px;
-  color: #fff;
+  color: var(--color-text-primary);
   margin-bottom: 1rem;
 }
 
@@ -668,13 +701,13 @@
   display: block;
   font-size: 1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.72);
   padding: 0.5rem 0;
   transition: color var(--duration-fast);
 }
 
 .footer__col a:hover {
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 /* ==========================================================================
@@ -712,9 +745,10 @@
     font-size: 0.74rem;
   }
 
-  /* Brand grid — 2 columns on tablet */
+  /* Brand grid — 2 columns on tablet/mobile */
   .brand-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
   }
 
   /* Timeline goes to left side on tablet — show all content stacked */
@@ -834,10 +868,24 @@
     max-width: 100%;
   }
 
-  /* Services grid — allow smaller cards on phones */
+  /* Services grid — horizontal scroll carousel on mobile */
   .services-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xs);
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    scrollbar-width: none;
+  }
+
+  .services-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .services-grid .service-card {
+    flex: 0 0 80vw;
+    scroll-snap-align: center;
   }
 
   /* Process steps — tighter on phone */
@@ -919,14 +967,14 @@
     min-height: 32px;
   }
 
-  /* Brand grid — 2 columns on small mobile */
+  /* Brand grid — single column on small mobile */
   .brand-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
-  /* Services grid single column */
-  .services-grid {
-    grid-template-columns: 1fr;
+  /* Services grid — narrower cards on small mobile */
+  .services-grid .service-card {
+    flex: 0 0 85vw;
   }
 
   /* Footer single column */

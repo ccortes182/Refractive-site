@@ -102,6 +102,37 @@ h1, h2, h3, h4, h5, h6 {
   border: 0;
 }
 
+/* ── Skip Link ── */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: var(--gutter);
+  z-index: calc(var(--z-nav) + 1);
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-accent-blue);
+  color: var(--color-bg-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-to-content:focus {
+  top: var(--space-xs);
+}
+
+/* ── Global Focus-Visible ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent-cyan);
+  outline-offset: 2px;
+}
+
+/* Remove outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* Selection */
 ::selection {
   background: rgba(67, 169, 223, 0.3);
