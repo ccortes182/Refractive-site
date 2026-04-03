@@ -378,12 +378,7 @@
   }
 
   .auth-bar__signed-out,
-  .auth-bar__signed-in {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-  }
-
+  .auth-bar__signed-in,
   .index-section__header {
     flex-direction: row;
     align-items: center;
