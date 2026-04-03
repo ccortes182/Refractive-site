@@ -57,7 +57,7 @@
 }
 
 .auth-bar__headline {
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
   line-height: 1.1;
@@ -389,7 +389,7 @@
   }
 
   .auth-bar__headline {
-    font-size: 0.66rem;
+    font-size: 0.8rem;
     line-height: 1.15;
   }
 
@@ -425,7 +425,7 @@
   }
 
   .auth-bar__headline {
-    font-size: 0.6rem;
+    font-size: 0.8rem;
   }
 
   .auth-bar__actions .btn {
