@@ -12,7 +12,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: calc(var(--z-nav) - 1);
+  z-index: calc(var(--z-nav) - 2);
   background: rgba(26, 26, 31, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
