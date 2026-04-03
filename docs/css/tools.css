@@ -73,9 +73,9 @@
 }
 
 .auth-bar__actions .btn {
-  min-height: 26px;
-  padding: 0.34rem 0.56rem;
-  font-size: 0.54rem;
+  min-height: 32px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
   letter-spacing: 0.09em;
 }
 
@@ -372,7 +372,7 @@
   }
 
   .auth-bar__inner {
-    min-height: 48px;
+    min-height: 60px;
     padding: 0;
     gap: 0.4rem;
   }
@@ -400,9 +400,9 @@
 
   .auth-bar__actions .btn {
     width: auto;
-    min-height: 24px;
-    padding: 0.3rem 0.46rem;
-    font-size: 0.5rem;
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.7rem;
   }
 
   .index-hero__actions {
@@ -420,7 +420,7 @@
   }
 
   .auth-bar__inner {
-    min-height: 32px;
+    min-height: 60px;
     gap: 0.32rem;
   }
 
@@ -429,8 +429,8 @@
   }
 
   .auth-bar__actions .btn {
-    min-height: 22px;
-    padding: 0.28rem 0.42rem;
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
     font-size: 0.46rem;
   }
 }
