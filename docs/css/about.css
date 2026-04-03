@@ -322,3 +322,21 @@
     font-size: clamp(2rem, 8vw, 3rem);
   }
 }
+
+@media (max-width: 479px) {
+  .about-hero__headline {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  .team-card {
+    padding: var(--space-md);
+  }
+
+  .career-card {
+    padding: var(--space-md);
+  }
+
+  .story__pillar {
+    padding: var(--space-md);
+  }
+}

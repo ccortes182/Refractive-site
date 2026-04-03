@@ -25,6 +25,21 @@
   padding: 0;
 }
 
+.section--centered {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 767px) and (orientation: landscape) {
+  .section--centered {
+    min-height: auto;
+    padding: var(--space-xl) 0;
+  }
+}
+
 .section__cta {
   text-align: center;
   margin-top: var(--space-xl);
@@ -383,7 +398,7 @@
   letter-spacing: clamp(2px, 0.35vw, 5px);
   text-transform: uppercase;
   margin-bottom: var(--space-md);
-  white-space: nowrap;
+  text-wrap: balance;
 }
 
 .hero__subhead {

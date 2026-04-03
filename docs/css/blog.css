@@ -624,3 +624,21 @@
     gap: var(--space-xs);
   }
 }
+
+@media (max-width: 479px) {
+  .blog-hero__title {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  .article-hero__title {
+    font-size: var(--text-xl);
+  }
+
+  .blog-card--featured {
+    padding: var(--space-md);
+  }
+
+  .blog-newsletter__form {
+    gap: var(--space-xs);
+  }
+}

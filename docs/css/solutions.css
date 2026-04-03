@@ -615,6 +615,11 @@
   .sub-solutions {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .anchor-nav__link {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -657,7 +662,27 @@
     flex-direction: column;
   }
   .anchor-nav {
-      margin-left: 0;
-  margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .sol-hero__headline {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+  }
+
+  .anchor-nav__link {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.6rem;
+  }
+
+  .pillar-graphic {
+    width: 64px;
+    height: 64px;
+  }
+
+  .pillar-header__subtitle {
+    font-size: var(--text-sm);
   }
 }

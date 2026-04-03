@@ -12,8 +12,8 @@
 /* ── Download Button ── */
 .doc-download {
   position: fixed;
-  bottom: var(--space-lg);
-  right: var(--space-lg);
+  bottom: max(var(--space-lg), env(safe-area-inset-bottom, 0px));
+  right: max(var(--space-lg), env(safe-area-inset-right, 0px));
   z-index: var(--z-sticky);
   display: inline-flex;
   align-items: center;
