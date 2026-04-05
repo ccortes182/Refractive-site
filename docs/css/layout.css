@@ -392,7 +392,7 @@
 }
 
 .hero__headline {
-  font-size: clamp(1.4rem, 5.5vw, 5.5rem);
+  font-size: clamp(1.4rem, 4.5vw, 4.5rem);
   font-weight: var(--font-weight-semibold);
   line-height: var(--leading-snug);
   letter-spacing: clamp(2px, 0.35vw, 5px);

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Contact Form — Validation + Submission handling
+   Contact Form — Validation + Submission handling (Netlify Forms)
    ========================================================================== */
 
 function initContactForm() {
@@ -82,17 +82,20 @@ function initContactForm() {
       return;
     }
 
-    // Simulate form submission (replace with real endpoint)
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
-    // Collect form data
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
 
-    setTimeout(() => {
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString()
+    })
+    .then(function(response) {
+      if (!response.ok) throw new Error('Form submission failed');
       form.style.display = 'none';
       successEl.hidden = false;
 
@@ -100,7 +103,21 @@ function initContactForm() {
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
       );
-    }, 800);
+    })
+    .catch(function() {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+      // Show a generic error — the form structure is valid, so this is a network issue
+      var networkErr = form.querySelector('.form-error--network');
+      if (!networkErr) {
+        networkErr = document.createElement('p');
+        networkErr.className = 'form-error form-error--network';
+        networkErr.setAttribute('role', 'alert');
+        networkErr.textContent = 'Something went wrong. Please try again or email us directly.';
+        form.querySelector('.contact-grid').appendChild(networkErr);
+      }
+      networkErr.hidden = false;
+    });
   });
 }
 

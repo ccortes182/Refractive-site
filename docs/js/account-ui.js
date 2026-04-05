@@ -134,6 +134,7 @@
         '</div>' +
         '<div class="auth-bar__actions">' +
           '<a href="' + config.playbooksHref + '" class="btn btn--primary btn--sm">My Account</a>' +
+          '<button class="btn btn--ghost btn--sm auth-bar__signout" id="auth-signout">Sign Out</button>' +
         '</div>' +
       '</div>'
     );
@@ -149,6 +150,17 @@
     var config = getAccountConfig();
     inner.innerHTML = buildRailMarkup(config);
     rail.setAttribute('data-account-state', config.state);
+
+    // Bind sign-out button
+    var signoutBtn = document.getElementById('auth-signout');
+    if (signoutBtn && window.RefractiveAuth && window.RefractiveAuth.signOut) {
+      signoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        RefractiveAuth.signOut().then(function() {
+          window.location.reload();
+        });
+      });
+    }
   }
 
   function markLastResource() {
@@ -161,8 +173,15 @@
 
   function initAccountUI() {
     if (!window.RefractiveAuth) return;
-    markLastResource();
-    initAccountRail();
+    if (window.RefractiveAuth.onReady) {
+      window.RefractiveAuth.onReady(function() {
+        markLastResource();
+        initAccountRail();
+      });
+    } else {
+      markLastResource();
+      initAccountRail();
+    }
   }
 
   if (document.readyState === 'loading') {

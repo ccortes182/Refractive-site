@@ -1,0 +1,30 @@
+[build]
+  publish = "docs"
+
+[[edge_functions]]
+  path = "/portal/*"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/investor/*"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/downloads/*"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/deck.html"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/pitch.html"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/investor-onepager.html"
+  function = "portal-guard"
+
+[[edge_functions]]
+  path = "/illuminate-roadmap.html"
+  function = "portal-guard"

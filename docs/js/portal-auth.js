@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Portal Auth — Client-side login gate
+   Portal Auth — Supabase-backed login for client & investor portals
    ========================================================================== */
 
 (function() {
@@ -13,64 +13,113 @@
 
     if (!loginSection || !landingSection || !form) return;
 
-    // Determine which portal this is
     var portalType = document.body.dataset.portal || 'default';
-    var storageKey = 'refractive_' + portalType + '_auth';
+    var sb = window.RefractiveSupabase;
 
-    // Hashed credentials (SHA-256)
-    var VALID_HASH = 'e82c3ca2482ea3c6fe829d1ac274662d30e1c7195e588b0a1505ec434c5610f5';
-
-    async function hashInput(email, pass) {
-      var raw = email + ':' + pass;
-      var encoded = new TextEncoder().encode(raw);
-      var buffer = await crypto.subtle.digest('SHA-256', encoded);
-      var arr = Array.from(new Uint8Array(buffer));
-      return arr.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-    }
-
-    // Check existing session
-    if (sessionStorage.getItem(storageKey) === 'true') {
-      showLanding();
+    // Check existing Supabase session
+    if (sb) {
+      sb.auth.getSession().then(function(result) {
+        var session = result.data && result.data.session;
+        if (!session) return;
+        // Verify portal access
+        return sb.from('portal_access')
+          .select('portal_type')
+          .eq('user_id', session.user.id)
+          .eq('portal_type', portalType)
+          .is('revoked_at', null)
+          .then(function(res) {
+            if (res.data && res.data.length > 0) {
+              showLanding();
+            }
+          });
+      });
     }
 
     // Form submit
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
 
       var email = form.querySelector('[name="email"]').value.trim().toLowerCase();
       var pass  = form.querySelector('[name="password"]').value;
-      var hash  = await hashInput(email, pass);
+      var submitBtn = form.querySelector('button[type="submit"]');
 
-      if (hash === VALID_HASH) {
-        sessionStorage.setItem(storageKey, 'true');
-        showLanding();
-      } else {
-        // Show error
-        errorEl.classList.add('portal-login__error--visible');
-        errorEl.textContent = 'Invalid email or password.';
-
-        // Shake
-        card.classList.remove('portal-login__card--shake');
-        void card.offsetWidth; // force reflow
-        card.classList.add('portal-login__card--shake');
+      if (!email || !pass) {
+        showError('Please enter your email and password.');
+        return;
       }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      clearError();
+
+      if (!sb) {
+        showError('Authentication service unavailable. Please try again later.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In';
+        return;
+      }
+
+      sb.auth.signInWithPassword({ email: email, password: pass })
+        .then(function(result) {
+          if (result.error) throw result.error;
+          var user = result.data.user;
+          // Check portal access
+          return sb.from('portal_access')
+            .select('portal_type')
+            .eq('user_id', user.id)
+            .eq('portal_type', portalType)
+            .is('revoked_at', null)
+            .then(function(res) {
+              if (!res.data || res.data.length === 0) {
+                throw new Error('You do not have access to this portal. Contact Refractive to request access.');
+              }
+              showLanding();
+            });
+        })
+        .catch(function(err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Sign In';
+          showError(err.message || 'Invalid email or password.');
+          // Shake animation
+          card.classList.remove('portal-login__card--shake');
+          void card.offsetWidth;
+          card.classList.add('portal-login__card--shake');
+        });
     });
 
     // Logout
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
-        sessionStorage.removeItem(storageKey);
-        loginSection.style.display = '';
-        landingSection.classList.remove('portal-landing--visible');
-        // Clear form
-        form.reset();
-        errorEl.classList.remove('portal-login__error--visible');
+        if (sb) {
+          sb.auth.signOut().then(function() {
+            showLogin();
+          });
+        } else {
+          showLogin();
+        }
       });
     }
 
     function showLanding() {
       loginSection.style.display = 'none';
       landingSection.classList.add('portal-landing--visible');
+    }
+
+    function showLogin() {
+      loginSection.style.display = '';
+      landingSection.classList.remove('portal-landing--visible');
+      form.reset();
+      clearError();
+    }
+
+    function showError(msg) {
+      errorEl.classList.add('portal-login__error--visible');
+      errorEl.textContent = msg;
+    }
+
+    function clearError() {
+      errorEl.classList.remove('portal-login__error--visible');
+      errorEl.textContent = '';
     }
   });
 })();

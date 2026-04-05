@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#212429">
-  <title>DTC Health Check — Refractive</title>
-  <meta name="description" content="Five numbers. Instant read on your brand's growth health. Free DTC calculator with operator-level benchmarks.">
+  <title>Investor One-Pager — Refractive</title>
+  <meta name="description" content="Refractive investor one-pager: company, solution, model, and the ask.">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="../images/Social Icon.png">
@@ -21,13 +21,16 @@
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/animations.css">
-  <link rel="stylesheet" href="../css/tools.css">
+  <link rel="stylesheet" href="../css/doc.css">
 </head>
-<body class="has-auth-bar">
+<body>
 
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
+  <!-- ════════════════════════════════════════════════════════
+       NAVIGATION
+       ════════════════════════════════════════════════════════ -->
   <div class="bottom-blur"></div>
 
   <nav class="nav" id="nav">
@@ -38,7 +41,7 @@
       </a>
 
       <div class="nav__links">
-        <a href="../how-we-work.html" class="nav__link">How We Work</a>
+        <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
         <a href="../solutions.html" class="nav__link">Solutions</a>
         <a href="../illuminate.html" class="nav__link">Illuminate</a>
         <a href="../blog/index.html" class="nav__link">The Index</a>
@@ -55,7 +58,7 @@
   </nav>
 
   <div class="nav__mobile-overlay" id="mobile-nav">
-    <a href="../how-we-work.html" class="nav__link">How We Work</a>
+    <a href="../index.html#how-we-work" class="nav__link">How We Work</a>
     <a href="../solutions.html" class="nav__link">Solutions</a>
     <a href="../illuminate.html" class="nav__link">Illuminate</a>
     <a href="../blog/index.html" class="nav__link">The Index</a>
@@ -63,114 +66,94 @@
     <a href="../index.html#contact" class="btn btn--primary">Book a Growth Audit</a>
   </div>
 
-  <!-- Auth Bar -->
-  <div class="auth-bar" id="auth-bar">
-    <div class="container">
-      <div class="auth-bar__inner">
-        <div class="auth-bar__logged-out" id="auth-logged-out">
-          <span class="auth-bar__text">Create a free account to unlock premium tools and dashboards.</span>
-        </div>
-        <div class="auth-bar__logged-in" id="auth-logged-in" style="display:none;">
-          <span class="auth-bar__welcome" id="auth-welcome">Welcome back</span>
-        </div>
+  <!-- ════════════════════════════════════════════════════════
+       DOCUMENT
+       ════════════════════════════════════════════════════════ -->
+  <main class="doc" id="main-content">
+
+    <div class="doc__header">
+      <p class="doc__label">Investor One-Pager</p>
+      <h1 class="doc__title">Refractive</h1>
+      <p class="doc__subtitle">The full-stack growth partner for operator-led eCommerce brands that have outgrown their agency but aren&rsquo;t ready to build a 15-person in-house team.</p>
+    </div>
+
+    <div class="doc__section">
+      <h2 class="doc__section-title">The problem</h2>
+      <p>Mid-market eCommerce brands ($3M&ndash;$20M+) are stuck. They&rsquo;re running paid in one silo, email in another, and CRO when someone remembers. Measurement is noisy&mdash;every platform takes credit, nobody proves incrementality. The result: stalled growth, wasted spend, and founder burnout.</p>
+      <div class="doc__card">
+        <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;">Typical audits reveal <strong style="color:var(--color-text-primary);">15&ndash;30% of ad spend</strong> leaking to misaligned funnels, redundant attribution, and lifecycle gaps. That&rsquo;s the gap we close.</p>
       </div>
     </div>
-  </div>
 
-  <!-- Hero -->
-  <section class="section section--hero hc-hero" id="main-content">
-    <div class="container container--narrow">
-      <p class="eyebrow">The Refractive Index</p>
-      <h1>DTC Health Check</h1>
-      <p class="hc-hero__subtitle">Five numbers. Instant read on your brand's growth health.<br>No sign-up. No fluff.</p>
+    <div class="doc__section">
+      <h2 class="doc__section-title">Our solution</h2>
+      <p>A single operating system that aligns Foundation (strategy), Growth (acquisition), Experience (conversion), and Retention (lifecycle) under one roadmap, one pod, and one measurement layer. Not channel management&mdash;full-funnel coordination.</p>
     </div>
-  </section>
 
-  <!-- Calculator -->
-  <section class="section">
-    <div class="container container--narrow">
-
-      <!-- Inputs -->
-      <div class="hc-inputs">
-        <div class="form-group">
-          <label class="form-label" for="hc-revenue">Monthly Revenue</label>
-          <input type="text" id="hc-revenue" class="form-input" placeholder="e.g. 150,000" inputmode="numeric">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="hc-adspend">Monthly Ad Spend</label>
-          <input type="text" id="hc-adspend" class="form-input" placeholder="e.g. 30,000" inputmode="numeric">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="hc-customers">New Customers</label>
-          <input type="text" id="hc-customers" class="form-input" placeholder="e.g. 400" inputmode="numeric">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="hc-aov">Average Order Value</label>
-          <input type="text" id="hc-aov" class="form-input" placeholder="e.g. 95" inputmode="numeric">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="hc-margin">Gross Margin %</label>
-          <input type="text" id="hc-margin" class="form-input" placeholder="e.g. 58" inputmode="numeric">
-        </div>
-      </div>
-
-      <!-- Empty state -->
-      <p class="hc-empty" id="hc-empty">Enter your numbers above to see your growth health score.</p>
-
-      <!-- Results -->
-      <div class="hc-results" id="hc-results" style="display:none;">
-        <div class="hc-metric" id="metric-mer">
-          <span class="hc-metric__label">Marketing Efficiency Ratio</span>
-          <span class="hc-metric__value" id="val-mer">--</span>
-          <span class="hc-metric__badge" id="badge-mer"></span>
-          <span class="hc-metric__benchmark">Healthy DTC brands typically run 4x–6x MER. Below 3x usually means either CAC is too high or revenue per order needs work.</span>
-        </div>
-        <div class="hc-metric" id="metric-cac">
-          <span class="hc-metric__label">Blended CAC</span>
-          <span class="hc-metric__value" id="val-cac">--</span>
-          <span class="hc-metric__badge" id="badge-cac"></span>
-          <span class="hc-metric__benchmark">Your CAC should be well below your AOV. If CAC is approaching or exceeding AOV, you're acquiring customers at a loss before any margin consideration.</span>
-        </div>
-        <div class="hc-metric" id="metric-cac-aov">
-          <span class="hc-metric__label">CAC : AOV Ratio</span>
-          <span class="hc-metric__value" id="val-cac-aov">--</span>
-          <span class="hc-metric__badge" id="badge-cac-aov"></span>
-          <span class="hc-metric__benchmark">A ratio under 0.5 means you recover acquisition cost quickly. Above 0.8 means you're dependent on repeat purchase to break even.</span>
-        </div>
-        <div class="hc-metric" id="metric-gm">
-          <span class="hc-metric__label">Gross Margin</span>
-          <span class="hc-metric__value" id="val-gm">--</span>
-          <span class="hc-metric__badge" id="badge-gm"></span>
-          <span class="hc-metric__benchmark">DTC apparel and footwear brands typically target 55%–70% gross margin. Below 45% leaves very little room for marketing spend.</span>
-        </div>
-        <div class="hc-metric" id="metric-cm">
-          <span class="hc-metric__label">Contribution Margin</span>
-          <span class="hc-metric__value" id="val-cm">--</span>
-          <span class="hc-metric__badge" id="badge-cm"></span>
-          <span class="hc-metric__benchmark">Contribution margin is the real profitability signal — revenue left after COGS and marketing. Brands scaling profitably typically run 20%–35% CM.</span>
-        </div>
-        <div class="hc-metric" id="metric-be">
-          <span class="hc-metric__label">Break-Even MER</span>
-          <span class="hc-metric__value" id="val-be">--</span>
-          <span class="hc-metric__badge hc-metric__badge--info" id="badge-be">Informational</span>
-          <span class="hc-metric__benchmark" id="bench-be">This is the minimum MER at which you're gross-margin positive on paid spend.</span>
-        </div>
-      </div>
-
-      <!-- Operator Read -->
-      <div class="hc-read" id="hc-read"></div>
-
-      <!-- CTA -->
-      <div class="hc-cta">
-        <p>Want the full picture?</p>
-        <p class="hc-cta__desc">The Refractive Growth Dashboard breaks this down month-by-month — P&L, cohort LTV, new customer acquisition metrics, and channel-level efficiency. Free to access. Takes 2 minutes to set up.</p>
-        <a href="../playbooks.html" class="btn btn--primary">Get the Full Dashboard &rarr;</a>
-      </div>
-
+    <div class="doc__section">
+      <h2 class="doc__section-title">The moat: Illuminate</h2>
+      <p>Illuminate is our measurement layer. It combines multi-touch attribution, geo-based incrementality testing, and media mix modeling into a single decision engine. Agencies sell dashboards. We prove what&rsquo;s actually driving revenue&mdash;and reallocate accordingly.</p>
+      <p>Phase 1 ships today using best-in-class partners. Phase 2 (6&ndash;12 months) adds proprietary automation, anomaly detection, and creative intelligence. The partner layer gets us to market fast. The proprietary layer compounds defensibility.</p>
     </div>
-  </section>
 
-  <!-- Footer -->
+    <div class="doc__section">
+      <h2 class="doc__section-title">Business model</h2>
+      <p>Three revenue streams. All aligned with client outcomes.</p>
+      <ul class="doc__list">
+        <li><strong>Retainers</strong> &mdash; Core / Scale / Enterprise tiers. Flat fees by scope, not percent-of-spend. Predictable, high-margin recurring revenue.</li>
+        <li><strong>Programs</strong> &mdash; Signal Scan ($3,500) and Spectrum Sprint ($12.5&ndash;18.5K). Productized entry points that convert to retainers at high rates.</li>
+        <li><strong>Performance bonus</strong> &mdash; tied to business KPIs, not vanity metrics. We eat what we kill.</li>
+      </ul>
+    </div>
+
+    <div class="doc__section">
+      <h2 class="doc__section-title">The raise</h2>
+      <div class="doc__card">
+        <div class="doc__highlight">
+          <span class="doc__highlight-value">$500K</span>
+          <span class="doc__highlight-label">to fund speed and proof</span>
+        </div>
+        <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-top:var(--space-sm);margin-bottom:0;">Capital-efficient model. Pod-based delivery means we scale capacity with revenue, not ahead of it. This raise buys the runway to prove the model and build the Illuminate moat.</p>
+      </div>
+    </div>
+
+    <div class="doc__section">
+      <h2 class="doc__section-title">Use of funds</h2>
+      <ul class="doc__list">
+        <li><strong>Delivery capacity</strong> &mdash; contract pods first, full-time hires as revenue supports. No premature headcount bloat.</li>
+        <li><strong>Creative production</strong> &mdash; fuel the testing engine. Brands that test more creative, faster, win. We need the budget to deliver velocity.</li>
+        <li><strong>Tooling + Illuminate</strong> &mdash; partner costs for attribution, incrementality, and MMM infrastructure.</li>
+        <li><strong>GTM</strong> &mdash; content marketing, strategic partnerships, and targeted outbound to DTC operators in the $3&ndash;20M range.</li>
+      </ul>
+    </div>
+
+    <div class="doc__section">
+      <h2 class="doc__section-title">12-month milestones</h2>
+      <ul class="doc__timeline">
+        <li><strong>Months 1&ndash;3:</strong> 3&ndash;5 design partners onboarded. Playbook validated. First case studies produced.</li>
+        <li><strong>By month 6:</strong> 3&ndash;6 retainer clients generating recurring revenue. Signal Scan and Spectrum Sprint conversion funnel proven.</li>
+        <li><strong>By month 12:</strong> 8&ndash;12 active retainers. Revenue trajectory toward profitability. Illuminate proprietary layer v0.9 running in parallel with partner infrastructure.</li>
+      </ul>
+    </div>
+
+    <div class="doc__section">
+      <h2 class="doc__section-title">Founder</h2>
+      <div class="doc__card">
+        <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin:0;"><strong style="color:var(--color-text-primary);font-size:var(--text-base);">Christian Cortes</strong><br>7+ years scaling eCommerce growth at a $40M retailer. Built and led cross-functional teams across paid, creative, CRO, and lifecycle. Knows the operator&rsquo;s pain firsthand&mdash;because he lived it. Refractive is the growth partner he wished existed.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Download Button -->
+  <a href="../downloads/Refractive_Investor_OnePager.pdf" download class="doc-download">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Download PDF
+  </a>
+
+  <!-- ════════════════════════════════════════════════════════
+       FOOTER
+       ════════════════════════════════════════════════════════ -->
   <footer class="footer" id="footer">
     <div class="container">
       <div class="footer__top">
@@ -178,14 +161,8 @@
           <a href="../index.html">
             <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo">
           </a>
-          <p class="footer__heading">The Refractive Index</p>
-          <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
-          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-            <input type="hidden" name="form-name" value="newsletter">
-            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
-            <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
-          </form>
-          <p class="footer__privacy-note">We care about your data in our <a href="../privacy.html">privacy policy</a>.</p>
+          <p class="footer__heading">Fuel for founder-operators.</p>
+          <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
         </div>
 
         <div class="footer__col">
@@ -251,16 +228,27 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="../js/nav.js"></script>
-  <script src="../js/animations.js"></script>
-  <script src="../js/health-check.js"></script>
+  <script>
+    initNav();
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase-client.js"></script>
-  <script src="../js/auth.js"></script>
-  <script src="../js/account-ui.js"></script>
-  <script src="../js/newsletter-form.js"></script>
+    (function() {
+      var btn = document.querySelector('.doc-download');
+      var main = document.querySelector('.doc');
+      if (!btn || !main) return;
+
+      function check() {
+        var mainBottom = main.getBoundingClientRect().bottom;
+        btn.style.opacity = mainBottom > window.innerHeight ? '' : '0';
+        btn.style.pointerEvents = mainBottom > window.innerHeight ? '' : 'none';
+      }
+
+      window.addEventListener('scroll', check, { passive: true });
+      check();
+    })();
+  </script>
 </body>
 </html>

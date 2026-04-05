@@ -384,8 +384,9 @@
           </a>
           <p class="footer__heading">Fuel for founder-operators.</p>
           <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
-          <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
+          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="newsletter">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="../../privacy.html">privacy policy</a>.</p>
@@ -466,7 +467,10 @@
     });
   </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/account-ui.js"></script>
+  <script src="../../js/newsletter-form.js"></script>
 </body>
 </html>

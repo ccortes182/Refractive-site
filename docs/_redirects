@@ -1,0 +1,11 @@
+# Redirect old portal URLs to new directory structure
+/portal.html        /portal.html       200
+/investor.html      /investor.html     200
+
+# Old content page URLs redirect to new protected locations
+/pitch.html                 /portal/first-call-deck.html    301
+/signal-scan.html           /portal/signal-scan.html        301
+/spectrum-sprint.html       /portal/spectrum-sprint.html    301
+/deck.html                  /investor/deck.html             301
+/investor-onepager.html     /investor/onepager.html         301
+/illuminate-roadmap.html    /investor/illuminate-roadmap.html 301

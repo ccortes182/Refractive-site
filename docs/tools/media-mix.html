@@ -24,11 +24,25 @@
   <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
   <!-- Auth guard -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="../js/auth.js"></script>
   <script>
-    if (!window.RefractiveAuth || !RefractiveAuth.checkAccess('media-mix')) {
-      window.location.href = '../playbooks.html';
-    }
+    document.documentElement.style.visibility = 'hidden';
+    (function() {
+      if (window.RefractiveAuth && RefractiveAuth.onReady) {
+        RefractiveAuth.onReady(function() {
+          RefractiveAuth.checkAccessAsync('media-mix').then(function(ok) {
+            if (ok) { document.documentElement.style.visibility = ''; }
+            else { window.location.href = '../playbooks.html'; }
+          });
+        });
+      } else if (!window.RefractiveAuth || !RefractiveAuth.checkAccess('media-mix')) {
+        window.location.href = '../playbooks.html';
+      } else {
+        document.documentElement.style.visibility = '';
+      }
+    })();
   </script>
 
   <div class="bottom-blur"></div>
@@ -163,8 +177,9 @@
           <a href="../index.html"><img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="footer__brand-logo"></a>
           <p class="footer__heading">The Refractive Index</p>
           <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
-          <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
+          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="newsletter">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="../privacy.html">privacy policy</a>.</p>
@@ -199,5 +214,6 @@
   <script src="../js/account-ui.js"></script>
   <script src="../js/media-mix.js"></script>
 
+  <script src="../js/newsletter-form.js"></script>
 </body>
 </html>

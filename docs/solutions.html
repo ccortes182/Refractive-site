@@ -125,7 +125,7 @@
             <li>Sharper positioning and GTM narrative</li>
             <li>Cleaner ops that remove friction</li>
           </ul>
-          <span class="pillar-card__deliverable">Business Strategy &amp; GTM Plan</span>
+          <span class="pillar-card__deliverable">Strategy &amp; GTM</span>
         </a>
 
         <a href="#growth" class="pillar-card">
@@ -137,7 +137,7 @@
             <li>Lower CAC and stronger MER</li>
             <li>Budget reallocations based on incrementality</li>
           </ul>
-          <span class="pillar-card__deliverable">Paid Media &amp; Creative Production</span>
+          <span class="pillar-card__deliverable">Paid Media &amp; Creative</span>
         </a>
 
         <a href="#experience" class="pillar-card">
@@ -492,7 +492,7 @@
        7. HOW WE WORK
        ════════════════════════════════════════════════════════ -->
   <section class="section section--deep" id="how-we-work">
-    <div class="container container--narrow">
+    <div class="container">
       <span class="eyebrow" data-animate="fade-up" style="text-align:center;display:block;">Operations</span>
       <h2 class="section__heading section__heading--center" data-animate="fade-up">How Refractive runs the work</h2>
       <p class="section__subhead" data-animate="fade-up">We operate as a senior pod: paid, creative, CRO, lifecycle, and measurement moving together under one roadmap.</p>
@@ -580,27 +580,27 @@
 
       <div class="pricing-grid" data-animate="fade-up" data-animate-stagger>
         <div class="pricing-card">
-          <h3 class="pricing-card__title">Two-Pillar Focus</h3>
-          <p class="pricing-card__scope">e.g. Paid + Retention</p>
-          <p class="pricing-card__price">Starting at $X,XXX<span>/mo</span></p>
+          <h3 class="pricing-card__title">Single Pillar</h3>
+          <p class="pricing-card__scope">Discounts for bundling</p>
+          <p class="pricing-card__price">Starting at $4,000<span>/mo</span></p>
         </div>
 
         <div class="pricing-card pricing-card--featured">
-          <h3 class="pricing-card__title">Full Growth Engine</h3>
+          <h3 class="pricing-card__title">Full-Stack Growth</h3>
           <p class="pricing-card__scope">All four pillars</p>
-          <p class="pricing-card__price">Starting at $X,XXX<span>/mo</span></p>
+          <p class="pricing-card__price">Starting at $12,000<span>/mo</span></p>
         </div>
 
         <div class="pricing-card">
-          <h3 class="pricing-card__title">Illuminate</h3>
+          <h3 class="pricing-card__title">Illuminate&trade;</h3>
           <p class="pricing-card__scope">Standalone measurement</p>
-          <p class="pricing-card__price">Starting at $X,XXX<span>/mo</span></p>
+          <p class="pricing-card__price">Starting at $149<span>/mo</span></p>
         </div>
 
         <div class="pricing-card">
           <h3 class="pricing-card__title">Shopify Development</h3>
           <p class="pricing-card__scope">Project-based</p>
-          <p class="pricing-card__price">From $X,XXX</p>
+          <p class="pricing-card__price">Starting at $40,000</p>
         </div>
       </div>
 
@@ -706,8 +706,9 @@
           </a>
           <p class="footer__heading">Fuel for founder-operators.</p>
           <p class="footer__tagline">Playbooks for paid, CRO, Shopify, retention, and Illuminate, built by senior operators.</p>
-          <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
+          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="newsletter">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="privacy.html">privacy policy</a>.</p>
@@ -870,5 +871,6 @@
     });
   </script>
 
+  <script src="js/newsletter-form.js"></script>
 </body>
 </html>

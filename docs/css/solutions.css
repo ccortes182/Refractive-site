@@ -207,14 +207,34 @@
 
 .pillar-card__deliverable {
   display: inline-block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.5rem 1rem;
   font-size: var(--text-xs);
-  color: var(--color-accent-blue);
-  border: 1px solid rgba(67, 169, 223, 0.25);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+  background: linear-gradient(
+    135deg,
+    rgba(67, 169, 223, 0.12) 0%,
+    rgba(142, 104, 173, 0.1) 100%
+  );
+  border: 1px solid rgba(67, 169, 223, 0.3);
   border-radius: var(--radius-full);
-  font-weight: var(--font-weight-medium);
   margin-top: auto;
   align-self: flex-start;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 12px rgba(67, 169, 223, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color var(--duration-fast), box-shadow var(--duration-fast), background var(--duration-fast);
+}
+
+.pillar-card:hover .pillar-card__deliverable {
+  border-color: rgba(67, 169, 223, 0.5);
+  background: linear-gradient(
+    135deg,
+    rgba(67, 169, 223, 0.18) 0%,
+    rgba(142, 104, 173, 0.15) 100%
+  );
+  box-shadow: 0 0 18px rgba(67, 169, 223, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ── Pillar Animated Graphics ── */
@@ -222,6 +242,87 @@
   width: 100px;
   height: 100px;
   flex-shrink: 0;
+  position: relative;
+  border-radius: 50%;
+}
+
+/* Morphing blob glow — primary layer */
+.pillar-graphic::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  background: rgba(67, 169, 223, 0.2);
+  border-radius: 40% 60% 55% 45% / 55% 40% 60% 45%;
+  filter: blur(14px);
+  animation:
+    blob-morph 8s ease-in-out infinite,
+    blob-color 6s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Morphing blob glow — secondary layer (offset timing for organic feel) */
+.pillar-graphic::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: rgba(142, 104, 173, 0.15);
+  border-radius: 55% 45% 40% 60% / 45% 55% 50% 50%;
+  filter: blur(10px);
+  animation:
+    blob-morph-alt 10s ease-in-out infinite,
+    blob-color-alt 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes blob-morph {
+  0%, 100% {
+    border-radius: 40% 60% 55% 45% / 55% 40% 60% 45%;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    border-radius: 55% 45% 38% 62% / 42% 58% 50% 50%;
+    transform: scale(1.12) rotate(8deg);
+  }
+  50% {
+    border-radius: 48% 52% 62% 38% / 60% 42% 38% 58%;
+    transform: scale(0.92) rotate(-5deg);
+  }
+  75% {
+    border-radius: 62% 38% 45% 55% / 38% 62% 55% 42%;
+    transform: scale(1.06) rotate(3deg);
+  }
+}
+
+@keyframes blob-morph-alt {
+  0%, 100% {
+    border-radius: 55% 45% 40% 60% / 45% 55% 50% 50%;
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    border-radius: 42% 58% 60% 40% / 58% 42% 45% 55%;
+    transform: scale(1.08) rotate(-6deg);
+  }
+  60% {
+    border-radius: 60% 40% 42% 58% / 40% 60% 58% 42%;
+    transform: scale(0.94) rotate(7deg);
+  }
+  85% {
+    border-radius: 45% 55% 55% 45% / 55% 45% 42% 58%;
+    transform: scale(1.04) rotate(-2deg);
+  }
+}
+
+@keyframes blob-color {
+  0%, 100% { background: rgba(67, 169, 223, 0.22); }
+  33%      { background: rgba(142, 104, 173, 0.25); }
+  66%      { background: rgba(194, 220, 212, 0.2); }
+}
+
+@keyframes blob-color-alt {
+  0%, 100% { background: rgba(142, 104, 173, 0.18); }
+  25%      { background: rgba(194, 220, 212, 0.2); }
+  50%      { background: rgba(67, 169, 223, 0.18); }
+  75%      { background: rgba(160, 92, 151, 0.16); }
 }
 
 .pillar-graphic svg,
@@ -229,6 +330,8 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  position: relative;
+  z-index: 1;
 }
 
 .pillar-graphic__ring {
@@ -319,6 +422,13 @@
     opacity: 1;
     stroke-dashoffset: 0;
     transform: none;
+  }
+
+  .pillar-graphic::before,
+  .pillar-graphic::after {
+    animation: none !important;
+    border-radius: 50% !important;
+    transform: none !important;
   }
 }
 
@@ -485,7 +595,7 @@
 /* ── Cadence Grid (How We Work) ── */
 .cadence-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--space-md);
   margin-top: var(--space-lg);
 }

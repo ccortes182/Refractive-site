@@ -205,6 +205,8 @@
       <button class="gate-modal__close" id="gate-close" aria-label="Close">&times;</button>
       <h2 class="gate-modal__title" id="gate-modal-title">Unlock member access</h2>
       <p class="gate-modal__desc" id="gate-modal-desc">Tell us a bit about yourself to unlock this operator tool instantly. Your free account will carry across future member resources too.</p>
+
+      <!-- Sign-up form (default) -->
       <form class="gate-modal__form" id="gate-form">
         <div class="gate-modal__row">
           <div class="form-group">
@@ -220,6 +222,10 @@
           <label class="form-label" for="gate-email">Work Email</label>
           <input type="email" class="form-input" placeholder="you@brand.com" required id="gate-email" autocomplete="email">
         </div>
+        <div class="form-group">
+          <label class="form-label" for="gate-password">Password</label>
+          <input type="password" class="form-input" placeholder="Create a password" required id="gate-password" minlength="8" autocomplete="new-password">
+        </div>
         <div class="gate-modal__row">
           <div class="form-group">
             <label class="form-label" for="gate-title">Job Title</label>
@@ -231,8 +237,24 @@
           </div>
         </div>
         <button type="submit" class="btn btn--primary btn--full" id="gate-submit">Unlock Free Account &rarr;</button>
-        <p class="gate-modal__error" id="gate-error" hidden>Please enter your name and a valid email address.</p>
+        <p class="gate-modal__error" id="gate-error" hidden>Please enter your name, a valid email, and a password (8+ characters).</p>
       </form>
+
+      <!-- Sign-in form (toggle) -->
+      <form class="gate-modal__form" id="gate-signin-form" hidden>
+        <div class="form-group">
+          <label class="form-label" for="signin-email">Email</label>
+          <input type="email" class="form-input" placeholder="you@brand.com" required id="signin-email" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signin-password">Password</label>
+          <input type="password" class="form-input" placeholder="Your password" required id="signin-password" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn--primary btn--full" id="signin-submit">Sign In &rarr;</button>
+        <p class="gate-modal__error" id="signin-error" hidden>Invalid email or password.</p>
+      </form>
+
+      <p class="gate-modal__toggle" id="gate-toggle">Already have an account? <a href="#" id="gate-toggle-link">Sign in</a></p>
       <p class="gate-modal__note">No spam. Unsubscribe any time.</p>
     </div>
   </div>
@@ -247,8 +269,9 @@
           </a>
           <p class="footer__heading">The Refractive Index</p>
           <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
-          <form class="footer__newsletter">
-            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email">
+          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="newsletter">
+            <input type="email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
           </form>
           <p class="footer__privacy-note">We care about your data in our <a href="privacy.html">privacy policy</a>.</p>
@@ -319,6 +342,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/account-ui.js"></script>
   <script src="js/nav.js"></script>
@@ -326,43 +351,93 @@
   <script>
     (function() {
       document.addEventListener('DOMContentLoaded', function() {
-        var overlay   = document.getElementById('gate-overlay');
-        var closeBtn  = document.getElementById('gate-close');
-        var form      = document.getElementById('gate-form');
-        var firstIn   = document.getElementById('gate-first');
-        var lastIn    = document.getElementById('gate-last');
-        var emailIn   = document.getElementById('gate-email');
-        var titleIn   = document.getElementById('gate-title');
-        var companyIn = document.getElementById('gate-company');
-        var errorEl   = document.getElementById('gate-error');
-        var submitBtn = document.getElementById('gate-submit');
+        var overlay      = document.getElementById('gate-overlay');
+        var closeBtn     = document.getElementById('gate-close');
+        var form         = document.getElementById('gate-form');
+        var signinForm   = document.getElementById('gate-signin-form');
+        var firstIn      = document.getElementById('gate-first');
+        var lastIn       = document.getElementById('gate-last');
+        var emailIn      = document.getElementById('gate-email');
+        var passwordIn   = document.getElementById('gate-password');
+        var titleIn      = document.getElementById('gate-title');
+        var companyIn    = document.getElementById('gate-company');
+        var errorEl      = document.getElementById('gate-error');
+        var submitBtn    = document.getElementById('gate-submit');
+        var signinEmailIn   = document.getElementById('signin-email');
+        var signinPassIn    = document.getElementById('signin-password');
+        var signinErrorEl   = document.getElementById('signin-error');
+        var signinSubmitBtn = document.getElementById('signin-submit');
+        var toggleEl     = document.getElementById('gate-toggle');
+        var toggleLink   = document.getElementById('gate-toggle-link');
+        var modalTitle   = document.getElementById('gate-modal-title');
+        var modalDesc    = document.getElementById('gate-modal-desc');
         var activeResource = null;
         var activeHref = null;
+        var isSignInMode = false;
 
         if (!overlay) return;
 
-        // Check and unlock all gated cards that user already has access to
-        var gatedCards = document.querySelectorAll('.gated-card');
-        gatedCards.forEach(function(card) {
-          var resource = card.dataset.resource;
-          if (RefractiveAuth.checkAccess(resource)) {
-            unlockCard(card);
-          }
-
-          // Click handler for each gated card
-          card.addEventListener('click', function(e) {
-            e.stopPropagation();
+        // Wait for Supabase auth to initialise, then check gated cards
+        function initCards() {
+          var gatedCards = document.querySelectorAll('.gated-card');
+          gatedCards.forEach(function(card) {
+            var resource = card.dataset.resource;
             if (RefractiveAuth.checkAccess(resource)) {
-              window.location.href = card.dataset.href;
-            } else {
-              activeResource = resource;
-              activeHref = card.dataset.href;
-              var title = card.querySelector('.playbook-card__title');
-              document.getElementById('gate-modal-title').textContent = 'Unlock ' + (title ? title.textContent : 'member access');
-              document.getElementById('gate-modal-desc').textContent = 'Tell us a bit about yourself to unlock this operator tool instantly. Your free account will carry across future member resources too.';
-              openModal();
+              unlockCard(card);
             }
+
+            card.addEventListener('click', function(e) {
+              e.stopPropagation();
+              if (RefractiveAuth.checkAccess(resource)) {
+                window.location.href = card.dataset.href;
+              } else if (RefractiveAuth.isAuthenticated()) {
+                // Already signed in but missing this resource — grant directly
+                activeResource = resource;
+                activeHref = card.dataset.href;
+                RefractiveAuth.grantAccess(resource).then(function() {
+                  window.location.href = activeHref;
+                }).catch(function() {
+                  openModal();
+                });
+              } else {
+                activeResource = resource;
+                activeHref = card.dataset.href;
+                var title = card.querySelector('.playbook-card__title');
+                modalTitle.textContent = 'Unlock ' + (title ? title.textContent : 'member access');
+                modalDesc.textContent = 'Create a free account to unlock this operator tool instantly. Your account will carry across future member resources too.';
+                openModal();
+              }
+            });
           });
+        }
+
+        if (RefractiveAuth.onReady) {
+          RefractiveAuth.onReady(initCards);
+        } else {
+          initCards();
+        }
+
+        // Toggle between sign-up and sign-in
+        toggleLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          isSignInMode = !isSignInMode;
+          if (isSignInMode) {
+            form.hidden = true;
+            signinForm.hidden = false;
+            toggleLink.textContent = 'Create an account';
+            toggleEl.firstChild.textContent = 'New here? ';
+            modalTitle.textContent = 'Sign in';
+            modalDesc.textContent = 'Sign in to access your member tools.';
+            signinEmailIn.focus();
+          } else {
+            form.hidden = false;
+            signinForm.hidden = true;
+            toggleLink.textContent = 'Sign in';
+            toggleEl.firstChild.textContent = 'Already have an account? ';
+            modalTitle.textContent = 'Unlock member access';
+            modalDesc.textContent = 'Create a free account to unlock this operator tool instantly. Your account will carry across future member resources too.';
+            firstIn.focus();
+          }
         });
 
         // Close modal
@@ -378,36 +453,84 @@
           if (e.key === 'Escape' && overlay.classList.contains('is-visible')) closeModal();
         });
 
-        // Form submit — grants access to whichever resource triggered the modal
+        // Sign-up form submit
         form.addEventListener('submit', function(e) {
           e.preventDefault();
           var first = firstIn.value.trim();
           var last = lastIn.value.trim();
           var email = emailIn.value.trim();
+          var password = passwordIn.value;
 
-          if (!first || !last || !RefractiveAuth.isValidEmail(email)) {
+          if (!first || !last || !RefractiveAuth.isValidEmail(email) || password.length < 8) {
             errorEl.hidden = false;
             return;
           }
 
           errorEl.hidden = true;
           submitBtn.disabled = true;
-          submitBtn.textContent = 'Unlocking...';
+          submitBtn.textContent = 'Creating account...';
 
-          RefractiveAuth.gateUser({
+          RefractiveAuth.gateUserAsync({
             email: email,
             firstName: first,
             lastName: last,
             jobTitle: titleIn.value.trim(),
             company: companyIn.value.trim()
-          }, activeResource);
-
-          setTimeout(function() {
+          }, password, activeResource)
+          .then(function() {
             window.location.href = activeHref;
-          }, 300);
+          })
+          .catch(function(err) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Unlock Free Account \u2192';
+            errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+            errorEl.hidden = false;
+          });
+        });
+
+        // Sign-in form submit
+        signinForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var email = signinEmailIn.value.trim();
+          var password = signinPassIn.value;
+
+          if (!email || !password) {
+            signinErrorEl.hidden = false;
+            return;
+          }
+
+          signinErrorEl.hidden = true;
+          signinSubmitBtn.disabled = true;
+          signinSubmitBtn.textContent = 'Signing in...';
+
+          RefractiveAuth.signIn(email, password)
+            .then(function() {
+              if (activeResource) {
+                return RefractiveAuth.grantAccess(activeResource);
+              }
+            })
+            .then(function() {
+              if (activeHref) {
+                window.location.href = activeHref;
+              } else {
+                window.location.reload();
+              }
+            })
+            .catch(function(err) {
+              signinSubmitBtn.disabled = false;
+              signinSubmitBtn.textContent = 'Sign In \u2192';
+              signinErrorEl.textContent = err.message || 'Invalid email or password.';
+              signinErrorEl.hidden = false;
+            });
         });
 
         function openModal() {
+          // Reset to sign-up mode
+          isSignInMode = false;
+          form.hidden = false;
+          signinForm.hidden = true;
+          toggleLink.textContent = 'Sign in';
+          toggleEl.firstChild.textContent = 'Already have an account? ';
           overlay.classList.add('is-visible');
           firstIn.focus();
         }
@@ -415,9 +538,13 @@
         function closeModal() {
           overlay.classList.remove('is-visible');
           errorEl.hidden = true;
+          signinErrorEl.hidden = true;
           form.reset();
+          signinForm.reset();
           submitBtn.disabled = false;
           submitBtn.textContent = 'Unlock Free Account \u2192';
+          signinSubmitBtn.disabled = false;
+          signinSubmitBtn.textContent = 'Sign In \u2192';
           activeResource = null;
           activeHref = null;
         }
@@ -439,5 +566,6 @@
     })();
   </script>
 
+  <script src="js/newsletter-form.js"></script>
 </body>
 </html>

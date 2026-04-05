@@ -692,7 +692,9 @@
     <div class="container container--narrow">
       <h2 class="section__heading section__heading--center" data-animate="fade-up">Let's build something that compounds</h2>
 
-      <form class="contact-form" id="contact-form" data-animate="fade-up">
+      <form class="contact-form" id="contact-form" data-animate="fade-up" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact">
+        <p class="visually-hidden"><label>Don't fill this out: <input name="bot-field"></label></p>
         <div class="contact-grid">
           <div class="form-group">
             <label for="first-name" class="form-label">First name</label>
@@ -756,7 +758,8 @@
           </a>
           <p class="footer__heading">The Refractive Index</p>
           <p class="footer__tagline">Operator-level frameworks for DTC brands. No fluff &mdash; just the mental models and playbooks we use to grow brands every day.</p>
-          <form class="footer__newsletter">
+          <form class="footer__newsletter" name="newsletter" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="newsletter">
             <label for="newsletter-email" class="visually-hidden">Email address for newsletter</label>
             <input type="email" id="newsletter-email" placeholder="Enter your email&hellip;" name="email" class="form-input form-input--sm" autocomplete="email" required>
             <button type="submit" class="btn btn--primary btn--sm">Subscribe</button>
@@ -840,6 +843,7 @@
   <script src="js/animations.js"></script>
   <script src="js/contact-form.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/newsletter-form.js"></script>
 
 </body>
 </html>
