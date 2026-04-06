@@ -401,6 +401,19 @@
   text-wrap: balance;
 }
 
+.hero__headline br {
+  display: inline;
+  content: "";
+}
+
+@media (max-width: 480px) {
+  .hero__headline {
+    font-size: clamp(1.2rem, 6.5vw, 2.5rem);
+    letter-spacing: 1px;
+    text-wrap: initial;
+  }
+}
+
 .hero__subhead {
   font-size: var(--text-lg);
   font-weight: var(--font-weight-light);
