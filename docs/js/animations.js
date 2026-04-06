@@ -253,17 +253,30 @@ function initTextReveal() {
 
     el.innerHTML = parts.map(part => {
       if (part.startsWith('<span class="gradient-text">')) {
-        // Extract inner text of gradient span and wrap each word
+        // Wrap each word but keep them inside a gradient parent so the
+        // gradient spans the entire phrase, not per-word
         const inner = part.replace(/<span class="gradient-text">/, '').replace(/<\/span>/, '');
-        return inner.split(/\s+/).filter(Boolean).map(word =>
+        const words = inner.split(/\s+/).filter(Boolean).map(word =>
           `<span class="word word--gradient">${word}</span>`
         ).join(' ');
+        return `<span class="gradient-text-line">${words}</span>`;
       }
       // Regular text — wrap each word
       return part.split(/\s+/).filter(Boolean).map(word =>
         `<span class="word">${word}</span>`
       ).join(' ');
     }).join(' ');
+
+    // Set per-word gradient offset so the gradient spans the full line
+    const gradLine = el.querySelector('.gradient-text-line');
+    if (gradLine) {
+      const lineW = gradLine.offsetWidth;
+      gradLine.querySelectorAll('.word--gradient').forEach(w => {
+        const pct = lineW > 0 ? (w.offsetLeft - gradLine.offsetLeft) / lineW * 100 : 0;
+        w.style.backgroundSize = lineW + 'px 100%';
+        w.style.backgroundPosition = '-' + (w.offsetLeft - gradLine.offsetLeft) + 'px 0';
+      });
+    }
 
     // Animate words in with staggered ScrollTrigger
     const words = el.querySelectorAll('.word');

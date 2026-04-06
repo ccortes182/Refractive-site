@@ -101,13 +101,17 @@ html:not(.gsap-ready) [data-animate-stagger] > * {
   filter: blur(0);
 }
 
-/* Preserve gradient on revealed gradient-text words */
+/* Gradient spans the full phrase — JS sets background-size and
+   background-position per word so the gradient is continuous. */
+[data-animate="text-reveal"] .gradient-text-line {
+  font-weight: var(--font-weight-bold);
+}
+
 [data-animate="text-reveal"] .word--gradient {
   background: var(--color-accent-gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-weight: var(--font-weight-bold);
 }
 
 /* ── Section Top Glow — light bleeding from behind ── */
