@@ -666,6 +666,57 @@
   grid-column: 1 / -1;
 }
 
+/* ── Brand Moment — WebGL prism lens ── */
+.brand-moment {
+  position: relative;
+  overflow: hidden;
+  height: clamp(200px, 25vh, 400px);
+  background-color: var(--color-bg-primary);
+  cursor: crosshair;
+}
+
+.brand-moment__fallback {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: clamp(48px, 6vw, 72px);
+  transform: translateY(-50%);
+  background-image: url('../images/brand-moment-text.png');
+  background-position: 0 50%;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  opacity: 0.98;
+  animation: brand-moment-scroll 40s linear infinite;
+  transition: opacity 220ms ease;
+}
+
+.brand-moment--webgl-ready .brand-moment__fallback {
+  opacity: 0;
+}
+
+.brand-moment__canvas-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.brand-moment__canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes brand-moment-scroll {
+  from {
+    background-position: 0 50%;
+  }
+
+  to {
+    background-position: -2000px 50%;
+  }
+}
+
 /* ── Footer Layout ── */
 .footer {
   background-color: var(--color-bg-footer);

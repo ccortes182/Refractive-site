@@ -39,6 +39,7 @@ html:not(.gsap-ready) [data-animate-stagger] > * {
   animation: reveal-fallback 0s 2s forwards;
 }
 
+
 /* ── Hero Headline Letter Animation ── */
 .hero__headline .char {
   display: inline-block;
@@ -176,6 +177,7 @@ html:not(.gsap-ready) [data-animate-stagger] > * {
     opacity: 1 !important;
     animation: none !important;
   }
+
 }
 
 /* ── Subtle Section Background Glows ── */

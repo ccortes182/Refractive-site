@@ -61,6 +61,7 @@ function initAnimations() {
 
   // ── Staggered children animations ──
   initStaggerAnimations();
+
 }
 
 function animateHeroHeadline() {

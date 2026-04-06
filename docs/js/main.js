@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize all modules
   initPrism();
+  initBrandDistortion();
   initNav();
   initBrandCards();
   initMarquee();

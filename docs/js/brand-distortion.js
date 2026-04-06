@@ -1,0 +1,335 @@
+/* ==========================================================================
+   Brand Distortion — Hybrid: 2D canvas text + WebGL barrel distortion
+   Crisp text via Canvas 2D, per-pixel prism lens via WebGL shader.
+   ========================================================================== */
+
+function initBrandDistortion() {
+  var container = document.getElementById('brand-distortion');
+  if (!container) return;
+  var section = container.closest('.brand-moment');
+  if (!section) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.fonts.ready.then(function() { setupDistortion(container, section); });
+}
+
+function setupDistortion(container, section) {
+  var TEXT = 'ILLUMINATING BRANDS.  \u2014  AMPLIFYING GROWTH.  \u2014  NO COMPROMISES.  \u2014  ';
+  var SCROLL_SPEED = 110;
+  var TRAIL_COUNT = 20;
+
+  container.textContent = '';
+
+  // ── Visible WebGL canvas ──
+  var glCanvas = document.createElement('canvas');
+  Object.assign(glCanvas.style, {
+    position: 'absolute', inset: '0',
+    width: '100%', height: '100%', display: 'block'
+  });
+  container.appendChild(glCanvas);
+
+  var gl = glCanvas.getContext('webgl', { alpha: false, antialias: false });
+  if (!gl) return;
+
+  // ── Offscreen 2D canvas for text ──
+  var textCanvas = document.createElement('canvas');
+  var textCtx = textCanvas.getContext('2d');
+
+  // ── State ──
+  var dpr = 1, W = 1, H = 1, fontSize = 48, letterSpacing = 6;
+  var patternWidth = 1, textOffset = 0;
+  var mouseX = 0.5, mouseY = 0.5;
+  var smoothX = 0.5, smoothY = 0.5;
+  var prevX = 0.5, prevY = 0.5;
+  var smoothVelocity = 0;
+  var hover = 0, targetHover = 0;
+  var raf = 0, lastTime = performance.now();
+
+  // ── Trail ──
+  var trailPos = new Float32Array(TRAIL_COUNT * 2);
+  var trailAlpha = new Float32Array(TRAIL_COUNT);
+  var lastTrailTime = 0;
+  for (var i = 0; i < TRAIL_COUNT; i++) {
+    trailPos[i * 2] = 0.5; trailPos[i * 2 + 1] = 0.5;
+  }
+
+  // ── 2D text helpers ──
+  function setFont() {
+    textCtx.font = '700 ' + fontSize + 'px "adelphi-pe-variable", sans-serif';
+    textCtx.textBaseline = 'middle';
+    textCtx.textAlign = 'left';
+  }
+
+  function measurePattern() {
+    setFont();
+    var sum = 0;
+    for (var i = 0; i < TEXT.length; i++) {
+      sum += textCtx.measureText(TEXT[i]).width;
+      if (i < TEXT.length - 1) sum += letterSpacing;
+    }
+    patternWidth = Math.max(sum, W + fontSize);
+  }
+
+  function drawPhrase(startX) {
+    var cx = startX;
+    for (var i = 0; i < TEXT.length; i++) {
+      textCtx.fillText(TEXT[i], cx, H * 0.5);
+      cx += textCtx.measureText(TEXT[i]).width + letterSpacing;
+    }
+  }
+
+  function renderText() {
+    var ss = 2; // supersample for crisp edges through lens
+    textCanvas.width = Math.round(W * dpr * ss);
+    textCanvas.height = Math.round(H * dpr * ss);
+    textCtx.setTransform(dpr * ss, 0, 0, dpr * ss, 0, 0);
+    textCtx.clearRect(0, 0, W, H);
+    setFont();
+    textCtx.fillStyle = '#ffffff';
+
+    var offset = ((textOffset % patternWidth) + patternWidth) % patternWidth;
+    var x = -offset - patternWidth;
+    while (x < W + patternWidth) {
+      drawPhrase(x);
+      x += patternWidth;
+    }
+  }
+
+  // ── WebGL shader ──
+  function compile(type, src) {
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error('brand-distortion:', gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
+  }
+
+  var vertSrc = 'attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}';
+
+  var fragSrc = [
+    'precision mediump float;',
+    'uniform sampler2D uText;',
+    'uniform vec2  uRes;',
+    'uniform vec2  uMouse;',
+    'uniform float uVel;',
+    'uniform float uTime;',
+    'uniform float uHover;',
+    'uniform vec2  uTrail[' + TRAIL_COUNT + '];',
+    'uniform float uTrailA[' + TRAIL_COUNT + '];',
+    '',
+    'const vec3 BG=vec3(0.129,0.141,0.161);',
+    'const vec3 C_B=vec3(0.263,0.663,0.875);',
+    'const vec3 C_V=vec3(0.557,0.408,0.678);',
+    'const vec3 C_C=vec3(0.761,0.863,0.831);',
+    '',
+    'vec3 pal(float t){',
+    '  t=fract(t);',
+    '  if(t<.333)return mix(C_B,C_V,t*3.);',
+    '  if(t<.666)return mix(C_V,C_C,(t-.333)*3.);',
+    '  return mix(C_C,C_B,(t-.666)*3.);',
+    '}',
+    '',
+    'float txt(vec2 uv){',
+    '  if(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.)return 0.;',
+    '  return texture2D(uText,uv).r;',
+    '}',
+    '',
+    'void main(){',
+    '  vec2 uv=gl_FragCoord.xy/uRes;',
+    '  uv.y=1.-uv.y;',  // flip Y to match 2D canvas
+    '  float ar=uRes.x/uRes.y;',
+    '  vec2 asp=vec2(ar,1.);',
+    '',
+    '  // ── Trail ──',
+    '  vec3 trail=vec3(0.);',
+    '  for(int i=0;i<' + TRAIL_COUNT + ';i++){',
+    '    float a=uTrailA[i];',
+    '    if(a<.005)continue;',
+    '    float d=distance(uv*asp,uTrail[i]*asp);',
+    '    float blob=smoothstep(.22,.0,d)*a;',
+    '    trail+=pal(float(i)/20.+uTime*.15)*blob*1.;',
+    '  }',
+    '',
+    '  // ── Lens ──',
+    '  float dist=distance(uv*asp,uMouse*asp);',
+    '  float spd=uVel;',
+    '  float lensR=.25+spd*.15;',
+    '  float inL=smoothstep(lensR,lensR*.05,dist)*uHover;',
+    '  float nd=clamp(dist/lensR,0.,1.);',
+    '  float k=inL*(.8+spd*.7);',
+    '  float r2=nd*nd;',
+    '',
+    '  vec2 toM=uv-uMouse;',
+    '  vec2 dR=uMouse+toM/(1.+k*.3*r2);',
+    '  vec2 dG=uMouse+toM/(1.+k*1.*r2);',
+    '  vec2 dB=uMouse+toM/(1.+k*2.2*r2);',
+    '',
+    '  float tR=txt(dR);',
+    '  float tG=txt(dG);',
+    '  float tB=txt(dB);',
+    '  float tN=txt(uv);',
+    '',
+    '  vec3 tc;',
+    '  tc.r=mix(tN,tR,inL);',
+    '  tc.g=mix(tN,tG,inL);',
+    '  tc.b=mix(tN,tB,inL);',
+    '',
+    '  // ── Edge glow ──',
+    '  float edge=smoothstep(lensR,lensR-.018,dist)',
+    '            *(1.-smoothstep(lensR-.018,lensR-.06,dist));',
+    '  vec3 edgeC=pal(uTime*.2)*edge*uHover*.5;',
+    '',
+    '  float inner=smoothstep(lensR,0.,dist)*uHover*.08;',
+    '  vec3 glowC=pal(uTime*.1+.5)*inner;',
+    '',
+    '  // ── Compose ──',
+    '  float tm=max(max(tc.r,tc.g),tc.b);',
+    '  vec3 c=BG;',
+    '  c+=trail*(1.-tm*.6);',
+    '  c+=glowC*(1.-tm*.3);',
+    '  c+=tc;',
+    '  c+=edgeC;',
+    '',
+    '  float fade=smoothstep(0.,.06,uv.x)*smoothstep(1.,.94,uv.x)',
+    '           *smoothstep(0.,.12,uv.y)*smoothstep(1.,.88,uv.y);',
+    '  c=mix(BG,c,fade);',
+    '',
+    '  gl_FragColor=vec4(c,1.);',
+    '}'
+  ].join('\n');
+
+  var vs = compile(gl.VERTEX_SHADER, vertSrc);
+  var fs = compile(gl.FRAGMENT_SHADER, fragSrc);
+  if (!vs || !fs) return;
+
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    console.error('brand-distortion link:', gl.getProgramInfoLog(prog));
+    return;
+  }
+  gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+  var pLoc = gl.getAttribLocation(prog, 'p');
+  gl.enableVertexAttribArray(pLoc);
+  gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+
+  var loc = {};
+  ['uRes','uMouse','uVel','uTime','uHover','uText'].forEach(function(n) {
+    loc[n] = gl.getUniformLocation(prog, n);
+  });
+  loc.uTrail = gl.getUniformLocation(prog, 'uTrail');
+  loc.uTrailA = gl.getUniformLocation(prog, 'uTrailA');
+
+  var tex = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.uniform1i(loc.uText, 0);
+
+  // ── Resize ──
+  function resize() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, container.clientWidth);
+    H = Math.max(1, container.clientHeight);
+    fontSize = Math.round(Math.max(40, Math.min(84, H * 0.34)));
+    letterSpacing = Math.round(fontSize * 0.08);
+    glCanvas.width = Math.round(W * dpr);
+    glCanvas.height = Math.round(H * dpr);
+    gl.viewport(0, 0, glCanvas.width, glCanvas.height);
+    gl.uniform2f(loc.uRes, glCanvas.width, glCanvas.height);
+    measurePattern();
+  }
+
+  // ── Input ──
+  function onPointerMove(e) {
+    var pt = e.touches ? e.touches[0] : e;
+    var rect = section.getBoundingClientRect();
+    mouseX = (pt.clientX - rect.left) / rect.width;
+    mouseY = (pt.clientY - rect.top) / rect.height;
+    targetHover = 1;
+  }
+  section.addEventListener('mousemove', onPointerMove);
+  section.addEventListener('touchmove', onPointerMove, { passive: true });
+  section.addEventListener('mouseenter', onPointerMove);
+  section.addEventListener('mouseleave', function() { targetHover = 0; });
+  section.addEventListener('touchstart', onPointerMove, { passive: true });
+  section.addEventListener('touchend', function() { targetHover = 0; });
+
+  // ── Trail update ──
+  function updateTrail(now) {
+    if (now - lastTrailTime < 20) return;
+    lastTrailTime = now;
+    for (var i = TRAIL_COUNT - 1; i > 0; i--) {
+      trailPos[i*2] = trailPos[(i-1)*2];
+      trailPos[i*2+1] = trailPos[(i-1)*2+1];
+      trailAlpha[i] = trailAlpha[i-1] * 0.88;
+    }
+    trailPos[0] = smoothX;
+    trailPos[1] = smoothY;
+    trailAlpha[0] = hover > 0.1 ? Math.min(smoothVelocity * 1.5, 1.0) : 0;
+  }
+
+  // ── Render ──
+  function render(now) {
+    var dt = Math.min((now - lastTime) * 0.001, 0.05);
+    lastTime = now;
+
+    textOffset -= SCROLL_SPEED * dt;
+
+    smoothX += (mouseX - smoothX) * 0.12;
+    smoothY += (mouseY - smoothY) * 0.12;
+
+    var dx = smoothX - prevX;
+    var dy = smoothY - prevY;
+    var vel = Math.sqrt(dx*dx + dy*dy) * 80;
+    smoothVelocity += (vel - smoothVelocity) * 0.15;
+    smoothVelocity = Math.min(smoothVelocity, 4.0);
+    prevX = smoothX;
+    prevY = smoothY;
+
+    hover += (targetHover - hover) * 0.15;
+
+    updateTrail(now);
+
+    // 1. Render scrolling text to offscreen 2D canvas
+    renderText();
+
+    // 2. Upload as WebGL texture
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
+
+    // 3. Set uniforms and draw
+    gl.uniform2f(loc.uMouse, smoothX, smoothY);
+    gl.uniform1f(loc.uVel, smoothVelocity);
+    gl.uniform1f(loc.uTime, now * 0.001);
+    gl.uniform1f(loc.uHover, hover);
+    gl.uniform2fv(loc.uTrail, trailPos);
+    gl.uniform1fv(loc.uTrailA, trailAlpha);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    raf = requestAnimationFrame(render);
+  }
+
+  var ro = new ResizeObserver(resize);
+  ro.observe(container);
+  resize();
+
+  var io = new IntersectionObserver(function(entries) {
+    var vis = entries.some(function(e) { return e.isIntersecting; });
+    if (vis && !raf) { lastTime = performance.now(); raf = requestAnimationFrame(render); }
+    else if (!vis && raf) { cancelAnimationFrame(raf); raf = 0; }
+  });
+  io.observe(section);
+  raf = requestAnimationFrame(render);
+}
