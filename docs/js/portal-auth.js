@@ -21,6 +21,8 @@
       sb.auth.getSession().then(function(result) {
         var session = result.data && result.data.session;
         if (!session) return;
+        // Set cookie for edge function
+        setAuthCookie(session.access_token);
         // Verify portal access
         return sb.from('portal_access')
           .select('portal_type')
@@ -63,6 +65,9 @@
         .then(function(result) {
           if (result.error) throw result.error;
           var user = result.data.user;
+          var session = result.data.session;
+          // Set cookie for edge function so protected pages load
+          if (session) setAuthCookie(session.access_token);
           // Check portal access
           return sb.from('portal_access')
             .select('portal_type')
@@ -90,6 +95,7 @@
     // Logout
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function() {
+        clearAuthCookie();
         if (sb) {
           sb.auth.signOut().then(function() {
             showLogin();
@@ -120,6 +126,15 @@
     function clearError() {
       errorEl.classList.remove('portal-login__error--visible');
       errorEl.textContent = '';
+    }
+
+    function setAuthCookie(token) {
+      var maxAge = 60 * 60; // 1 hour — matches Supabase JWT expiry
+      document.cookie = 'sb-access-token=' + token + ';path=/;max-age=' + maxAge + ';SameSite=Lax;Secure';
+    }
+
+    function clearAuthCookie() {
+      document.cookie = 'sb-access-token=;path=/;max-age=0;SameSite=Lax;Secure';
     }
   });
 })();
