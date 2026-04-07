@@ -1,6 +1,8 @@
+
 /* ==========================================================================
    Brand Distortion — Hybrid: 2D canvas text + WebGL barrel distortion
-   Crisp text via Canvas 2D, per-pixel prism lens via WebGL shader.
+   Two static lines auto-scaled to fill width, footer gradient text color,
+   per-pixel prism lens via WebGL shader on hover.
    ========================================================================== */
 
 function initBrandDistortion() {
@@ -13,8 +15,8 @@ function initBrandDistortion() {
 }
 
 function setupDistortion(container, section) {
-  var TEXT = 'ILLUMINATING BRANDS.  \u2014  AMPLIFYING GROWTH.  \u2014  NO COMPROMISES.  \u2014  ';
-  var SCROLL_SPEED = 110;
+  var LINE1 = 'ILLUMINATING BRANDS';
+  var LINE2 = 'AMPLIFYING GROWTH';
   var TRAIL_COUNT = 20;
 
   container.textContent = '';
@@ -35,8 +37,7 @@ function setupDistortion(container, section) {
   var textCtx = textCanvas.getContext('2d');
 
   // ── State ──
-  var dpr = 1, W = 1, H = 1, fontSize = 48, letterSpacing = 6;
-  var patternWidth = 1, textOffset = 0;
+  var dpr = 1, W = 1, H = 1;
   var mouseX = 0.5, mouseY = 0.5;
   var smoothX = 0.5, smoothY = 0.5;
   var prevX = 0.5, prevY = 0.5;
@@ -52,46 +53,56 @@ function setupDistortion(container, section) {
     trailPos[i * 2] = 0.5; trailPos[i * 2 + 1] = 0.5;
   }
 
-  // ── 2D text helpers ──
-  function setFont() {
-    textCtx.font = '700 ' + fontSize + 'px "adelphi-pe-variable", sans-serif';
-    textCtx.textBaseline = 'middle';
-    textCtx.textAlign = 'left';
-  }
-
-  function measurePattern() {
-    setFont();
-    var sum = 0;
-    for (var i = 0; i < TEXT.length; i++) {
-      sum += textCtx.measureText(TEXT[i]).width;
-      if (i < TEXT.length - 1) sum += letterSpacing;
+  // ── Measure & fit text to width ──
+  function fitFontSize(text, maxW) {
+    // Binary search for the font size that fills the width
+    var lo = 10, hi = 400, mid;
+    for (var i = 0; i < 20; i++) {
+      mid = (lo + hi) / 2;
+      textCtx.font = '700 ' + mid + 'px "adelphi-pe-variable", sans-serif';
+      if (textCtx.measureText(text).width > maxW) hi = mid;
+      else lo = mid;
     }
-    patternWidth = Math.max(sum, W + fontSize);
-  }
-
-  function drawPhrase(startX) {
-    var cx = startX;
-    for (var i = 0; i < TEXT.length; i++) {
-      textCtx.fillText(TEXT[i], cx, H * 0.5);
-      cx += textCtx.measureText(TEXT[i]).width + letterSpacing;
-    }
+    return lo;
   }
 
   function renderText() {
-    var ss = 2; // supersample for crisp edges through lens
+    var ss = 2;
     textCanvas.width = Math.round(W * dpr * ss);
     textCanvas.height = Math.round(H * dpr * ss);
     textCtx.setTransform(dpr * ss, 0, 0, dpr * ss, 0, 0);
     textCtx.clearRect(0, 0, W, H);
-    setFont();
-    textCtx.fillStyle = '#ffffff';
 
-    var offset = ((textOffset % patternWidth) + patternWidth) % patternWidth;
-    var x = -offset - patternWidth;
-    while (x < W + patternWidth) {
-      drawPhrase(x);
-      x += patternWidth;
-    }
+    var pad = W * 0.01; // nearly touch the edges
+    var usableW = W - pad * 2;
+
+    // Fit each line independently
+    var fs1 = fitFontSize(LINE1, usableW);
+    var fs2 = fitFontSize(LINE2, usableW);
+
+    // Footer gradient: #292831 → #414046 → #4b4a4e
+    var grad = textCtx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, '#292831');
+    grad.addColorStop(0.5, '#414046');
+    grad.addColorStop(1, '#4b4a4e');
+
+    textCtx.textBaseline = 'alphabetic';
+    textCtx.textAlign = 'left';
+
+    // Tight vertical stacking — minimal gap between lines
+    var lineGap = H * 0.02;
+    var totalH = fs1 * 0.75 + lineGap + fs2 * 0.75; // approx cap height
+    var startY = (H - totalH) / 2 + fs1 * 0.72;
+
+    // Line 1
+    textCtx.font = '700 ' + fs1 + 'px "adelphi-pe-variable", sans-serif';
+    textCtx.fillStyle = grad;
+    textCtx.fillText(LINE1, pad, startY);
+
+    // Line 2
+    textCtx.font = '700 ' + fs2 + 'px "adelphi-pe-variable", sans-serif';
+    textCtx.fillStyle = grad;
+    textCtx.fillText(LINE2, pad, startY + fs1 * 0.75 + lineGap);
   }
 
   // ── WebGL shader ──
@@ -131,14 +142,19 @@ function setupDistortion(container, section) {
     '  return mix(C_C,C_B,(t-.666)*3.);',
     '}',
     '',
-    'float txt(vec2 uv){',
-    '  if(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.)return 0.;',
-    '  return texture2D(uText,uv).r;',
+    '// Sample text — returns RGB (gradient-colored text)',
+    'vec3 txtRGB(vec2 uv){',
+    '  if(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.)return vec3(0.);',
+    '  return texture2D(uText,uv).rgb;',
+    '}',
+    'float txtA(vec2 uv){',
+    '  vec3 c=txtRGB(uv);',
+    '  return max(max(c.r,c.g),c.b);',
     '}',
     '',
     'void main(){',
     '  vec2 uv=gl_FragCoord.xy/uRes;',
-    '  uv.y=1.-uv.y;',  // flip Y to match 2D canvas
+    '  uv.y=1.-uv.y;',
     '  float ar=uRes.x/uRes.y;',
     '  vec2 asp=vec2(ar,1.);',
     '',
@@ -149,7 +165,7 @@ function setupDistortion(container, section) {
     '    if(a<.005)continue;',
     '    float d=distance(uv*asp,uTrail[i]*asp);',
     '    float blob=smoothstep(.22,.0,d)*a;',
-    '    trail+=pal(float(i)/20.+uTime*.15)*blob*1.;',
+    '    trail+=pal(float(i)/20.+uTime*.15)*blob;',
     '  }',
     '',
     '  // ── Lens ──',
@@ -166,15 +182,17 @@ function setupDistortion(container, section) {
     '  vec2 dG=uMouse+toM/(1.+k*1.*r2);',
     '  vec2 dB=uMouse+toM/(1.+k*2.2*r2);',
     '',
-    '  float tR=txt(dR);',
-    '  float tG=txt(dG);',
-    '  float tB=txt(dB);',
-    '  float tN=txt(uv);',
+    '  // Sample each channel from differently distorted UVs',
+    '  vec3 cR=txtRGB(dR);',
+    '  vec3 cG=txtRGB(dG);',
+    '  vec3 cB=txtRGB(dB);',
+    '  vec3 cN=txtRGB(uv);',
     '',
+    '  // Chromatic split: take r from red-offset, g from green-offset, b from blue-offset',
     '  vec3 tc;',
-    '  tc.r=mix(tN,tR,inL);',
-    '  tc.g=mix(tN,tG,inL);',
-    '  tc.b=mix(tN,tB,inL);',
+    '  tc.r=mix(cN.r,cR.r,inL);',
+    '  tc.g=mix(cN.g,cG.g,inL);',
+    '  tc.b=mix(cN.b,cB.b,inL);',
     '',
     '  // ── Compose ──',
     '  float tm=max(max(tc.r,tc.g),tc.b);',
@@ -228,17 +246,16 @@ function setupDistortion(container, section) {
   gl.uniform1i(loc.uText, 0);
 
   // ── Resize ──
+  var textDirty = true;
   function resize() {
     dpr = Math.min(2, window.devicePixelRatio || 1);
     W = Math.max(1, container.clientWidth);
     H = Math.max(1, container.clientHeight);
-    fontSize = Math.round(Math.max(40, Math.min(84, H * 0.34)));
-    letterSpacing = Math.round(fontSize * 0.08);
     glCanvas.width = Math.round(W * dpr);
     glCanvas.height = Math.round(H * dpr);
     gl.viewport(0, 0, glCanvas.width, glCanvas.height);
     gl.uniform2f(loc.uRes, glCanvas.width, glCanvas.height);
-    measurePattern();
+    textDirty = true;
   }
 
   // ── Input ──
@@ -275,8 +292,6 @@ function setupDistortion(container, section) {
     var dt = Math.min((now - lastTime) * 0.001, 0.05);
     lastTime = now;
 
-    textOffset -= SCROLL_SPEED * dt;
-
     smoothX += (mouseX - smoothX) * 0.12;
     smoothY += (mouseY - smoothY) * 0.12;
 
@@ -292,14 +307,16 @@ function setupDistortion(container, section) {
 
     updateTrail(now);
 
-    // 1. Render scrolling text to offscreen 2D canvas
-    renderText();
+    // Only re-render text on resize (static, no scroll)
+    if (textDirty) {
+      renderText();
+      textDirty = false;
+    }
 
-    // 2. Upload as WebGL texture
+    // Upload text texture
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textCanvas);
 
-    // 3. Set uniforms and draw
     gl.uniform2f(loc.uMouse, smoothX, smoothY);
     gl.uniform1f(loc.uVel, smoothVelocity);
     gl.uniform1f(loc.uTime, now * 0.001);

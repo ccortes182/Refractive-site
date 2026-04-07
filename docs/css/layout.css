@@ -670,7 +670,7 @@
 .brand-moment {
   position: relative;
   overflow: hidden;
-  height: clamp(200px, 25vh, 400px);
+  height: clamp(180px, 22vw, 420px);
   background-color: var(--color-bg-primary);
   cursor: crosshair;
 }
