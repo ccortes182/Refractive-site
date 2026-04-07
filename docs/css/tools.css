@@ -814,6 +814,10 @@
   gap: var(--space-sm);
 }
 
+.gate-modal__form[hidden] {
+  display: none;
+}
+
 .gate-modal__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
