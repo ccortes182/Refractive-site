@@ -43,9 +43,12 @@ const headers = {
 };
 
 async function request(path, options = {}) {
-  const res = await fetch(SUPABASE_URL + path, { headers, ...options });
-  const data = await res.json();
-  if (!res.ok) throw new Error(JSON.stringify(data));
+  const mergedHeaders = Object.assign({}, headers, options.headers || {});
+  const res = await fetch(SUPABASE_URL + path, { ...options, headers: mergedHeaders });
+  const text = await res.text();
+  var data;
+  try { data = text ? JSON.parse(text) : {}; } catch (e) { data = {}; }
+  if (!res.ok) throw new Error(JSON.stringify(data) || res.statusText);
   return data;
 }
 
