@@ -119,8 +119,29 @@ async function inviteUser(email, password, portal) {
   });
 
   console.log('Granted ' + portal + ' portal access to ' + email);
-  console.log('Temporary password: ' + password);
-  console.log('Send credentials to the user and ask them to change their password.');
+
+  // Send invite email via Netlify Function
+  if (!args.includes('--no-email')) {
+    console.log('Sending invite email...');
+    try {
+      const emailRes = await fetch('https://refractive.netlify.app/.netlify/functions/email-portal-invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: password, portal: portal })
+      });
+      const emailBody = await emailRes.text();
+      if (emailRes.ok) {
+        console.log('Invite email sent to ' + email);
+      } else {
+        console.error('Email failed: ' + emailBody);
+      }
+    } catch (err) {
+      console.error('Could not send invite email: ' + err.message);
+    }
+  } else {
+    console.log('Skipped invite email (--no-email flag)');
+    console.log('Temporary password: ' + password);
+  }
 }
 
 async function revokeUser(email, portal) {
