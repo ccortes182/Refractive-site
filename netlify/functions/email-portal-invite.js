@@ -1,5 +1,6 @@
 // Netlify Function — Send portal invite email with credentials
-// Called from admin-invite.js after creating/granting access
+
+const { wrap } = require('./_email-template');
 
 exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
@@ -30,6 +31,22 @@ exports.handler = async function(event) {
     ? 'investor deck, one-pager, and Illuminate roadmap'
     : 'engagement decks, service one-pagers, and operational playbooks';
 
+  const html = wrap(`
+    <p>You've been granted access to the Refractive ${portalLabel}.</p>
+    <div style="background: #f4f4f5; border-radius: 8px; padding: 20px; margin: 24px 0;">
+      <p style="margin: 0 0 12px 0;"><strong>Login URL</strong><br>
+      <a href="${loginUrl}" style="color: #7c5cfc;">${loginUrl}</a></p>
+      <p style="margin: 0 0 12px 0;"><strong>Email</strong><br>${email}</p>
+      <p style="margin: 0;"><strong>Temporary Password</strong><br>${password}</p>
+    </div>
+    <p>Once signed in, you'll have access to your ${materialsDesc}.</p>
+    <p style="margin-top: 24px;">
+      <a href="${loginUrl}" style="display: inline-block; background: #7c5cfc; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-weight: 600;">Sign In to ${portalLabel}</a>
+    </p>
+    <p style="color: #666; font-size: 13px; margin-top: 32px;">If you have any questions, reply to this email or reach out at <a href="mailto:growth@refractive.co" style="color: #7c5cfc;">growth@refractive.co</a>.</p>
+    <p>— The Refractive Team</p>
+  `, { hideUnsubscribe: true });
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -40,23 +57,7 @@ exports.handler = async function(event) {
       from: 'Refractive <growth@refractive.co>',
       to: email,
       subject: 'Your ' + portalLabel + ' access — Refractive',
-      html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
-          <p>You've been granted access to the Refractive ${portalLabel}.</p>
-          <div style="background: #f4f4f5; border-radius: 8px; padding: 20px; margin: 24px 0;">
-            <p style="margin: 0 0 12px 0;"><strong>Login URL</strong><br>
-            <a href="${loginUrl}" style="color: #7c5cfc;">${loginUrl}</a></p>
-            <p style="margin: 0 0 12px 0;"><strong>Email</strong><br>${email}</p>
-            <p style="margin: 0;"><strong>Temporary Password</strong><br>${password}</p>
-          </div>
-          <p>Once signed in, you'll have access to your ${materialsDesc}.</p>
-          <p style="margin-top: 24px;">
-            <a href="${loginUrl}" style="display: inline-block; background: #7c5cfc; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 6px; font-weight: 600;">Sign In to ${portalLabel}</a>
-          </p>
-          <p style="color: #666; font-size: 13px; margin-top: 32px;">If you have any questions, reply to this email or reach out at <a href="mailto:growth@refractive.co" style="color: #7c5cfc;">growth@refractive.co</a>.</p>
-          <p>— The Refractive Team</p>
-        </div>
-      `
+      html: html
     })
   });
 
