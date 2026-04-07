@@ -765,7 +765,10 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
-  max-width: 440px;
+  max-width: 540px;
+  max-height: calc(100vh - var(--gutter) * 2);
+  max-height: calc(100dvh - var(--gutter) * 2);
+  overflow-y: auto;
   width: 100%;
   position: relative;
 }
@@ -824,9 +827,15 @@
   gap: var(--space-sm);
 }
 
-@media (max-width: 479px) {
-  .gate-modal__row {
-    grid-template-columns: 1fr;
+@media (max-height: 700px) {
+  .gate-modal {
+    padding: var(--space-md);
+  }
+  .gate-modal__desc {
+    margin-bottom: var(--space-sm);
+  }
+  .gate-modal__form {
+    gap: var(--space-xs);
   }
 }
 
