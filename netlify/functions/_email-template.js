@@ -1,7 +1,7 @@
 // Shared email template wrapper for all Refractive emails
 
-const ICON_URL = 'https://refractive.co/images/Social%20Icon.png';
-const WORDMARK_URL = 'https://refractive.co/images/brand-moment-text.png';
+const ICON_URL = 'https://refractive.co/images/REFRACTIVE.png';
+const WORDMARK_URL = 'https://refractive.co/images/REFRACTIVE-DIGITAL.png';
 const SITE_URL = 'https://refractive.co';
 
 function wrap(bodyHtml, options = {}) {
