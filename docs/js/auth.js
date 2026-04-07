@@ -183,8 +183,28 @@
       })
       .then(function(result) {
         if (result.error) throw result.error;
+        // Send welcome email + notify admin (fire and forget)
+        _sendWelcomeEmail(email, profile);
         return _loadProfile(_cachedUser.id);
       });
+  }
+
+  function _sendWelcomeEmail(email, profile) {
+    var payload = JSON.stringify({
+      email: email,
+      firstName: profile.firstName || '',
+      lastName: profile.lastName || '',
+      jobTitle: profile.jobTitle || '',
+      company: profile.company || ''
+    });
+    // Welcome email to user
+    fetch('/.netlify/functions/email-member-welcome', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload
+    }).catch(function() {});
+    // Admin notification
+    fetch('/.netlify/functions/email-notify-admin', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload
+    }).catch(function() {});
   }
 
   function signIn(email, password) {
