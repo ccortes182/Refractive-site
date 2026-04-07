@@ -96,8 +96,17 @@ function initContactForm() {
     })
     .then(function(response) {
       if (!response.ok) throw new Error('Form submission failed');
-      form.style.display = 'none';
+      // Hide the grid but keep the form container for stable layout
+      var grid = form.querySelector('.contact-grid');
+      if (grid) grid.style.display = 'none';
       successEl.hidden = false;
+      successEl.style.display = 'flex';
+      successEl.style.flexDirection = 'column';
+      successEl.style.alignItems = 'center';
+      successEl.style.justifyContent = 'center';
+      successEl.style.textAlign = 'center';
+      successEl.style.minHeight = '320px';
+      successEl.style.padding = 'var(--space-xl) 0';
 
       gsap.fromTo(successEl,
         { opacity: 0, y: 20 },
