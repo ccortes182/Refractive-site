@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBrandDistortion();
   initNav();
   initBrandCards();
+  initServiceCardGlow();
   initMarquee();
   initFaq();
   initAnimations();

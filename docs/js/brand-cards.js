@@ -39,6 +39,37 @@ function initBrandCards() {
   });
 }
 
+function initServiceCardGlow() {
+  const supportsHover = window.matchMedia('(hover: hover)').matches;
+  const cards = document.querySelectorAll('.service-card');
+  if (!supportsHover || !cards.length) return;
+
+  const setGlowPosition = (card, clientX, clientY) => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', `${clientX - rect.left}px`);
+    card.style.setProperty('--mouse-y', `${clientY - rect.top}px`);
+  };
+
+  cards.forEach(card => {
+    const resetGlow = () => {
+      card.style.setProperty('--mouse-x', '50%');
+      card.style.setProperty('--mouse-y', '50%');
+    };
+
+    resetGlow();
+
+    card.addEventListener('pointerenter', event => {
+      setGlowPosition(card, event.clientX, event.clientY);
+    });
+
+    card.addEventListener('pointermove', event => {
+      setGlowPosition(card, event.clientX, event.clientY);
+    });
+
+    card.addEventListener('pointerleave', resetGlow);
+  });
+}
+
 function animateCounter(el, target) {
   const duration = 800;
   const start = performance.now();

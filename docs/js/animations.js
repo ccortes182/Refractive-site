@@ -111,6 +111,47 @@ function initTimelineProgress() {
   const progress = document.getElementById('timeline-progress');
   if (!wrapper || !progress) return;
 
+  const dots = Array.from(wrapper.querySelectorAll('.process-step__dot'));
+  let dotCenters = [];
+
+  const measureDotCenters = () => {
+    const wrapperRect = wrapper.getBoundingClientRect();
+
+    dotCenters = dots.map(dot => {
+      const dotRect = dot.getBoundingClientRect();
+      return {
+        dot,
+        center: dotRect.top - wrapperRect.top + (dotRect.height / 2)
+      };
+    });
+  };
+
+  const bloomDot = dot => {
+    dot.classList.remove('is-glow-bloom');
+    void dot.offsetWidth;
+    dot.classList.add('is-glow-bloom');
+  };
+
+  const syncReachedDots = progressRatio => {
+    const filledHeight = progressRatio * wrapper.offsetHeight;
+
+    dotCenters.forEach(({ dot, center }) => {
+      const isReached = filledHeight >= center;
+
+      if (isReached) {
+        if (!dot.classList.contains('is-reached')) {
+          dot.classList.add('is-reached');
+          bloomDot(dot);
+        }
+        return;
+      }
+
+      dot.classList.remove('is-reached', 'is-glow-bloom');
+    });
+  };
+
+  measureDotCenters();
+
   gsap.to(progress, {
     height: '100%',
     ease: 'none',
@@ -118,9 +159,18 @@ function initTimelineProgress() {
       trigger: wrapper,
       start: 'top 60%',
       end: 'bottom 40%',
-      scrub: 0.3
+      scrub: 0.3,
+      onUpdate: self => {
+        syncReachedDots(self.progress);
+      },
+      onRefresh: self => {
+        measureDotCenters();
+        syncReachedDots(self.progress);
+      }
     }
   });
+
+  ScrollTrigger.addEventListener('refreshInit', measureDotCenters);
 }
 
 function initProcessStepAnimations() {

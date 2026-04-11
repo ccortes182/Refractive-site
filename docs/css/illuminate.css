@@ -80,12 +80,19 @@
 }
 
 .illum-hero__headline {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--leading-tight);
+  font-size: clamp(1.4rem, 4.5vw, 4.5rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: clamp(2px, 0.35vw, 5px);
+  text-transform: uppercase;
   margin-top: var(--space-md);
   margin-bottom: var(--space-md);
+  text-wrap: balance;
+}
+
+.illum-hero__headline br {
+  display: inline;
+  content: "";
 }
 
 .illum-hero__subhead {
@@ -1000,7 +1007,9 @@
   }
 
   .illum-hero__headline {
-    font-size: clamp(2rem, 8vw, 3rem);
+    font-size: clamp(1.2rem, 6.5vw, 2.5rem);
+    letter-spacing: 1px;
+    text-wrap: initial;
   }
 
   .anchor-nav__link {

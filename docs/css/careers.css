@@ -1,0 +1,241 @@
+/* ==========================================================================
+   Careers Pages — Job detail + application form
+   ========================================================================== */
+
+.role-page {
+  padding-top: calc(var(--space-2xl) + 80px);
+  padding-bottom: var(--space-xl);
+}
+
+.role-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.role-breadcrumb:hover {
+  color: var(--color-text-primary);
+}
+
+.role-hero {
+  margin-bottom: var(--space-lg);
+}
+
+.role-hero__headline {
+  max-width: 14ch;
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.role-hero__summary {
+  max-width: 58rem;
+  color: var(--color-text-secondary);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-md);
+}
+
+.role-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.role-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.role-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.9fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.role-main {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.role-section {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+}
+
+.role-section h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-xs);
+}
+
+.role-section p {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.role-list {
+  margin-top: var(--space-sm);
+  display: grid;
+  gap: 0.7rem;
+}
+
+.role-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.role-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--color-accent-blue);
+  transform: translateY(-50%);
+}
+
+.role-sidebar {
+  position: sticky;
+  top: calc(80px + var(--space-sm));
+}
+
+.role-aside {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%),
+    var(--color-bg-card);
+}
+
+.role-aside__eyebrow {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.role-aside__title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-xs);
+}
+
+.role-aside__copy {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-sm);
+}
+
+.role-aside__list {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: var(--space-md);
+}
+
+.role-aside__list strong {
+  display: block;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.role-aside__list span {
+  color: var(--color-text-primary);
+}
+
+.career-apply {
+  margin-top: var(--space-lg);
+}
+
+.career-apply__card {
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-card);
+}
+
+.career-apply__title {
+  margin-bottom: var(--space-xs);
+}
+
+.career-apply__copy {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+  line-height: var(--leading-relaxed);
+}
+
+.career-application-form {
+  margin-top: 0;
+}
+
+.career-application-form .contact-grid {
+  gap: var(--space-sm);
+}
+
+.career-file-note {
+  display: block;
+  margin-top: var(--space-2xs);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+}
+
+.career-privacy-note {
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  margin-top: var(--space-sm);
+  line-height: var(--leading-relaxed);
+}
+
+@media (max-width: 991px) {
+  .role-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .role-sidebar {
+    position: static;
+  }
+
+  .role-hero__headline {
+    max-width: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .role-page {
+    padding-top: calc(var(--space-xl) + 72px);
+  }
+
+  .role-section,
+  .role-aside,
+  .career-apply__card {
+    padding: var(--space-sm);
+  }
+
+  .role-hero__summary {
+    font-size: var(--text-base);
+  }
+}

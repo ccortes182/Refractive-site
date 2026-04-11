@@ -9,7 +9,7 @@
   margin-bottom: var(--space-lg);
   line-height: var(--leading-snug);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  letter-spacing: var(--tracking-wide);
 }
 
 .section__heading--center {
@@ -404,11 +404,14 @@
 
 /* ── Service Cards (with mouse-follow glow) ── */
 .service-card {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
   position: relative;
   border-radius: var(--radius-md);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   overflow: hidden;
+  isolation: isolate;
   transition: border-color var(--duration-normal) var(--ease-out);
 }
 
@@ -421,10 +424,27 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(147, 83, 255, 0.3),
-    rgba(67, 169, 223, 0.1) 40%,
-    transparent 70%
+    800px circle at var(--mouse-x) var(--mouse-y),
+    rgba(67, 169, 223, 0.18),
+    rgba(147, 83, 255, 0.09) 36%,
+    transparent 64%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    340px circle at var(--mouse-x) var(--mouse-y),
+    rgba(67, 169, 223, 0.28),
+    rgba(67, 169, 223, 0.12) 22%,
+    rgba(147, 83, 255, 0.12) 42%,
+    transparent 68%
   );
   opacity: 0;
   transition: opacity var(--duration-normal) var(--ease-out);
@@ -436,6 +456,10 @@
   opacity: 1;
 }
 
+.service-card:hover::after {
+  opacity: 1;
+}
+
 /* Mobile: disable mouse-follow glow, keep spectral accents */
 @media (hover: none) {
   .service-card:active {
@@ -444,6 +468,10 @@
   }
 
   .service-card::before {
+    display: none;
+  }
+
+  .service-card::after {
     display: none;
   }
 }
@@ -918,6 +946,114 @@
   margin-top: var(--space-lg);
 }
 
+body.has-modal-open {
+  overflow: hidden;
+}
+
+.lead-modal[hidden] {
+  display: none;
+}
+
+.lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: grid;
+  place-items: center;
+  padding: 0.75rem;
+}
+
+.lead-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 9, 16, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.lead-modal__dialog {
+  position: relative;
+  width: min(720px, calc(100vw - 1.5rem));
+  max-height: calc(100dvh - 1.5rem);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 30%),
+    rgba(17, 20, 28, 0.96);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+  padding: 1.25rem;
+}
+
+.lead-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+.lead-modal__close:hover {
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lead-modal__close:focus-visible {
+  outline: 2px solid rgba(67, 169, 223, 0.5);
+  outline-offset: 2px;
+}
+
+.lead-modal__title {
+  margin-bottom: var(--space-sm);
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.contact-form--modal {
+  margin-top: 0;
+}
+
+.contact-form--modal .contact-grid {
+  gap: 0.75rem;
+}
+
+.contact-form--modal .form-group {
+  gap: 0.25rem;
+}
+
+.contact-form--modal .form-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+}
+
+.contact-form--modal .form-input,
+.contact-form--modal .form-select,
+.contact-form--modal .form-textarea {
+  padding: 12px 14px;
+}
+
+.contact-form--modal .form-textarea {
+  min-height: 76px;
+  max-height: 76px;
+  resize: none;
+}
+
+.contact-form--modal .btn--lg {
+  min-height: 48px;
+}
+
 .form-success {
   text-align: center;
   padding: var(--space-lg);
@@ -1005,6 +1141,45 @@
 
 /* ── Mobile Footer Components ── */
 @media (max-width: 767px) {
+  .lead-modal {
+    padding: 0.5rem;
+  }
+
+  .lead-modal__dialog {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+    padding: 0.9rem;
+  }
+
+  .lead-modal__close {
+    top: 0.55rem;
+    right: 0.55rem;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .lead-modal__title {
+    margin-bottom: 0.75rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .contact-form--modal .contact-grid {
+    gap: 0.625rem;
+  }
+
+  .contact-form--modal .form-input,
+  .contact-form--modal .form-select,
+  .contact-form--modal .form-textarea {
+    padding: 11px 13px;
+    font-size: 15px;
+  }
+
+  .contact-form--modal .form-textarea {
+    min-height: 72px;
+    max-height: 72px;
+  }
+
   .footer__newsletter {
     grid-template-columns: 1fr;
   }
@@ -1024,6 +1199,35 @@
   }
 }
 
+@media (max-height: 760px) {
+  .lead-modal {
+    padding: 0.5rem;
+  }
+
+  .lead-modal__dialog {
+    padding: 0.9rem;
+  }
+
+  .lead-modal__title {
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-form--modal .contact-grid {
+    gap: 0.625rem;
+  }
+
+  .contact-form--modal .form-input,
+  .contact-form--modal .form-select,
+  .contact-form--modal .form-textarea {
+    padding: 11px 13px;
+  }
+
+  .contact-form--modal .form-textarea {
+    min-height: 64px;
+    max-height: 64px;
+  }
+}
+
 /* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
   .marquee__track,
@@ -1036,4 +1240,128 @@
   .faq-item__icon {
     transition: none !important;
   }
+}
+
+/* ==========================================================================
+   Refractive Scroll Sequence (brand image-sequence section)
+   --------------------------------------------------------------------------
+   Pinning is done by GSAP ScrollTrigger (pin: .refractive-scroll__pin),
+   not CSS sticky — because base.css sets overflow-x:hidden on html/body,
+   which silently breaks position:sticky on every descendant. GSAP uses
+   position:fixed for pinning, which isn't affected by ancestor overflow.
+   GSAP injects a pin-spacer that wraps .refractive-scroll__pin and adds
+   400vh of scroll distance for the scrub.
+   ========================================================================== */
+.refractive-scroll {
+  position: relative;
+  width: 100%;
+  background: var(--color-bg-primary);
+}
+
+.refractive-scroll__pin {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.refractive-scroll__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  will-change: contents;
+}
+.refractive-scroll__canvas.is-visible {
+  opacity: 1;
+}
+
+.refractive-scroll__loader {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  transition: opacity 300ms ease;
+}
+.refractive-scroll__loader.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.refractive-scroll__phrases {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.refractive-scroll__phrase {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%); /* slight upward offset above logo centerpoint */
+  visibility: hidden;
+  opacity: 0;
+  /* Match .hero__headline typography */
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: clamp(1.4rem, 4.5vw, 4.5rem);
+  line-height: var(--leading-snug);
+  letter-spacing: clamp(2px, 0.35vw, 5px);
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  /* Brand gradient text (matches .gradient-text utility in base.css) */
+  background: var(--color-accent-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  /* Layered drop-shadow halo for contrast against the bright crystal frames.
+     Must use filter (not text-shadow) because text-shadow renders against the
+     original transparent text color and would be invisible. */
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6))
+          drop-shadow(0 8px 32px rgba(0, 0, 0, 0.45));
+  will-change: opacity, filter;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .refractive-scroll__phrase {
+    font-size: clamp(1.2rem, 6.5vw, 2.5rem);
+    letter-spacing: 1px;
+  }
+}
+
+/* ── Reduced-motion static fallback ── */
+.refractive-scroll--static .refractive-scroll__pin {
+  height: auto;
+  padding: 6rem 1.5rem;
+  overflow: visible;
+}
+.refractive-scroll--static .refractive-scroll__canvas {
+  position: relative;
+  height: 50vh;
+  opacity: 1;
+  transition: none;
+}
+.refractive-scroll--static .refractive-scroll__phrases {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0 0;
+}
+.refractive-scroll--static .refractive-scroll__phrase {
+  position: static;
+  transform: none;
+  visibility: visible;
+  opacity: 1;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  white-space: normal;
 }
