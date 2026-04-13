@@ -9,8 +9,9 @@
 
 /* ── Anchor Nav (Sticky sub-navigation) ── */
 .anchor-nav {
+  --anchor-nav-top-offset: 9px;
   position: fixed;
-  top: 0;
+  top: var(--anchor-nav-top-offset);
   left: 0;
   right: 0;
   z-index: calc(var(--z-nav) - 2);
@@ -33,6 +34,12 @@
   transform: translateY(60px); /* below main nav */
   opacity: 1;
   pointer-events: auto;
+}
+
+@media (max-width: 1023px) {
+  .anchor-nav {
+    --anchor-nav-top-offset: 4px;
+  }
 }
 
 .anchor-nav__inner {

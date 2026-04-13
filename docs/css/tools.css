@@ -6,7 +6,7 @@
 
 .auth-bar {
   position: fixed;
-  top: 74px;
+  top: calc(74px + var(--auth-bar-top-offset, 9px));
   left: 0;
   right: 0;
   z-index: calc(var(--z-nav) - 2);
@@ -22,7 +22,8 @@
 
 /* Offset page content below both nav + auth bar */
 .has-auth-bar {
-  padding-top: 118px;
+  --auth-bar-top-offset: 9px;
+  padding-top: calc(118px + var(--auth-bar-top-offset));
 }
 
 .auth-bar__inner {
@@ -80,7 +81,7 @@
 }
 
 .auth-bar--scrolled {
-  top: 58px;
+  top: calc(58px + var(--auth-bar-top-offset, 9px));
   left: 1%;
   right: 1%;
   border-top: none;
@@ -353,12 +354,16 @@
 }
 
 @media (max-width: 767px) {
+  .has-auth-bar {
+    --auth-bar-top-offset: 4px;
+  }
+
   .auth-bar {
-    top: 70px;
+    top: calc(70px + var(--auth-bar-top-offset));
   }
 
   .auth-bar--scrolled {
-    top: 60px;
+    top: calc(60px + var(--auth-bar-top-offset));
     left: 0;
     right: 0;
     border-left: none;
@@ -368,7 +373,7 @@
   }
 
   .has-auth-bar {
-    padding-top: 102px;
+    padding-top: calc(102px + var(--auth-bar-top-offset));
   }
 
   .auth-bar__inner {
@@ -420,7 +425,7 @@
 
 @media (max-width: 479px) {
   .has-auth-bar {
-    padding-top: 98px;
+    padding-top: calc(98px + var(--auth-bar-top-offset));
   }
 
   .auth-bar__inner {
