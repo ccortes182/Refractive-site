@@ -22,8 +22,16 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
+
+  <!-- refractive-analytics -->
+  <link rel="stylesheet" href="/css/consent.css">
+  <script src="/js/consent.js"></script>
+  <script src="/js/analytics-loader.js"></script>
 </head>
 <body>
+  <!-- refractive-analytics -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLNXV5JB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
 
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-to-content">Skip to main content</a>
@@ -68,10 +76,38 @@
       <span class="eyebrow">Legal</span>
       <h1 class="section__heading">Cookie Policy</h1>
       <div style="color: var(--color-text-secondary); line-height: var(--leading-relaxed);">
-        <p>Last updated: March 2026</p>
-        <p style="margin-top: var(--space-md);">This cookie policy describes how Refractive ("we", "us", or "our") uses cookies and similar technologies when you visit our website.</p>
-        <p style="margin-top: var(--space-md);">This page is currently being finalized. For questions about our cookie policy, please contact us at <a href="mailto:hello@refractive.co" style="color: var(--color-accent-blue);">hello@refractive.co</a>.</p>
+        <p>Last updated: April 2026</p>
+        <p style="margin-top: var(--space-md);">This cookie policy describes how Refractive ("we", "us", or "our") uses cookies and similar technologies when you visit our website. When you first visit the site we show a consent banner; we only set advertising and analytics cookies after you accept.</p>
+
+        <h2 style="margin-top: var(--space-lg); color: var(--color-text-primary); font-size: var(--text-xl);">How to change your choice</h2>
+        <p style="margin-top: var(--space-sm);">
+          <button type="button" id="manage-consent" class="btn btn--primary btn--sm" style="cursor: pointer;">Manage cookie preferences</button>
+        </p>
+
+        <h2 style="margin-top: var(--space-lg); color: var(--color-text-primary); font-size: var(--text-xl);">Strictly necessary</h2>
+        <ul style="margin-top: var(--space-sm); padding-left: var(--space-md);">
+          <li><strong>refractive_consent</strong> — browser localStorage entry that records your consent choice so we don't show the banner again.</li>
+          <li>Netlify session cookies — used by <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">Netlify</a>, our hosting provider, to serve the site and protect against abuse.</li>
+        </ul>
+
+        <h2 style="margin-top: var(--space-lg); color: var(--color-text-primary); font-size: var(--text-xl);">Analytics &amp; advertising (only after you accept)</h2>
+        <ul style="margin-top: var(--space-sm); padding-left: var(--space-md);">
+          <li><strong>Google Tag Manager</strong> — loads the tags below. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">Privacy policy</a>.</li>
+          <li><strong>Google Analytics 4</strong> — measures site usage. Cookies: <code>_ga</code>, <code>_ga_*</code>.</li>
+          <li><strong>Google Ads</strong> — conversion tracking and remarketing. Cookies: <code>_gcl_*</code>, <code>IDE</code> (doubleclick.net).</li>
+          <li><strong>Meta Pixel</strong> — Facebook/Instagram ads conversion and audiences. Cookies: <code>_fbp</code>. <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">Privacy policy</a>.</li>
+          <li><strong>LinkedIn Insight Tag</strong> — LinkedIn ads conversion and audiences. Cookies: <code>li_sugr</code>, <code>bcookie</code>, <code>lidc</code>. <a href="https://www.linkedin.com/legal/privacy-policy" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">Privacy policy</a>.</li>
+          <li><strong>Microsoft Clarity</strong> — anonymous heatmaps and session replay for site improvement. Cookies: <code>_clck</code>, <code>_clsk</code>. <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">Privacy policy</a>.</li>
+        </ul>
+
+        <p style="margin-top: var(--space-md);">Questions? Contact us at <a href="mailto:hello@refractive.co" style="color: var(--color-accent-blue);">hello@refractive.co</a>.</p>
       </div>
+
+      <script>
+        document.getElementById('manage-consent').addEventListener('click', function () {
+          if (window.RefractiveConsent) window.RefractiveConsent.reopen();
+        });
+      </script>
     </div>
   </section>
 
@@ -167,5 +203,5 @@
   </script>
 
   <script src="js/newsletter-form.js"></script>
-</body>
+  <script src="/js/analytics-events.js"></script></body>
 </html>

@@ -29,3 +29,21 @@
 [[edge_functions]]
   path = "/illuminate-roadmap.html"
   function = "portal-guard"
+
+# Security headers. Referrer policy preserves the origin for ad-attribution
+# UTMs while stripping path/query to third parties. Permissions-Policy caps
+# the browser APIs analytics/ads vendors can use by default.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Content-Type-Options = "nosniff"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    # NOTE: a Content-Security-Policy is intentionally not set yet. When we
+    # add one, vendor domains that must be allowed are:
+    #   script-src:  https://*.googletagmanager.com https://*.google-analytics.com
+    #                https://*.googleadservices.com https://connect.facebook.net
+    #                https://snap.licdn.com https://*.clarity.ms
+    #   img-src:     same hosts (+ https://px.ads.linkedin.com https://www.facebook.com)
+    #   connect-src: same hosts (+ https://*.analytics.google.com)
+    #   frame-src:   https://*.googletagmanager.com https://td.doubleclick.net

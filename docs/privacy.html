@@ -22,8 +22,16 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
+
+  <!-- refractive-analytics -->
+  <link rel="stylesheet" href="/css/consent.css">
+  <script src="/js/consent.js"></script>
+  <script src="/js/analytics-loader.js"></script>
 </head>
 <body>
+  <!-- refractive-analytics -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLNXV5JB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
 
   <!-- Skip Navigation -->
   <a href="#main-content" class="skip-to-content">Skip to main content</a>
@@ -68,9 +76,24 @@
       <span class="eyebrow">Legal</span>
       <h1 class="section__heading">Privacy Policy</h1>
       <div style="color: var(--color-text-secondary); line-height: var(--leading-relaxed);">
-        <p>Last updated: March 2026</p>
+        <p>Last updated: April 2026</p>
         <p style="margin-top: var(--space-md);">This privacy policy describes how Refractive ("we", "us", or "our") collects, uses, and shares information about you when you visit our website or use our services.</p>
-        <p style="margin-top: var(--space-md);">This page is currently being finalized. For questions about your data or privacy, please contact us at <a href="mailto:hello@refractive.co" style="color: var(--color-accent-blue);">hello@refractive.co</a>.</p>
+
+        <h2 style="margin-top: var(--space-lg); color: var(--color-text-primary); font-size: var(--text-xl);">Third-party services &amp; tracking</h2>
+        <p style="margin-top: var(--space-sm);">Subject to your consent (see our <a href="cookies.html" style="color: var(--color-accent-blue);">cookie policy</a>), we share pageview and conversion events with the providers below so we can measure marketing performance and reach relevant audiences:</p>
+        <ul style="margin-top: var(--space-sm); padding-left: var(--space-md);">
+          <li>Google LLC — Tag Manager, Analytics 4, Ads (<a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">privacy</a>)</li>
+          <li>Meta Platforms, Inc. — Meta Pixel for Facebook and Instagram ads (<a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">privacy</a>)</li>
+          <li>LinkedIn Corporation — Insight Tag for LinkedIn ads (<a href="https://www.linkedin.com/legal/privacy-policy" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">privacy</a>)</li>
+          <li>Microsoft Corporation — Clarity for anonymous heatmaps and session replay (<a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">privacy</a>)</li>
+          <li>Netlify, Inc. — site hosting and form submission handling (<a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener" style="color: var(--color-accent-blue);">privacy</a>)</li>
+        </ul>
+        <p style="margin-top: var(--space-md);">We use Google Consent Mode v2: all advertising and analytics storage defaults to <em>denied</em> until you accept in the banner. You can change your choice at any time from the <a href="cookies.html" style="color: var(--color-accent-blue);">cookie policy</a> page.</p>
+
+        <h2 style="margin-top: var(--space-lg); color: var(--color-text-primary); font-size: var(--text-xl);">Your rights</h2>
+        <p style="margin-top: var(--space-sm);">Depending on where you live (e.g. EEA, UK, California), you may have rights to access, correct, delete, or export the personal data we hold about you, and to opt out of targeted advertising. To exercise these rights, email <a href="mailto:hello@refractive.co" style="color: var(--color-accent-blue);">hello@refractive.co</a>.</p>
+
+        <p style="margin-top: var(--space-md);">For questions about your data or privacy, please contact us at <a href="mailto:hello@refractive.co" style="color: var(--color-accent-blue);">hello@refractive.co</a>.</p>
       </div>
     </div>
   </section>
@@ -167,5 +190,5 @@
   </script>
 
   <script src="js/newsletter-form.js"></script>
-</body>
+  <script src="/js/analytics-events.js"></script></body>
 </html>
