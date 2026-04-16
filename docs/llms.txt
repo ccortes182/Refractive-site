@@ -1,0 +1,30 @@
+# Refractive
+
+> Refractive is a senior-operator ecommerce growth partner for DTC brands, covering strategy, paid media, creative, conversion, retention, and measurement.
+
+Canonical site: https://refractive.co/
+XML sitemap: https://refractive.co/sitemap.xml
+HTML sitemap: https://refractive.co/sitemap.html
+Contact: growth@refractive.co
+
+## Preferred discovery pages
+- https://refractive.co/ :: Refractive — One Growth Team. Every Channel. No Excuses. — Refractive replaces your agency stack with a single senior team that owns paid, creative, site, email, and measurement. All coordinated. All accountable.
+- https://refractive.co/solutions.html :: Solutions | Full-Stack eCommerce Growth Partner | Refractive — Four pillars that compound growth: Foundation, Growth, Experience, and Retention—powered by Illuminate™ measurement.
+- https://refractive.co/illuminate.html :: Illuminate™ | Attribution + Incrementality + MMM for eCommerce | Refractive — Illuminate™ turns scattered marketing data into confident decisions. Attribution, incrementality testing, and media mix modeling—built for eCommerce brands.
+- https://refractive.co/playbooks.html :: Playbooks & Templates — Refractive — Operator-built tools and frameworks for DTC growth. Free calculators and gated dashboards built from real programs.
+- https://refractive.co/blog/index.html :: The Refractive Index — Operator Frameworks for DTC Growth | Refractive — Operator-level marketing frameworks, playbooks, and contrarian thinking for DTC brands. Written by senior operators who run these programs for real brands, right now.
+- https://refractive.co/about.html :: About — Refractive — We're a growth partner built by former in-house operators. Fewer clients, deeper work, measurable outcomes.
+- https://refractive.co/how-we-work.html :: How We Work — Refractive — How Refractive Works: The system, cadence, pod, and deliverables.
+
+## Topic coverage
+- Ecommerce growth strategy
+- Paid media and creative systems
+- Shopify conversion and site performance
+- Email, SMS, and retention programs
+- Attribution, incrementality, MMM, and marketing measurement
+- Operator frameworks, calculators, and growth tools
+
+## Crawling notes
+- Public marketing pages, blog posts, and open tools are intended for discovery.
+- Protected portal, investor, app, and download paths are not intended for open crawling.
+- For the complete public URL list, use the XML sitemap.

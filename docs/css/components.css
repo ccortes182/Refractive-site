@@ -104,6 +104,53 @@
   cursor: pointer;
 }
 
+.brand-card__context {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: calc(100% - (var(--space-sm) * 2));
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(12, 16, 22, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.brand-card__context--in-house {
+  box-shadow: 0 0 0 1px rgba(67, 169, 223, 0.18);
+}
+
+.brand-card__context--client {
+  box-shadow: 0 0 0 1px rgba(194, 220, 212, 0.16);
+}
+
+.brand-card__context-type {
+  font-size: 0.62rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+}
+
+.brand-card__context-detail {
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.76);
+  white-space: nowrap;
+}
+
+.brand-card__context-detail::before {
+  content: "\00b7";
+  margin-right: 0.4rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
 .brand-card__media {
   position: absolute;
   inset: 0;

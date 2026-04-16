@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+Disallow: /blog/archive/
+Disallow: /deck.html
+Disallow: /downloads/
+Disallow: /illuminate-app/
+Disallow: /illuminate-roadmap.html
+Disallow: /investor-onepager.html
+Disallow: /investor/
+Disallow: /pitch.html
+Disallow: /portal/
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+Sitemap: https://refractive.co/sitemap.xml
