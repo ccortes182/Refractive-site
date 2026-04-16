@@ -226,6 +226,11 @@
               opacity var(--duration-normal) var(--ease-out);
 }
 
+.brand-card__result strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
 .brand-card:hover .brand-card__result,
 .brand-card:focus-within .brand-card__result {
   transform: translateY(0);
@@ -306,6 +311,11 @@
 
   /* Show stats always on mobile (no hover) */
   .brand-card .brand-card__stat {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .brand-card .brand-card__result {
     transform: translateY(0);
     opacity: 1;
   }
