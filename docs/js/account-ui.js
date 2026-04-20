@@ -150,6 +150,7 @@
     var config = getAccountConfig();
     inner.innerHTML = buildRailMarkup(config);
     rail.setAttribute('data-account-state', config.state);
+    inner.style.opacity = '1';
 
     // Bind sign-out button
     var signoutBtn = document.getElementById('auth-signout');
