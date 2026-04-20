@@ -298,6 +298,8 @@
         </div>
         <button type="submit" class="btn btn--primary btn--full" id="signin-submit">Sign In &rarr;</button>
         <p class="gate-modal__error" id="signin-error" hidden>Invalid email or password.</p>
+        <p class="gate-modal__note" style="margin-top: var(--space-xs);"><a href="#" id="forgot-password-link" style="color: var(--color-text-secondary);">Forgot your password?</a></p>
+        <p class="gate-modal__success" id="reset-success" hidden style="color: #7c5cfc; font-size: var(--text-sm); text-align: center;">Password reset link sent — check your email.</p>
       </form>
 
       <p class="gate-modal__toggle" id="gate-toggle">Already have an account? <a href="#" id="gate-toggle-link">Sign in</a></p>
@@ -415,6 +417,8 @@
         var signinSubmitBtn = document.getElementById('signin-submit');
         var toggleEl     = document.getElementById('gate-toggle');
         var toggleLink   = document.getElementById('gate-toggle-link');
+        var forgotLink   = document.getElementById('forgot-password-link');
+        var resetSuccess = document.getElementById('reset-success');
         var modalTitle   = document.getElementById('gate-modal-title');
         var modalDesc    = document.getElementById('gate-modal-desc');
         var activeResource = null;
@@ -464,6 +468,29 @@
         }
 
         // Toggle between sign-up and sign-in
+        // Forgot password
+        forgotLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          var email = signinEmailIn.value.trim();
+          if (!email) {
+            signinErrorEl.textContent = 'Enter your email above, then click forgot password.';
+            signinErrorEl.hidden = false;
+            signinEmailIn.focus();
+            return;
+          }
+          signinErrorEl.hidden = true;
+          resetSuccess.hidden = true;
+          forgotLink.textContent = 'Sending...';
+          RefractiveAuth.resetPassword(email).then(function() {
+            resetSuccess.hidden = false;
+            forgotLink.textContent = 'Forgot your password?';
+          }).catch(function() {
+            signinErrorEl.textContent = 'Could not send reset email. Please try again.';
+            signinErrorEl.hidden = false;
+            forgotLink.textContent = 'Forgot your password?';
+          });
+        });
+
         toggleLink.addEventListener('click', function(e) {
           e.preventDefault();
           isSignInMode = !isSignInMode;
@@ -585,6 +612,7 @@
           overlay.classList.remove('is-visible');
           errorEl.hidden = true;
           signinErrorEl.hidden = true;
+          resetSuccess.hidden = true;
           form.reset();
           signinForm.reset();
           submitBtn.disabled = false;

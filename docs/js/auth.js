@@ -267,15 +267,28 @@
   function gateUserAsync(profile, password, resource) {
     return signUp(profile.email, password, profile)
       .catch(function(err) {
-        // If user already exists, try signing in
         if (err.message && err.message.indexOf('already registered') !== -1) {
-          return signIn(profile.email, password);
+          return signIn(profile.email, password).catch(function(signInErr) {
+            if (signInErr.message && signInErr.message.indexOf('Invalid login') !== -1) {
+              throw new Error('An account with this email already exists. Try signing in with your password, or use a different email.');
+            }
+            throw signInErr;
+          });
         }
         throw err;
       })
       .then(function() {
         return grantAccess(resource);
       });
+  }
+
+  function resetPassword(email) {
+    if (!sb) return Promise.reject(new Error('Supabase not loaded'));
+    return sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/playbooks.html'
+    }).then(function(result) {
+      if (result.error) throw result.error;
+    });
   }
 
   // ── Legacy helpers ──────────────────────────────────────────────────────
@@ -334,6 +347,7 @@
     grantAccess: grantAccess,
     gateUserAsync: gateUserAsync,
     checkAccessAsync: checkAccessAsync,
+    resetPassword: resetPassword,
     onReady: onReady
   };
 
