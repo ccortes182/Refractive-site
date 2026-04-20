@@ -264,6 +264,8 @@
 
   // ── Async gateUser — full Supabase flow (used by updated playbooks.html) ──
 
+  var ALL_TOOLS = ['growth-dashboard', 'cohort-simulator', 'attribution-impact', 'media-mix'];
+
   function gateUserAsync(profile, password, resource) {
     return signUp(profile.email, password, profile)
       .catch(function(err) {
@@ -278,7 +280,19 @@
         throw err;
       })
       .then(function() {
-        return grantAccess(resource);
+        return grantAllAccess();
+      });
+  }
+
+  function grantAllAccess() {
+    if (!sb || !_cachedUser) return Promise.reject(new Error('Not authenticated'));
+    var rows = ALL_TOOLS.map(function(slug) {
+      return { user_id: _cachedUser.id, resource_slug: slug, unlocked_at: new Date().toISOString() };
+    });
+    return sb.from('tool_access').upsert(rows, { onConflict: 'user_id,resource_slug' })
+      .then(function(result) {
+        if (result.error) throw result.error;
+        _cachedAccess = ALL_TOOLS.slice();
       });
   }
 

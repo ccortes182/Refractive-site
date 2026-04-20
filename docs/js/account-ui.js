@@ -119,7 +119,7 @@
             '<span class="auth-bar__headline">Unlock your free Refractive account.</span>' +
           '</div>' +
           '<div class="auth-bar__actions">' +
-            '<a href="' + config.playbooksHref + '" class="btn btn--primary btn--sm">Unlock Free Account</a>' +
+            '<a href="' + config.playbooksHref + '?signup=1" class="btn btn--primary btn--sm">Unlock Free Account</a>' +
           '</div>' +
         '</div>'
       );

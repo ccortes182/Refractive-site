@@ -132,7 +132,7 @@
           <h1 class="member-page-hero__title">Your operator account for frameworks, calculators, and premium tools.</h1>
           <p class="member-page-hero__desc">Use your Refractive account to move from quick diagnostics into deeper operating systems. Open the free tools immediately, then unlock premium dashboards and simulators built for real DTC decision-making.</p>
           <div class="index-hero__actions">
-            <a href="#member-tools" class="btn btn--primary btn--lg">Unlock Member Tools</a>
+            <a href="#member-tools" class="btn btn--primary btn--lg" id="hero-unlock-btn">Unlock Member Tools</a>
             <a href="#free-tools" class="btn btn--outline btn--lg">Open Free Tools</a>
           </div>
         </div>
@@ -462,9 +462,34 @@
         }
 
         if (RefractiveAuth.onReady) {
-          RefractiveAuth.onReady(initCards);
+          RefractiveAuth.onReady(function() {
+            initCards();
+            // Auto-open signup modal if ?signup=1 and not already signed in
+            if (window.location.search.indexOf('signup=1') !== -1 && !RefractiveAuth.isAuthenticated()) {
+              modalTitle.textContent = 'Unlock member access';
+              modalDesc.textContent = 'Create a free account to unlock all operator tools and dashboards instantly.';
+              activeResource = 'growth-dashboard';
+              activeHref = 'tools/growth-dashboard.html';
+              openModal();
+            }
+          });
         } else {
           initCards();
+        }
+
+        // Hero "Unlock Member Tools" button opens modal if not signed in
+        var heroBtn = document.getElementById('hero-unlock-btn');
+        if (heroBtn) {
+          heroBtn.addEventListener('click', function(e) {
+            if (!RefractiveAuth.isAuthenticated()) {
+              e.preventDefault();
+              modalTitle.textContent = 'Unlock member access';
+              modalDesc.textContent = 'Create a free account to unlock all operator tools and dashboards instantly.';
+              activeResource = 'growth-dashboard';
+              activeHref = 'tools/growth-dashboard.html';
+              openModal();
+            }
+          });
         }
 
         // Toggle between sign-up and sign-in
