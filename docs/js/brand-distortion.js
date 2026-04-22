@@ -73,12 +73,36 @@ function setupDistortion(container, section) {
     textCtx.setTransform(dpr * ss, 0, 0, dpr * ss, 0, 0);
     textCtx.clearRect(0, 0, W, H);
 
-    var pad = W * 0.01; // nearly touch the edges
+    var isMobile = window.matchMedia('(max-width: 767px)').matches;
+    var lines = isMobile
+      ? ['ILLUMINATING', 'BRANDS', 'AMPLIFYING', 'GROWTH']
+      : [LINE1, LINE2];
+    var pad = W * (isMobile ? 0.035 : 0.01);
     var usableW = W - pad * 2;
+    var lineGap = H * (isMobile ? 0.006 : 0.012);
+    var topPad = H * (isMobile ? 0.08 : 0.12);
+    var bottomPad = Math.max(2, H * (isMobile ? 0.008 : 0.01));
+    var usableH = H - topPad - bottomPad;
+    var fontSizes = [];
+    var totalH = 0;
 
-    // Fit each line independently
-    var fs1 = fitFontSize(LINE1, usableW);
-    var fs2 = fitFontSize(LINE2, usableW);
+    for (var i = 0; i < lines.length; i++) {
+      var fitted = fitFontSize(lines[i], usableW);
+      fontSizes.push(fitted);
+      totalH += fitted * 0.75;
+    }
+
+    totalH += (lines.length - 1) * lineGap;
+
+    if (totalH > usableH) {
+      var scale = usableH / totalH;
+      totalH = 0;
+      for (var j = 0; j < fontSizes.length; j++) {
+        fontSizes[j] *= scale;
+        totalH += fontSizes[j] * 0.75;
+      }
+      totalH += (lines.length - 1) * lineGap;
+    }
 
     // Footer gradient: #292831 → #414046 → #4b4a4e
     var grad = textCtx.createLinearGradient(0, 0, W, 0);
@@ -87,22 +111,19 @@ function setupDistortion(container, section) {
     grad.addColorStop(1, '#4b4a4e');
 
     textCtx.textBaseline = 'alphabetic';
-    textCtx.textAlign = 'left';
+    textCtx.textAlign = isMobile ? 'center' : 'left';
 
-    // Tight vertical stacking — minimal gap between lines
-    var lineGap = H * 0.02;
-    var totalH = fs1 * 0.75 + lineGap + fs2 * 0.75; // approx cap height
-    var startY = (H - totalH) / 2 + fs1 * 0.72;
-
-    // Line 1
-    textCtx.font = '700 ' + fs1 + 'px "adelphi-pe-variable", sans-serif';
+    var startY = H - bottomPad - totalH;
     textCtx.fillStyle = grad;
-    textCtx.fillText(LINE1, pad, startY);
+    var textX = isMobile ? W / 2 : pad;
 
-    // Line 2
-    textCtx.font = '700 ' + fs2 + 'px "adelphi-pe-variable", sans-serif';
-    textCtx.fillStyle = grad;
-    textCtx.fillText(LINE2, pad, startY + fs1 * 0.75 + lineGap);
+    var currentY = startY;
+    for (var k = 0; k < lines.length; k++) {
+      textCtx.font = '700 ' + fontSizes[k] + 'px "adelphi-pe-variable", sans-serif';
+      currentY += fontSizes[k] * 0.72;
+      textCtx.fillText(lines[k], textX, currentY);
+      currentY += fontSizes[k] * 0.03 + lineGap;
+    }
   }
 
   // ── WebGL shader ──

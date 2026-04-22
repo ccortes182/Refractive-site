@@ -947,6 +947,10 @@
 }
 
 @media (max-width: 767px) {
+  .brand-moment {
+    height: clamp(220px, 58vw, 320px);
+  }
+
   .nav__mobile-overlay {
     padding: 1.5rem;
     justify-content: center;
