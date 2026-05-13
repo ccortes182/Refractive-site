@@ -17,10 +17,10 @@ const GTM_CONTAINER_ID = 'GTM-TLNXV5JB';
 const ROOT = path.resolve(__dirname, '..', 'docs');
 const MARKER = '<!-- refractive-analytics -->';
 
-// The Illuminate product app is a separate Vue bundle with its own entrypoint
+// The Lucerna product app is a separate Vue bundle with its own entrypoint
 // and asset pipeline — skip it here and wire tracking through that app's own
 // build if/when needed.
-const SKIP_DIRS = new Set(['illuminate-app']);
+const SKIP_DIRS = new Set(['lucerna-app']);
 
 const HEAD_SNIPPET = [
   '',

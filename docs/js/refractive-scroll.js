@@ -6,26 +6,26 @@
    above this script in index.html).
 
    Architecture:
-   - Pinning is done by CSS `position: sticky` on .refractive-scroll__pin
-     (NOT by GSAP's pin). The section is 500vh tall in CSS, the inner pin
-     div is 100vh sticky-at-top. This eliminates GSAP's pin-spacer DOM
-     injection (which caused layout jumps and "still frame at end" bugs).
+   - Pinning is handled by GSAP ScrollTrigger on .refractive-scroll__pin
+     using a responsive end distance so the shorter 151-frame sequence
+     stays cinematic without dragging on mobile.
    - GSAP only handles the scrub callback, mapping scroll progress (0..1
      across the section) to a frame index + phrase opacities.
    - ScrollTrigger is created at DOMContentLoaded immediately — no waiting
      on frame loading. drawFrame() gracefully falls back to the nearest
      loaded frame so scrubbing works even while frames are still loading.
-   - Frames are lazy-loaded via IntersectionObserver to avoid blocking LCP
-     with 5.4 MB of JPEGs on initial page load.
+   - Frames are lazy-loaded via IntersectionObserver to avoid blocking LCP.
    - prefers-reduced-motion: render one mid-sequence frame statically with
      phrases stacked below. Matches the existing animations.js pattern.
    ========================================================================== */
 
 (function () {
-  const FRAME_COUNT = 240;
+  const FRAME_COUNT = 151;
   const FRAME_BASE = 'frames';
   const FRAME_EXT = 'jpg';
-  const STATIC_FRAME_INDEX = 119; // mid-sequence frame for reduced-motion fallback
+  const STATIC_FRAME_INDEX = Math.floor((FRAME_COUNT - 1) / 2);
+  const PHONE_BREAKPOINT = 767;
+  const DESKTOP_BREAKPOINT = 1024;
 
   function init() {
     const section = document.getElementById('refractive-scroll');
@@ -49,12 +49,22 @@
     let scrollTrigger = null;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const getScrollEnd = () => (
+      window.innerWidth <= PHONE_BREAKPOINT ? '+=140%' : '+=175%'
+    );
 
     // ---------- canvas sizing ----------
+    function getCanvasSize() {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        width: Math.round(rect.width || pinEl.clientWidth || window.innerWidth),
+        height: Math.round(rect.height || pinEl.clientHeight || window.innerHeight),
+      };
+    }
+
     function sizeCanvas() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = pinEl.clientWidth  || window.innerWidth;
-      const h = pinEl.clientHeight || window.innerHeight;
+      const { width: w, height: h } = getCanvasSize();
       canvas.width  = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width  = w + 'px';
@@ -64,10 +74,12 @@
 
     function drawImg(img) {
       if (!img || !img.naturalWidth) return;
-      const w = pinEl.clientWidth  || window.innerWidth;
-      const h = pinEl.clientHeight || window.innerHeight;
+      const { width: w, height: h } = getCanvasSize();
       ctx.clearRect(0, 0, w, h);
-      const scale = Math.min(w / img.naturalWidth, h / img.naturalHeight);
+      const useCoverFit = window.innerWidth >= DESKTOP_BREAKPOINT;
+      const scale = useCoverFit
+        ? Math.max(w / img.naturalWidth, h / img.naturalHeight)
+        : Math.min(w / img.naturalWidth, h / img.naturalHeight);
       const dw = img.naturalWidth  * scale;
       const dh = img.naturalHeight * scale;
       ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
@@ -156,7 +168,7 @@
       pin: pinEl,
       pinType: 'fixed',
       start: 'top top',
-      end: '+=200%', // 2 viewports of scroll for the full sequence
+      end: getScrollEnd,
       scrub: 0.5,
       anticipatePin: 1,
       invalidateOnRefresh: true,

@@ -2,7 +2,7 @@
    Solutions Page — Styles specific to solutions.html
    ========================================================================== */
 
-/* ── Reuse anchor-nav + active link from illuminate ── */
+/* ── Reuse anchor-nav + active link from lucerna ── */
 .nav__link--active {
   color: var(--color-text-primary);
 }

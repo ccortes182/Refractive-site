@@ -160,7 +160,7 @@
       parts.push('Net adjusted revenue is $' + fmt(Math.abs(totalShift)) + ' lower than last-click reports \u2014 meaning some channels are getting credit for conversions they didn\u2019t incrementally drive.');
     }
 
-    parts.push('These are estimates. For true incrementality measurement, run geo-holdout or conversion lift tests through Illuminate.');
+    parts.push('These are estimates. For true incrementality measurement, run geo-holdout or conversion lift tests through Lucerna.');
 
     readEl.textContent = parts.join(' ');
   }

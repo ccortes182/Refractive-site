@@ -16,7 +16,7 @@ export default async function handler(request, context) {
   const isDownload = path.startsWith('/downloads/');
 
   // Also protect the old root-level content pages (before redirect)
-  const protectedRootPages = ['/deck.html', '/pitch.html', '/investor-onepager.html', '/illuminate-roadmap.html'];
+  const protectedRootPages = ['/deck.html', '/pitch.html', '/investor-onepager.html', '/illuminate-roadmap.html', '/lucerna-roadmap.html'];
   const isProtectedRoot = protectedRootPages.includes(path);
 
   if (!isPortalContent && !isInvestorContent && !isDownload && !isProtectedRoot) {
@@ -84,7 +84,7 @@ export default async function handler(request, context) {
 }
 
 function redirectToLogin(path) {
-  const loginPage = (path.startsWith('/investor') || path === '/deck.html' || path === '/investor-onepager.html' || path === '/illuminate-roadmap.html')
+  const loginPage = (path.startsWith('/investor') || path === '/deck.html' || path === '/investor-onepager.html' || path === '/illuminate-roadmap.html' || path === '/lucerna-roadmap.html')
     ? '/investor.html'
     : '/portal.html';
   return new Response(null, {
@@ -106,5 +106,5 @@ function parseCookies(cookieString) {
 }
 
 export const config = {
-  path: ['/portal/*', '/investor/*', '/downloads/*', '/deck.html', '/pitch.html', '/investor-onepager.html', '/illuminate-roadmap.html']
+  path: ['/portal/*', '/investor/*', '/downloads/*', '/deck.html', '/pitch.html', '/investor-onepager.html', '/illuminate-roadmap.html', '/lucerna-roadmap.html']
 };

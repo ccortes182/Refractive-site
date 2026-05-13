@@ -109,7 +109,7 @@ const doc = new Document({
         moduleCard('Module B: Growth', 'Paid social/search, creative production, marketplaces, analytics and reporting'),
         moduleCard('Module C: Experience', 'Shopify development, CRO and A/B testing, SEO, AI enhancements, Performance UX'),
         moduleCard('Module D: Retention', 'Email/SMS, loyalty/referral, subscription, customer support systems, affiliate'),
-        moduleCard('Module E: Illuminate', 'Dashboards, incrementality plan, MMM planning, weekly memo'),
+        moduleCard('Module E: Lucerna', 'Dashboards, incrementality plan, MMM planning, weekly memo'),
 
         // 3. Deliverables
         sectionTitle('Deliverables & Cadence', 3),

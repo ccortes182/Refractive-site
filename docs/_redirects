@@ -8,4 +8,10 @@
 /spectrum-sprint.html       /portal/spectrum-sprint.html    301
 /deck.html                  /investor/deck.html             301
 /investor-onepager.html     /investor/onepager.html         301
-/illuminate-roadmap.html    /investor/illuminate-roadmap.html 301
+/illuminate-roadmap.html    /investor/lucerna-roadmap.html 301
+
+# Lucerna rebrand redirects (2026-05) — preserve legacy bookmarks for ~90 days minimum
+/illuminate.html                              /lucerna.html                              301
+/investor/illuminate-roadmap.html             /investor/lucerna-roadmap.html             301
+/illuminate-app/*                             /lucerna-app/:splat                        301
+/downloads/Refractive_Illuminate_Roadmap.pdf  /downloads/Refractive_Lucerna_Roadmap.pdf  301

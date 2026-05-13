@@ -4,8 +4,8 @@ Disallow: /404.html
 Disallow: /blog/archive/
 Disallow: /deck.html
 Disallow: /downloads/
-Disallow: /illuminate-app/
-Disallow: /illuminate-roadmap.html
+Disallow: /lucerna-app/
+Disallow: /lucerna-roadmap.html
 Disallow: /investor-onepager.html
 Disallow: /investor/
 Disallow: /pitch.html

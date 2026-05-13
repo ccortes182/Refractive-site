@@ -30,6 +30,12 @@
   path = "/illuminate-roadmap.html"
   function = "portal-guard"
 
+# Lucerna rebrand: keep both old and new protected paths registered during transition.
+# Remove the legacy /illuminate-roadmap.html entry after ~90 days post-launch.
+[[edge_functions]]
+  path = "/lucerna-roadmap.html"
+  function = "portal-guard"
+
 # Security headers. Referrer policy preserves the origin for ad-attribution
 # UTMs while stripping path/query to third parties. Permissions-Policy caps
 # the browser APIs analytics/ads vendors can use by default.

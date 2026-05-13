@@ -16,7 +16,7 @@ const pages = [
   { file: 'spectrum-sprint.html',    output: 'Refractive_Spectrum_Sprint.pdf' },
   { file: 'how-we-work.html',       output: 'Refractive_How_We_Work.pdf' },
   { file: 'investor-onepager.html',  output: 'Refractive_Investor_OnePager.pdf' },
-  { file: 'illuminate-roadmap.html', output: 'Refractive_Illuminate_Roadmap.pdf' },
+  { file: 'lucerna-roadmap.html', output: 'Refractive_Lucerna_Roadmap.pdf' },
 ];
 
 (async () => {

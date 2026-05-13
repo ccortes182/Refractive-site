@@ -28,7 +28,7 @@ exports.handler = async function(event) {
     ? 'https://refractive.co/investor.html'
     : 'https://refractive.co/portal.html';
   const materialsDesc = isInvestor
-    ? 'investor deck, one-pager, and Illuminate roadmap'
+    ? 'investor deck, one-pager, and Lucerna roadmap'
     : 'engagement decks, service one-pagers, and operational playbooks';
 
   const html = wrap(`
