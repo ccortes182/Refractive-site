@@ -87,9 +87,9 @@
 }
 
 .luc-hero__headline {
-  font-size: clamp(1.4rem, 4.5vw, 4.5rem);
+  font-size: clamp(3.5rem, 12vw, 10rem);
   font-weight: var(--font-weight-semibold);
-  line-height: var(--leading-snug);
+  line-height: 0.95;
   letter-spacing: clamp(2px, 0.35vw, 5px);
   text-transform: uppercase;
   margin-top: var(--space-md);
@@ -97,9 +97,27 @@
   text-wrap: balance;
 }
 
+.luc-hero__headline sup {
+  font-size: 0.16em;
+  vertical-align: super;
+  margin-left: 0.08em;
+  letter-spacing: 0;
+}
+
 .luc-hero__headline br {
   display: inline;
   content: "";
+}
+
+.luc-hero__etymology {
+  font-family: "miller-banner", Georgia, serif;
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  font-style: italic;
+  line-height: var(--leading-relaxed);
+  max-width: 620px;
+  margin: calc(var(--space-md) * -0.35) auto var(--space-md);
+  text-wrap: balance;
 }
 
 .luc-hero__subhead {
@@ -146,6 +164,15 @@
   margin-bottom: var(--space-lg);
 }
 
+.luc-hero__trust-line {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-relaxed);
+  margin: calc(var(--space-lg) * -0.35) auto var(--space-md);
+  text-wrap: balance;
+}
+
 .luc-hero__proof {
   display: flex;
   gap: var(--space-sm);
@@ -164,6 +191,31 @@
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   font-weight: var(--font-weight-medium);
+}
+
+/* ── Name Section ── */
+.name-section {
+  padding-top: var(--space-xl);
+}
+
+.name-section .container {
+  text-align: left;
+}
+
+.name-section__body {
+  max-width: 680px;
+}
+
+.name-section__body p {
+  font-size: var(--text-lg);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-light);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-md);
+}
+
+.name-section__body p:last-child {
+  margin-bottom: 0;
 }
 
 /* ── Overview Cards ── */
@@ -1044,7 +1096,7 @@
   }
 
   .luc-hero__headline {
-    font-size: clamp(1.2rem, 6.5vw, 2.5rem);
+    font-size: clamp(3rem, 18vw, 5rem);
     letter-spacing: 1px;
     text-wrap: initial;
   }
