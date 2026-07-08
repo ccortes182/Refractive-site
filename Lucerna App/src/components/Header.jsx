@@ -6,43 +6,8 @@ import { TODAY, getCompareRange } from "../data/mockData";
 import DateRangePicker from "./DateRangePicker";
 import BrandName from "./BrandName.jsx";
 
-const PAGE_NAMES = {
-  "/": "Overview",
-  "/channels": "Channels",
-  "/customers": "Customers",
-  "/products": "Products",
-  "/efficiency": "Efficiency",
-  "/incrementality": "Incrementality",
-  "/mmm": "Media Mix",
-  "/creative": "Creative",
-  "/cohorts": "Cohorts",
-  "/tracking": "Tracking",
-  "/forecasting": "Forecasting",
-  "/geo": "Geo",
-  "/profitability": "Profitability",
-  "/inventory": "Inventory",
-  "/subscriptions": "Subscriptions",
-  "/competitive": "Competitive",
-  "/alerts": "Alerts",
-  "/reports": "Executive Report",
-  "/journeys": "Journeys",
-  "/ai-insights": "AI Insights",
-  "/integrations": "Integrations",
-  "/transactions": "Transactions",
-  "/settings": "Settings",
-};
-
-const PRESETS = [
-  { days: 7, label: "7D", key: "7d" },
-  { days: 30, label: "30D", key: "30d" },
-  { days: 90, label: "90D", key: "90d" },
-];
-
-const COMPARE_MODES = [
-  { key: "previous", label: "Prior" },
-  { key: "yoy", label: "YOY" },
-  { key: "custom", label: "Custom" },
-];
+import { PAGE_NAMES } from "../lib/routes";
+import { PRESETS, COMPARE_MODES } from "../lib/dateConfig";
 
 export default function Header({
   dateRange,

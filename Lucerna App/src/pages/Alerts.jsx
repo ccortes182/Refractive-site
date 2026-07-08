@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { alertsData } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import { format } from "date-fns";
+import { rangeDays } from "../lib/rangeScale";
 import {
   ComposedChart,
   Bar,
@@ -14,22 +14,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { formatAxis } from "../lib/format";
+import { statusStyle } from "../lib/status";
+import { CARD as card } from "../lib/card";
 
-const card = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6";
 
 const severityStyles = {
-  Critical: {
-    dot: "bg-red-500",
-    pill: "bg-red-500/15 text-red-400 border border-red-500/30",
-  },
-  Warning: {
-    dot: "bg-yellow-500",
-    pill: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30",
-  },
-  Info: {
-    dot: "bg-blue-500",
-    pill: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
-  },
+  Critical: statusStyle("Critical"),
+  Warning: statusStyle("Warning"),
+  Info: statusStyle("Info"),
 };
 
 const severityScatterColor = {
@@ -37,26 +30,51 @@ const severityScatterColor = {
   Warning: "#eab308",
 };
 
-export default function Alerts({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const { alerts, rules, anomalies, thisWeekCount, resolvedCount } = alertsData;
+export default function Alerts({ dateRange }) {
+  const { alerts, rules, anomalies } = alertsData;
+
+  // Alerts carry real timestamps — only show those inside the selected range.
+  const filteredAlerts = useMemo(() => {
+    const start = dateRange.start ? new Date(dateRange.start) : null;
+    const end = dateRange.end ? new Date(dateRange.end) : null;
+    if (start) start.setHours(0, 0, 0, 0);
+    if (end) end.setHours(23, 59, 59, 999);
+    return alerts.filter((a) => {
+      const t = new Date(a.timestamp);
+      if (start && t < start) return false;
+      if (end && t > end) return false;
+      return true;
+    });
+  }, [alerts, dateRange.start, dateRange.end]);
 
   const sortedAlerts = useMemo(
-    () => [...alerts].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
-    [alerts]
+    () => [...filteredAlerts].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)),
+    [filteredAlerts]
   );
+
+  const activeCount = filteredAlerts.filter((a) => !a.resolved).length;
+  const resolvedCount = filteredAlerts.filter((a) => a.resolved).length;
+
+  // Window the 30-day anomaly series to the most recent min(rangeDays, 30) days.
+  const windowedAnomalies = useMemo(() => {
+    const days = Math.min(
+      rangeDays({ start: dateRange.start, end: dateRange.end }),
+      anomalies.length
+    );
+    return anomalies.slice(-days);
+  }, [anomalies, dateRange.start, dateRange.end]);
 
   const anomalyDots = useMemo(
     () =>
-      anomalies
+      windowedAnomalies
         .filter((d) => d.anomaly)
         .map((d) => ({ ...d, anomalyRevenue: d.revenue })),
-    [anomalies]
+    [windowedAnomalies]
   );
 
   const chartData = useMemo(
     () =>
-      anomalies.map((d) => {
+      windowedAnomalies.map((d) => {
         const match = anomalyDots.find((a) => a.dateStr === d.dateStr);
         return {
           ...d,
@@ -64,10 +82,10 @@ export default function Alerts({ dateRange, compare }) {
           anomalySeverity: match ? match.severity : null,
         };
       }),
-    [anomalies, anomalyDots]
+    [windowedAnomalies, anomalyDots]
   );
 
-  const formatYAxis = (v) => `$${(v / 1000).toFixed(0)}K`;
+  const formatYAxis = (v) => formatAxis(v, "dollar");
 
   return (
     <div className="space-y-6">
@@ -77,13 +95,13 @@ export default function Alerts({ dateRange, compare }) {
           <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
             Active Alerts
           </p>
-          <p className={`text-3xl font-bold ${thisWeekCount > 0 ? "text-red-400" : "text-[var(--text-primary)]"}`}>
-            {thisWeekCount}
+          <p className={`text-3xl font-bold ${activeCount > 0 ? "text-red-400" : "text-[var(--text-primary)]"}`}>
+            {activeCount}
           </p>
         </div>
         <div className={card}>
           <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-1">
-            Resolved This Week
+            Resolved in Range
           </p>
           <p className="text-3xl font-bold text-[var(--text-primary)]">{resolvedCount}</p>
         </div>
@@ -98,6 +116,11 @@ export default function Alerts({ dateRange, compare }) {
       {/* Active Alerts Feed */}
       <div className={card}>
         <h2 className="text-base font-semibold text-[var(--text-primary)] mb-4">Recent Alerts</h2>
+        {sortedAlerts.length === 0 && (
+          <p className="px-4 py-3 text-sm text-[var(--text-muted)]">
+            No alerts in the selected date range.
+          </p>
+        )}
         <div className="divide-y divide-[var(--border-color)]">
           {sortedAlerts.map((alert, i) => (
             <div

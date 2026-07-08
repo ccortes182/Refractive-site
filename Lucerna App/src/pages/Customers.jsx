@@ -2,9 +2,14 @@ import { useMemo } from "react";
 import { getKPIsForRange, getCohortData } from "../data/mockData";
 import LTVChart from "../components/Charts/LTVChart";
 import ExportCSV from "../components/ExportCSV";
+import KPICard from "../components/KPICard";
+import { fmtN, fmtDC } from "../lib/format";
+import { metricDefinition } from "../data/metricDefinitions";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 const COLORS = ["#43a9df", "#34d399"];
+
+const pct = (cur, prior) => (prior ? Math.round(((cur - prior) / prior) * 1000) / 10 : null);
 
 export default function Customers({ dateRange, compare }) {
   const { start, end } = dateRange;
@@ -22,6 +27,7 @@ export default function Customers({ dateRange, compare }) {
   const totalCustomers = totalNew + totalReturning;
 
   const priorTotal = kpis.prior.totalOrders;
+  const priorNew = kpis.prior.newCustomers;
 
   const pieData = [
     { name: "New Customers", value: totalNew },
@@ -39,9 +45,25 @@ export default function Customers({ dateRange, compare }) {
   }, [cohorts]);
 
   return (
-    <div>
+    <div className="space-y-5">
+      {/* KPI Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <KPICard title="Total Customers" value={fmtN(totalCustomers)}
+          change={compareEnabled ? pct(totalCustomers, priorTotal) : null} index={0}
+          compareEnabled={compareEnabled} priorValue={compareEnabled ? fmtN(priorTotal) : null} />
+        <KPICard title="New Customers" value={fmtN(totalNew)}
+          change={compareEnabled ? pct(totalNew, priorNew) : null} index={1}
+          compareEnabled={compareEnabled} priorValue={compareEnabled && priorNew ? fmtN(priorNew) : null} />
+        <KPICard title="Repeat Purchase Rate" value={`${repeatRate.toFixed(1)}%`}
+          change={null} subtitle="Average across 6-month cohorts" index={2}
+          description={metricDefinition("repeatRate")} />
+        <KPICard title="Average LTV" value={fmtDC(avgLTV)}
+          change={null} subtitle="Across all monthly cohorts" index={3}
+          description={metricDefinition("ltv")} />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] p-6">
+        <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] p-6 md:col-span-3">
           <h3 className="text-sm font-medium text-[var(--text-muted)] mb-4">New vs Returning Customers</h3>
           <div className="relative" style={{ height: 220 }}>
             <ResponsiveContainer width="100%" height="100%">
@@ -58,25 +80,11 @@ export default function Customers({ dateRange, compare }) {
                 <span className="text-2xl font-bold text-[var(--text-primary)]">{totalCustomers.toLocaleString("en-US")}</span>
                 <span className="block text-xs text-[var(--text-muted)]">Total</span>
                 {compareEnabled && (
-                  <span className="block text-[10px] text-[#8e68ad] mt-0.5">Prior: {priorTotal.toLocaleString("en-US")}</span>
+                  <span className="block text-[10px] text-[var(--accent-violet)] mt-0.5">Prior: {priorTotal.toLocaleString("en-US")}</span>
                 )}
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] p-6 flex flex-col items-center justify-center">
-          <h3 className="text-sm font-medium text-[var(--text-muted)] mb-2">Repeat Purchase Rate</h3>
-          <span className="text-4xl font-bold text-[var(--text-primary)]">{repeatRate.toFixed(1)}%</span>
-          <p className="text-sm text-[var(--text-muted)] mt-2 text-center">Average across 6-month cohorts</p>
-        </div>
-
-        <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] p-6 flex flex-col items-center justify-center">
-          <h3 className="text-sm font-medium text-[var(--text-muted)] mb-2">Average LTV</h3>
-          <span className="text-4xl font-bold text-[var(--text-primary)]">
-            ${avgLTV.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </span>
-          <p className="text-sm text-[var(--text-muted)] mt-2 text-center">Across all monthly cohorts</p>
         </div>
       </div>
 

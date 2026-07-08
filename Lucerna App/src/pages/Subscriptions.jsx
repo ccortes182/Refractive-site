@@ -1,7 +1,7 @@
+import { useMemo } from "react";
 import { subscriptionData } from "../data/mockData";
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import {
   AreaChart,
   Area,
@@ -17,19 +17,30 @@ import {
   Line,
   Cell,
 } from "recharts";
+import { useChartTheme } from "../lib/chartTheme";
+import { rangeDays } from "../lib/rangeScale";
 
-export default function Subscriptions({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+export default function Subscriptions({ dateRange }) {
+  const { gridColor, tickColor } = useChartTheme();
 
   const sub = subscriptionData;
 
+  // Window the 30-day daily series to the most recent min(rangeDays, 30)
+  // days. MRR, active subscribers, churn, and the monthly waterfall/cohort
+  // are point-in-time or monthly views and stay untouched.
+  const subVsOneTimeWindowed = useMemo(() => {
+    const days = Math.min(
+      rangeDays({ start: dateRange.start, end: dateRange.end }),
+      sub.subVsOneTime.length
+    );
+    return sub.subVsOneTime.slice(-days);
+  }, [sub.subVsOneTime, dateRange.start, dateRange.end]);
+
   const kpis = [
-    { title: "MRR", value: `$${sub.mrr.toLocaleString()}`, change: 8.2 },
-    { title: "Active Subscribers", value: sub.activeSubscribers.toLocaleString(), change: 5.4 },
-    { title: "Churn Rate", value: `${sub.churnRate}%`, change: -1.2 },
-    { title: "Avg Sub Value", value: `$${sub.avgSubValue}`, change: 3.1 },
+    { title: "MRR", value: `$${sub.mrr.toLocaleString()}`, change: sub.mrrChange ?? null },
+    { title: "Active Subscribers", value: sub.activeSubscribers.toLocaleString(), change: sub.activeSubscribersChange ?? null },
+    { title: "Churn Rate", value: `${sub.churnRate}%`, change: sub.churnRateChange ?? null, goodIfUp: false },
+    { title: "Avg Sub Value", value: `$${sub.avgSubValue}`, change: sub.avgSubValueChange ?? null },
   ];
 
   return (
@@ -37,7 +48,7 @@ export default function Subscriptions({ dateRange, compare }) {
       {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => (
-          <KPICard key={kpi.title} title={kpi.title} value={kpi.value} change={kpi.change} index={i} />
+          <KPICard key={kpi.title} title={kpi.title} value={kpi.value} change={kpi.change} goodIfUp={kpi.goodIfUp ?? true} index={i} />
         ))}
       </div>
 
@@ -79,7 +90,7 @@ export default function Subscriptions({ dateRange, compare }) {
       <div className="bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Subscription vs One-Time Revenue</h3>
         <ResponsiveContainer width="100%" height={320}>
-          <AreaChart data={sub.subVsOneTime} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <AreaChart data={subVsOneTimeWindowed} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="grad-sub" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#43a9df" stopOpacity={0.3} />
@@ -215,7 +226,19 @@ export default function Subscriptions({ dateRange, compare }) {
 
       {/* Winback Candidates */}
       <div className="bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
-        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Winback Candidates</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-[var(--text-primary)]">Winback Candidates</h3>
+          <ExportCSV
+            data={sub.winbackCandidates}
+            filename="winback-candidates"
+            columns={[
+              { key: "name", label: "Name" },
+              { key: "ltv", label: "Previous LTV ($)" },
+              { key: "churnedDaysAgo", label: "Churned (days ago)" },
+              { key: "lastProduct", label: "Last Product" },
+            ]}
+          />
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

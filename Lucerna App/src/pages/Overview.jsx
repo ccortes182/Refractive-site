@@ -5,13 +5,16 @@ import {
   getMERDataForRange,
   getMERKPIs,
   getCohortData,
+  getChannelSummaryForRange,
 } from "../data/mockData";
+import { Link } from "react-router-dom";
 import KPICard from "../components/KPICard";
 import SortableKPICard from "../components/SortableKPICard";
 import EditCardsMenu from "../components/EditCardsMenu";
 import ViewSwitcher from "../components/ViewSwitcher";
 import GoalEditor from "../components/GoalEditor";
 import MetricDrillDrawer from "../components/MetricDrillDrawer";
+import { PromptModal, ConfirmModal } from "../components/Modal";
 import ExportCSV from "../components/ExportCSV";
 import {
   CARD_BY_KEY,
@@ -26,7 +29,6 @@ import {
   newCustomViewId,
 } from "../data/overviewViews";
 import { loadGoals, saveGoals } from "../data/overviewGoals";
-import { useTheme } from "../context/ThemeContext";
 import {
   AreaChart,
   Area,
@@ -54,40 +56,70 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { format } from "date-fns";
-
-// ───── Formatters ──────────────────────────────────────────────────────────
-const fmtN = (n) => Math.round(n).toLocaleString("en-US");
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtDC = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const fmtP = (n) => n.toFixed(2) + "%";
-const fmtX = (n) => n.toFixed(2) + "x";
-const fmtO = (n) => n.toFixed(1) + " orders";
-
-function formatValue(v, fmt) {
-  if (v == null || Number.isNaN(v)) return "—";
-  if (fmt === "dollar") return fmtD(v);
-  if (fmt === "dollarC") return fmtDC(v);
-  if (fmt === "percent") return fmtP(v);
-  if (fmt === "merX") return fmtX(v);
-  if (fmt === "orders") return fmtO(v);
-  return fmtN(v);
-}
-
-function formatYAxis(v, fmt) {
-  if (fmt === "dollar" || fmt === "dollarC") {
-    if (Math.abs(v) >= 1000) return `$${Math.round(v / 1000)}K`;
-    return `$${Math.round(v)}`;
-  }
-  if (fmt === "percent") return `${v}%`;
-  if (fmt === "merX") return `${v}x`;
-  if (fmt === "orders") return `${v.toFixed(1)}`;
-  return v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v;
-}
+import { fmtN, formatValue, formatAxis } from "../lib/format";
+import { metricDefinition } from "../data/metricDefinitions";
+import { useChartTheme } from "../lib/chartTheme";
 
 // Subtitles for cards that surface a secondary stat
 const SUBTITLE_BUILDERS = {
   returns: (c) => `${fmtN(c.returnItems)} items`,
 };
+
+// Which page explains a metric best, for the insights strip deep links
+const INSIGHT_LINKS = {
+  cac: { to: "/efficiency", label: "Efficiency has the breakdown" },
+  mer: { to: "/efficiency", label: "Efficiency has the breakdown" },
+  adSpend: { to: "/channels", label: "See spend by channel" },
+  marketingPctOfRev: { to: "/efficiency", label: "Efficiency has the breakdown" },
+  netRevenue: { to: "/channels", label: "See revenue by channel" },
+  totalRevenue: { to: "/channels", label: "See revenue by channel" },
+  grossRevenue: { to: "/channels", label: "See revenue by channel" },
+  orders: { to: "/channels", label: "See orders by channel" },
+  ncRoas: { to: "/channels", label: "See NC-ROAS by channel" },
+  roas: { to: "/channels", label: "See ROAS by channel" },
+  cmPct: { to: "/profitability", label: "Profitability has the P&L" },
+  contributionMargin: { to: "/profitability", label: "Profitability has the P&L" },
+};
+
+// "What changed" strip: narrates the biggest range-over-range movers with a
+// channel-level cause hint. Only renders when compare is on — no invented deltas.
+function InsightsStrip({ movers, channelHint }) {
+  if (!movers.length) return null;
+  return (
+    <div className="mb-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-solid)] px-4 py-3">
+      <div className="flex items-start gap-3 flex-wrap">
+        <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-semibold mt-0.5 whitespace-nowrap">
+          What changed
+        </span>
+        <div className="flex-1 min-w-[240px] space-y-1">
+          {movers.map((m) => {
+            const link = INSIGHT_LINKS[m.key];
+            return (
+              <p key={m.key} className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                <span className={`font-semibold ${m.isGood ? "text-[var(--success)]" : "text-[var(--warning)]"}`}>
+                  {m.title} {m.change > 0 ? "up" : "down"} {Math.abs(m.change).toFixed(1)}%
+                </span>
+                {" vs prior period"}
+                {m.key === channelHint?.forKey && channelHint?.channel && (
+                  <>{", driven mostly by "}<span className="text-[var(--text-primary)] font-medium">{channelHint.channel}</span></>
+                )}
+                {"."}
+                {link && (
+                  <>
+                    {" "}
+                    <Link to={link.to} className="text-[var(--accent-blue)] hover:underline">
+                      {link.label} →
+                    </Link>
+                  </>
+                )}
+              </p>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ───── Per-day series builder for the line chart ───────────────────────────
 function buildChartSeries(metricKey, daily, mer, cohortLtv) {
@@ -276,9 +308,7 @@ function buildCardData(key, c, ch, p, compareEnabled) {
 export default function Overview({ dateRange, compare }) {
   const { start, end } = dateRange;
   const compareEnabled = compare.enabled && compare.start && compare.end;
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const [activeMetric, setActiveMetric] = useState("netRevenue");
   const [viewsState, setViewsState] = useState(() => loadViewsState());
@@ -361,42 +391,35 @@ export default function Overview({ dateRange, compare }) {
     setViewsState({ activeViewId: id, customViews });
   };
 
-  const handleCreateNew = () => {
-    const name = window.prompt("Name this view:", "My View");
-    if (!name || !name.trim()) return;
+  // View-management dialogs: { type: "create" } | { type: "rename", id } | { type: "delete", id }
+  const [viewDialog, setViewDialog] = useState(null);
+
+  const handleCreateNew = () => setViewDialog({ type: "create" });
+  const handleRename = (id) => setViewDialog({ type: "rename", id });
+  const handleDelete = (id) => setViewDialog({ type: "delete", id });
+
+  const createView = (name) => {
     const id = newCustomViewId();
-    const newView = {
-      id,
-      name: name.trim(),
-      isPreset: false,
-      cardOrder: [...cardOrder],
-    };
+    const newView = { id, name, isPreset: false, cardOrder: [...cardOrder] };
     setViewsState({ activeViewId: id, customViews: [...customViews, newView] });
   };
 
-  const handleRename = (id) => {
-    const view = customViews.find((v) => v.id === id);
-    if (!view) return;
-    const name = window.prompt("Rename view:", view.name);
-    if (!name || !name.trim()) return;
+  const renameView = (id, name) => {
     setViewsState({
       activeViewId,
-      customViews: customViews.map((v) =>
-        v.id === id ? { ...v, name: name.trim() } : v
-      ),
+      customViews: customViews.map((v) => (v.id === id ? { ...v, name } : v)),
     });
   };
 
-  const handleDelete = (id) => {
-    const view = customViews.find((v) => v.id === id);
-    if (!view) return;
-    if (!window.confirm(`Delete view "${view.name}"?`)) return;
+  const deleteView = (id) => {
     const remaining = customViews.filter((v) => v.id !== id);
     setViewsState({
       activeViewId: activeViewId === id ? PRESET_VIEWS[0].id : activeViewId,
       customViews: remaining,
     });
   };
+
+  const dialogView = viewDialog?.id ? customViews.find((v) => v.id === viewDialog.id) : null;
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -479,6 +502,40 @@ export default function Overview({ dateRange, compare }) {
     [cardOrder, c, ch, p, compareEnabled]
   );
 
+  // Top movers for the "What changed" strip (compare-only, from real deltas)
+  const movers = useMemo(() => {
+    if (!compareEnabled) return [];
+    return cards
+      .filter((card) => typeof card.change === "number" && Math.abs(card.change) >= ANOMALY_THRESHOLD)
+      .map((card) => ({
+        key: card.key,
+        title: card.title,
+        change: card.change,
+        isGood: (card.change >= 0) === isGoodIfUp(card.key),
+      }))
+      .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
+      .slice(0, 3);
+  }, [cards, compareEnabled]);
+
+  // Channel cause hint for the top revenue/spend mover
+  const channelHint = useMemo(() => {
+    if (!compareEnabled || movers.length === 0) return null;
+    const target = movers.find((m) =>
+      ["netRevenue", "totalRevenue", "grossRevenue", "orders", "adSpend", "cac", "mer"].includes(m.key)
+    );
+    if (!target) return null;
+    const field = ["adSpend", "cac", "mer"].includes(target.key) ? "spend" : "revenue";
+    const cur = getChannelSummaryForRange(start, end);
+    const pri = getChannelSummaryForRange(compare.start, compare.end);
+    const priByChannel = Object.fromEntries(pri.map((r) => [r.channel, r]));
+    let best = null;
+    cur.forEach((r) => {
+      const delta = Math.abs((r[field] || 0) - (priByChannel[r.channel]?.[field] || 0));
+      if (!best || delta > best.delta) best = { channel: r.channel, delta };
+    });
+    return best ? { forKey: target.key, channel: best.channel } : null;
+  }, [compareEnabled, movers, start, end, compare.start, compare.end]);
+
   const chartTitle = `${activeCfg.title} Over Time`;
   const activeGoal = goals[activeMetric];
 
@@ -532,6 +589,9 @@ export default function Overview({ dateRange, compare }) {
         </div>
       </div>
 
+      {/* What changed strip — only with compare on */}
+      <InsightsStrip movers={movers} channelHint={channelHint} />
+
       {/* Sortable card grid */}
       <div
         className={`relative rounded-xl transition-colors ${
@@ -566,6 +626,8 @@ export default function Overview({ dateRange, compare }) {
                   editMode={editMode}
                   onRemove={handleRemove}
                   anomaly={card.anomaly}
+                  goodIfUp={isGoodIfUp(card.key)}
+                  description={metricDefinition(card.key)}
                 />
               ))}
             </div>
@@ -582,6 +644,7 @@ export default function Overview({ dateRange, compare }) {
                   subtitle={activeDragCard.subtitle}
                   compareEnabled={compareEnabled}
                   priorValue={activeDragCard.priorValue}
+                  goodIfUp={isGoodIfUp(activeDragCard.key)}
                 />
               </div>
             ) : null}
@@ -645,7 +708,7 @@ export default function Overview({ dateRange, compare }) {
               axisLine={{ stroke: gridColor }}
             />
             <YAxis
-              tickFormatter={(v) => formatYAxis(v, activeCfg.fmt)}
+              tickFormatter={(v) => formatAxis(v, activeCfg.fmt)}
               tick={{ fontSize: 12, fill: tickColor }}
               tickLine={false}
               axisLine={false}
@@ -699,6 +762,34 @@ export default function Overview({ dateRange, compare }) {
         compareEnabled={compareEnabled}
         formatValue={formatValue}
         dailySeries={chartData}
+      />
+
+      {/* View management dialogs */}
+      <PromptModal
+        open={viewDialog?.type === "create"}
+        title="Save view"
+        label="Name this card layout so you can switch back to it later."
+        initialValue="My View"
+        confirmLabel="Save view"
+        onConfirm={createView}
+        onClose={() => setViewDialog(null)}
+      />
+      <PromptModal
+        open={viewDialog?.type === "rename"}
+        title="Rename view"
+        initialValue={dialogView?.name || ""}
+        confirmLabel="Rename"
+        onConfirm={(name) => renameView(viewDialog.id, name)}
+        onClose={() => setViewDialog(null)}
+      />
+      <ConfirmModal
+        open={viewDialog?.type === "delete"}
+        title="Delete view"
+        message={`Delete "${dialogView?.name}"? This can't be undone.`}
+        confirmLabel="Delete"
+        danger
+        onConfirm={() => deleteView(viewDialog.id)}
+        onClose={() => setViewDialog(null)}
       />
     </div>
   );

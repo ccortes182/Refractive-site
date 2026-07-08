@@ -29,6 +29,7 @@ import AIInsights from './pages/AIInsights'
 import Integrations from './pages/Integrations'
 import Transactions from './pages/Transactions'
 import Settings from './pages/Settings'
+import LockedFeature from './components/LockedFeature'
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -73,12 +74,27 @@ function App() {
                 <Route path="/" element={<Overview {...dr} />} />
                 <Route path="/channels" element={<Channels {...dr} />} />
                 <Route path="/customers" element={<Customers {...dr} />} />
-                <Route path="/products" element={<Products dateRange={dateRange} />} />
+                <Route path="/products" element={<Products {...dr} />} />
                 <Route path="/efficiency" element={<Efficiency {...dr} />} />
-                <Route path="/incrementality" element={<Incrementality {...dr} />} />
-                <Route path="/mmm" element={<MediaMix {...dr} />} />
+                <Route path="/incrementality" element={
+                  <LockedFeature tier="lumen" page title="Incrementality Testing"
+                    value="Lift tests, iROAS, and the calibration factors that keep your dashboard honest. This is where the modeled numbers come from.">
+                    <Incrementality {...dr} />
+                  </LockedFeature>
+                } />
+                <Route path="/mmm" element={
+                  <LockedFeature tier="lumen" page title="Media Mix Modeling"
+                    value="Saturation curves, adstock, and a budget simulator that shows what moving $10K between channels actually does to revenue.">
+                    <MediaMix {...dr} />
+                  </LockedFeature>
+                } />
                 <Route path="/campaigns" element={<Campaigns {...dr} />} />
-                <Route path="/creative" element={<Creative {...dr} />} />
+                <Route path="/creative" element={
+                  <LockedFeature tier="pro" page title="Creative Intelligence"
+                    value="Hook rates, fatigue curves, A/B significance, and audience-level creative ROAS. Know which ad to kill before the platform tells you.">
+                    <Creative {...dr} />
+                  </LockedFeature>
+                } />
                 <Route path="/cohorts" element={<Cohorts {...dr} />} />
                 <Route path="/tracking" element={<Tracking {...dr} />} />
                 <Route path="/forecasting" element={<Forecasting {...dr} />} />
@@ -86,11 +102,21 @@ function App() {
                 <Route path="/profitability" element={<Profitability {...dr} />} />
                 <Route path="/inventory" element={<Inventory {...dr} />} />
                 <Route path="/subscriptions" element={<Subscriptions {...dr} />} />
-                <Route path="/competitive" element={<Competitive {...dr} />} />
+                <Route path="/competitive" element={
+                  <LockedFeature tier="pro" page title="Competitive Intelligence"
+                    value="Share of search, share of voice, CPM pressure, and price positioning against the brands you actually compete with.">
+                    <Competitive {...dr} />
+                  </LockedFeature>
+                } />
                 <Route path="/alerts" element={<Alerts {...dr} />} />
                 <Route path="/reports" element={<Reports {...dr} />} />
                 <Route path="/journeys" element={<Journeys {...dr} />} />
-                <Route path="/ai-insights" element={<AIInsights {...dr} />} />
+                <Route path="/ai-insights" element={
+                  <LockedFeature tier="pro" page title="AI Insights"
+                    value="A weekly analyst memo, creative clustering, and ranked hypotheses generated from your own data. Like having a growth analyst on retainer.">
+                    <AIInsights {...dr} />
+                  </LockedFeature>
+                } />
                 <Route path="/integrations" element={<Integrations {...dr} />} />
                 <Route path="/transactions" element={<Transactions {...dr} />} />
                 <Route path="/settings" element={<Settings />} />

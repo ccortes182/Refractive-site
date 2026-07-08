@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { aiInsights } from "../data/mockData";
+import { rangeFactor, wobbleRatio } from "../lib/rangeScale";
 import ExportCSV from "../components/ExportCSV";
 import { useTheme } from "../context/ThemeContext";
 import {
@@ -11,17 +13,18 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { STATUS_STYLES } from "../lib/status";
+import { CARD } from "../lib/card";
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6";
 const CLUSTER_PALETTE = ["#43a9df", "#8e68ad", "#34d399", "#fbbf24"];
 
 function Badge({ label, color }) {
   const map = {
-    green:  "bg-emerald-500/15 text-emerald-400",
-    yellow: "bg-yellow-500/15 text-yellow-400",
-    red:    "bg-red-500/15 text-red-400",
-    blue:   "bg-sky-500/15 text-sky-400",
-    gray:   "bg-gray-500/15 text-gray-400",
+    green:  STATUS_STYLES.positive.pill,
+    yellow: STATUS_STYLES.warning.pill,
+    red:    STATUS_STYLES.negative.pill,
+    blue:   STATUS_STYLES.info.pill,
+    gray:   STATUS_STYLES.neutral.pill,
   };
   return (
     <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${map[color] || map.gray}`}>
@@ -49,7 +52,22 @@ function priorityColor(p) {
 export default function AIInsights({ dateRange, compare }) {
   const { theme } = useTheme();
   const ai = aiInsights;
-  const maxRoas = Math.max(...ai.creativeClusters.map((c) => c.avgRoas));
+
+  /* ── Range-aware data ───────────────────────────────────── */
+  // Cluster creative counts are additive over the period: scale by range
+  // length. ROAS is a ratio: light deterministic wobble per cluster. CTR
+  // stays put; hypotheses and the weekly memo are narrative — untouched.
+  const clusters = useMemo(() => {
+    const range = { start: dateRange.start, end: dateRange.end };
+    const factor = rangeFactor(range);
+    return aiInsights.creativeClusters.map((cl) => ({
+      ...cl,
+      count: Math.max(1, Math.round(cl.count * factor)),
+      avgRoas: wobbleRatio(cl.avgRoas, `ai:${cl.cluster}:roas`, range),
+    }));
+  }, [dateRange.start, dateRange.end]);
+
+  const maxRoas = Math.max(...clusters.map((c) => c.avgRoas));
 
   return (
     <div className="space-y-6">
@@ -67,7 +85,7 @@ export default function AIInsights({ dateRange, compare }) {
             <ul className="space-y-1">
               {ai.weeklyMemo.highlights.map((h, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[var(--success)]" />
                   {h}
                 </li>
               ))}
@@ -80,7 +98,7 @@ export default function AIInsights({ dateRange, compare }) {
             <ul className="space-y-1">
               {ai.weeklyMemo.risks.map((r, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-red-400" />
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[var(--error)]" />
                   {r}
                 </li>
               ))}
@@ -93,7 +111,7 @@ export default function AIInsights({ dateRange, compare }) {
             <ul className="space-y-1">
               {ai.weeklyMemo.recommendations.map((r, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
-                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-sky-400" />
+                  <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[var(--accent-blue)]" />
                   {r}
                 </li>
               ))}
@@ -106,7 +124,7 @@ export default function AIInsights({ dateRange, compare }) {
       <div>
         <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Creative Clusters</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {ai.creativeClusters.map((cl, i) => (
+          {clusters.map((cl, i) => (
             <div key={cl.cluster} className={CARD}>
               <p className="font-semibold text-[var(--text-primary)] mb-2">{cl.cluster}</p>
 
@@ -193,7 +211,7 @@ export default function AIInsights({ dateRange, compare }) {
           Cluster ROAS Comparison
         </h2>
         <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={ai.creativeClusters} layout="vertical" margin={{ left: 20, right: 20, top: 5, bottom: 5 }}>
+          <BarChart data={clusters} layout="vertical" margin={{ left: 20, right: 20, top: 5, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" horizontal={false} />
             <XAxis type="number" tick={{ fill: "var(--text-muted)", fontSize: 12 }} axisLine={false} tickLine={false} />
             <YAxis
@@ -214,7 +232,7 @@ export default function AIInsights({ dateRange, compare }) {
               formatter={(v) => [`${v.toFixed(1)}x`, "Avg ROAS"]}
             />
             <Bar dataKey="avgRoas" radius={[0, 4, 4, 0]} barSize={24}>
-              {ai.creativeClusters.map((_, i) => (
+              {clusters.map((_, i) => (
                 <Cell key={i} fill={CLUSTER_PALETTE[i % CLUSTER_PALETTE.length]} />
               ))}
             </Bar>

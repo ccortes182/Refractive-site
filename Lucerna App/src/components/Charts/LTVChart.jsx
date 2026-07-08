@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
+import { formatAxis } from "../../lib/format";
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
@@ -47,7 +48,7 @@ export default function LTVChart({ data = [] }) {
   const gridColor = theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#e2e8f0';
   const tickColor = theme === 'dark' ? 'rgba(255,255,255,0.4)' : '#94a3b8';
 
-  const formatYAxis = (value) => `$${value}`;
+  const formatYAxis = (value) => formatAxis(value, "dollar");
 
   return (
     <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-solid)] backdrop-blur-2xl p-6 hover:border-[var(--border-hover)] transition-colors">

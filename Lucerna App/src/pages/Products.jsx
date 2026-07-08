@@ -1,25 +1,27 @@
 import { useMemo, useState } from "react";
 import { getProducts } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
+import { fmtN as fmt, fmtD as fmtDollar, fmtDC as fmtDollarCents } from "../lib/format";
+import SortArrow from "../components/SortArrow";
+import { scaleAdditive, wobbleRatio } from "../lib/rangeScale";
 
-function SortArrow({ active, direction }) {
-  return (
-    <span className="ml-1 inline-flex flex-col leading-none text-[10px]">
-      <span className={active && direction === "asc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>
-        ▲
-      </span>
-      <span className={active && direction === "desc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>
-        ▼
-      </span>
-    </span>
-  );
-}
 
 export default function Products({ dateRange }) {
   const [sortField, setSortField] = useState("revenue");
   const [sortDirection, setSortDirection] = useState("desc");
 
-  const products = useMemo(() => getProducts(), []);
+  const products = useMemo(
+    () =>
+      getProducts().map((p) => ({
+        ...p,
+        unitsSold: Math.round(scaleAdditive(p.unitsSold, dateRange)),
+        revenue: Math.round(scaleAdditive(p.revenue, dateRange)),
+        refundRate: Math.round(wobbleRatio(p.refundRate, `products:${p.id}:refundRate`, dateRange) * 100) / 100,
+        aov: Math.round(wobbleRatio(p.aov, `products:${p.id}:aov`, dateRange) * 100) / 100,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dateRange.start, dateRange.end]
+  );
 
   const sorted = useMemo(() => {
     const copy = [...products];
@@ -45,15 +47,6 @@ export default function Products({ dateRange }) {
     }
   };
 
-  const fmt = (n) => n.toLocaleString("en-US");
-  const fmtDollar = (n) =>
-    "$" + Math.round(n).toLocaleString("en-US");
-  const fmtDollarCents = (n) =>
-    "$" +
-    n.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
 
   const columns = [
     { key: "name", label: "Product Name", align: "text-left" },

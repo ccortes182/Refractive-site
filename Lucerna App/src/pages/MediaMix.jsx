@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
-import { mmmData, simulateBudget, savedScenarios } from "../data/mockData";
+import { mmmData, simulateBudget } from "../data/mockData";
+import { loadScenarios, saveScenario, deleteScenario } from "../data/mmmScenarios";
 import ExportCSV from "../components/ExportCSV";
 import BudgetSlider from "../components/BudgetSlider";
+import { PromptModal, ConfirmModal } from "../components/Modal";
 import SaturationChart from "../components/Charts/SaturationChart";
-import { useTheme } from "../context/ThemeContext";
 import {
   PieChart,
   Pie,
@@ -17,12 +18,17 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
+import { fmtD as fmtDollar, fmtCompact as fmtDollarK } from "../lib/format";
+import { rangeFactor, scaleAdditive } from "../lib/rangeScale";
+import { useChartTheme } from "../lib/chartTheme";
 
-const fmtDollar = (v) =>
-  "$" + Math.round(v).toLocaleString("en-US");
+function fmtSavedAt(iso) {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? "--"
+    : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
 
-const fmtDollarK = (v) =>
-  "$" + Math.round(v / 1000).toLocaleString("en-US") + "K";
 
 const PieTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
@@ -61,29 +67,116 @@ function CenterLabel({ total }) {
 }
 
 export default function MediaMix({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
-  // Budget simulator state
-  const [allocations, setAllocations] = useState(() => {
-    const init = {};
+  // Spend/revenue dollars are period metrics and scale with the selected
+  // range length; saturation and adstock curves are model shapes defined on
+  // the 28-day baseline window and are left untouched.
+  const factor = rangeFactor(dateRange);
+  const rangeKey = `${dateRange?.start ?? ""}|${dateRange?.end ?? ""}`;
+
+  const scaledChannels = useMemo(
+    () =>
+      mmmData.channels.map((ch) => ({
+        ...ch,
+        currentSpend: Math.round(scaleAdditive(ch.currentSpend, dateRange)),
+        optimalSpend: Math.round(scaleAdditive(ch.optimalSpend, dateRange)),
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dateRange.start, dateRange.end]
+  );
+  const scaledTotalBudget = Math.round(scaleAdditive(mmmData.totalBudget, dateRange));
+
+  // Budget simulator state, kept in baseline (28-day) dollars so the mix
+  // survives range changes; scaled to period dollars for display. `version`
+  // remounts BudgetSlider (uncontrolled) when a scenario is loaded.
+  const [sim, setSim] = useState(() => {
+    const baseline = {};
     mmmData.channels.forEach((ch) => {
-      init[ch.name] = ch.currentSpend;
+      baseline[ch.name] = ch.currentSpend;
     });
-    return init;
+    return { version: 0, baseline };
   });
 
-  const simResults = useMemo(() => simulateBudget(allocations), [allocations]);
+  const handleSliderChange = (scaledAlloc) => {
+    const baseline = {};
+    Object.entries(scaledAlloc).forEach(([name, v]) => {
+      baseline[name] = v / factor;
+    });
+    setSim((s) => ({ ...s, baseline }));
+  };
+
+  // Run the model on baseline dollars (where the curves live), then scale the
+  // additive outputs to the period. Blended ROAS is a ratio and is invariant.
+  const simResults = useMemo(() => {
+    const res = simulateBudget(sim.baseline);
+    return {
+      ...res,
+      totalRevenue: Math.round(res.totalRevenue * factor),
+      totalSpend: Math.round(res.totalSpend * factor),
+    };
+  }, [sim.baseline, factor]);
+
+  // Current allocations in period dollars (for the table row and saving).
+  const displayAllocations = useMemo(() => {
+    const out = {};
+    Object.entries(sim.baseline).forEach(([name, v]) => {
+      out[name] = Math.round(v * factor);
+    });
+    return out;
+  }, [sim.baseline, factor]);
+
+  const sliderChannels = useMemo(
+    () =>
+      scaledChannels.map((ch) => ({
+        ...ch,
+        currentSpend: displayAllocations[ch.name] ?? ch.currentSpend,
+      })),
+    [scaledChannels, displayAllocations]
+  );
+
+  // Saved scenarios (localStorage-backed)
+  const [scenarios, setScenarios] = useState(() => loadScenarios());
+  const [savePromptOpen, setSavePromptOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
+  const handleSaveScenario = (name) => {
+    const entry = saveScenario({
+      name,
+      allocations: { ...displayAllocations },
+      projectedRevenue: simResults.totalRevenue,
+      projectedRoas: simResults.blendedRoas,
+      rangeFactor: factor,
+      savedAt: new Date().toISOString(),
+    });
+    if (entry) setScenarios((prev) => [...prev, entry]);
+  };
+
+  const handleLoadScenario = (sc) => {
+    const savedFactor = typeof sc.rangeFactor === "number" && sc.rangeFactor > 0 ? sc.rangeFactor : 1;
+    setSim((s) => {
+      const baseline = {};
+      mmmData.channels.forEach((ch) => {
+        const v = sc.allocations?.[ch.name];
+        baseline[ch.name] = typeof v === "number" && Number.isFinite(v) ? v / savedFactor : ch.currentSpend;
+      });
+      return { version: s.version + 1, baseline };
+    });
+  };
+
+  const handleDeleteScenario = () => {
+    if (!deleteTarget) return;
+    setScenarios(deleteScenario(deleteTarget.id));
+  };
 
   // Donut chart data
-  const currentAllocation = mmmData.channels.map((ch) => ({
+  const currentAllocation = scaledChannels.map((ch) => ({
     name: ch.name,
     value: ch.currentSpend,
     color: ch.color,
   }));
 
-  const optimalAllocation = mmmData.channels.map((ch) => ({
+  const optimalAllocation = scaledChannels.map((ch) => ({
     name: ch.name,
     value: ch.optimalSpend,
     color: ch.color,
@@ -110,7 +203,7 @@ export default function MediaMix({ dateRange, compare }) {
     { key: "marginalRoas", label: "Marginal ROAS" },
   ];
 
-  const tableExportData = mmmData.channels.map((ch) => ({
+  const tableExportData = scaledChannels.map((ch) => ({
     name: ch.name,
     currentSpend: ch.currentSpend,
     optimalSpend: ch.optimalSpend,
@@ -118,7 +211,7 @@ export default function MediaMix({ dateRange, compare }) {
     marginalRoas: ch.marginalRoas,
   }));
 
-  const totalLabel = fmtDollarK(mmmData.totalBudget);
+  const totalLabel = fmtDollarK(scaledTotalBudget);
 
   return (
     <div className="space-y-6">
@@ -198,9 +291,10 @@ export default function MediaMix({ dateRange, compare }) {
 
       {/* ── 3. Budget Simulator ──────────────────────────────────────── */}
       <BudgetSlider
-        channels={mmmData.channels}
-        totalBudget={mmmData.totalBudget}
-        onAllocationsChange={setAllocations}
+        key={`${rangeKey}:${sim.version}`}
+        channels={sliderChannels}
+        totalBudget={scaledTotalBudget}
+        onAllocationsChange={handleSliderChange}
       />
       <div className="bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
         <div className="flex items-center justify-around">
@@ -241,7 +335,7 @@ export default function MediaMix({ dateRange, compare }) {
               <tr className="border-l-2 border-l-[#43a9df] bg-[#43a9df]/5">
                 <td className="px-4 py-2.5 text-left font-medium text-[#43a9df]">Current (unsaved)</td>
                 <td className="px-4 py-2.5 text-left text-[var(--text-secondary)]">
-                  {Object.entries(allocations)
+                  {Object.entries(displayAllocations)
                     .sort(([, a], [, b]) => b - a)
                     .slice(0, 3)
                     .map(([ch, amt]) => `${ch}: ${fmtDollar(amt)}`)
@@ -252,23 +346,44 @@ export default function MediaMix({ dateRange, compare }) {
                 <td className="px-4 py-2.5 text-right text-[var(--text-muted)]">Now</td>
                 <td className="px-4 py-2.5 text-center text-[var(--text-muted)]">--</td>
               </tr>
-              {savedScenarios.map((sc, i) => {
+              {scenarios.length === 0 && (
+                <tr className="bg-[var(--bg-table-stripe)]">
+                  <td colSpan={6} className="px-4 py-3 text-center text-[var(--text-muted)]">
+                    No saved scenarios yet. Adjust the sliders, then save the current scenario.
+                  </td>
+                </tr>
+              )}
+              {scenarios.map((sc, i) => {
                 const topChannels = Object.entries(sc.allocations)
                   .sort(([, a], [, b]) => b - a)
                   .slice(0, 3)
                   .map(([ch, amt]) => `${ch}: ${fmtDollar(amt)}`)
                   .join(", ");
                 return (
-                  <tr key={sc.id} className={i % 2 === 0 ? "bg-[var(--bg-table-stripe)]" : "bg-transparent"}>
+                  <tr key={sc.id} className={i % 2 === 1 ? "bg-[var(--bg-table-stripe)]" : "bg-transparent"}>
                     <td className="px-4 py-2.5 text-left font-medium text-[var(--text-primary)]">{sc.name}</td>
                     <td className="px-4 py-2.5 text-left text-[var(--text-secondary)]">{topChannels}</td>
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{fmtDollar(sc.projectedRevenue)}</td>
-                    <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{sc.projectedRoas.toFixed(2)}x</td>
-                    <td className="px-4 py-2.5 text-right text-[var(--text-muted)]">{sc.createdAt}</td>
+                    <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">
+                      {typeof sc.projectedRoas === "number" ? `${sc.projectedRoas.toFixed(2)}x` : "--"}
+                    </td>
+                    <td className="px-4 py-2.5 text-right text-[var(--text-muted)]">{fmtSavedAt(sc.savedAt)}</td>
                     <td className="px-4 py-2.5 text-center">
-                      <button className="rounded-md bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-1 text-[10px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
-                        Load
-                      </button>
+                      <div className="flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => handleLoadScenario(sc)}
+                          className="rounded-md bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-1 text-[10px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                        >
+                          Load
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(sc)}
+                          aria-label={`Delete scenario ${sc.name}`}
+                          className="rounded-md bg-[var(--bg-surface)] border border-[var(--border-color)] px-2 py-1 text-[10px] font-medium text-[var(--text-muted)] hover:text-red-400 hover:border-red-400/50 transition-colors"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -277,7 +392,10 @@ export default function MediaMix({ dateRange, compare }) {
           </table>
         </div>
         <div className="px-5 py-3 border-t border-[var(--border-color)]">
-          <button className="rounded-lg bg-gradient-to-r from-[#43a9df] to-[#8e68ad] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition-opacity">
+          <button
+            onClick={() => setSavePromptOpen(true)}
+            className="rounded-lg bg-gradient-to-r from-[#43a9df] to-[#8e68ad] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-90 transition-opacity"
+          >
             Save Current Scenario
           </button>
         </div>
@@ -317,13 +435,13 @@ export default function MediaMix({ dateRange, compare }) {
               </tr>
             </thead>
             <tbody>
-              {mmmData.channels.map((ch, i) => {
+              {scaledChannels.map((ch, i) => {
                 const delta = ch.optimalSpend - ch.currentSpend;
                 const isPositive = delta >= 0;
                 return (
                   <tr
                     key={ch.name}
-                    className={i % 2 === 1 ? "bg-[var(--bg-surface)]" : ""}
+                    className={i % 2 === 1 ? "bg-[var(--bg-table-stripe)]" : ""}
                   >
                     <td className="px-4 py-2.5 text-[var(--text-primary)]">
                       <div className="flex items-center gap-2">
@@ -418,6 +536,26 @@ export default function MediaMix({ dateRange, compare }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      {/* ── Scenario modals ──────────────────────────────────────────── */}
+      <PromptModal
+        open={savePromptOpen}
+        title="Save Scenario"
+        label="Give this budget scenario a name."
+        initialValue=""
+        confirmLabel="Save"
+        onConfirm={handleSaveScenario}
+        onClose={() => setSavePromptOpen(false)}
+      />
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete Scenario"
+        message={deleteTarget ? `Delete "${deleteTarget.name}"? This cannot be undone.` : ""}
+        confirmLabel="Delete"
+        danger
+        onConfirm={handleDeleteScenario}
+        onClose={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

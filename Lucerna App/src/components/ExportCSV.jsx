@@ -1,36 +1,9 @@
+import { downloadCSV } from "../lib/csv";
+
 /**
- * Converts an array of objects to CSV and triggers a download.
- * @param {Object[]} data - Array of row objects
- * @param {string} filename - Download filename (without extension)
- * @param {Array<{key:string, label:string}>} [columns] - Optional column config.
- *   If omitted, all keys from the first row are used.
+ * CSV export button. Columns may include a `format` function so the
+ * exported values match what's rendered on screen.
  */
-function downloadCSV(data, filename, columns) {
-  if (!data.length) return;
-
-  const cols = columns || Object.keys(data[0]).map((k) => ({ key: k, label: k }));
-  const header = cols.map((c) => c.label).join(",");
-  const rows = data.map((row) =>
-    cols
-      .map((c) => {
-        let v = row[c.key];
-        if (v instanceof Date) v = v.toISOString().slice(0, 10);
-        if (typeof v === "string" && v.includes(",")) v = `"${v}"`;
-        return v ?? "";
-      })
-      .join(",")
-  );
-
-  const csv = [header, ...rows].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${filename}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
 export default function ExportCSV({ data, filename = "export", columns, className = "" }) {
   return (
     <button

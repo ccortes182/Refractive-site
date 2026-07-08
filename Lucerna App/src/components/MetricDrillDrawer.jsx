@@ -201,10 +201,6 @@ export default function MetricDrillDrawer({
         </div>
       </div>
 
-      <style>{`
-        @keyframes drillFade { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes drillSlide { from { transform: translateX(100%); } to { transform: translateX(0); } }
-      `}</style>
     </>
   );
 }

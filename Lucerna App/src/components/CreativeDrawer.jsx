@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useTheme } from "../context/ThemeContext";
+import { fmtD, fmtN } from "../lib/format";
+import { useChartTheme } from "../lib/chartTheme";
 
 const FUNNEL_COLORS = { TOF: "#43a9df", MOF: "#8e68ad", BOF: "#34d399" };
 const FORMAT_COLORS = { Video: "#43a9df", Image: "#8e68ad", Carousel: "#c2dcd4" };
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtN = (n) => n.toLocaleString("en-US");
 
 function ScoreRow({ label, score, description }) {
   const color = score >= 60 ? "#34d399" : score >= 40 ? "#43a9df" : score >= 20 ? "#fbbf24" : "#f87171";
@@ -21,9 +21,16 @@ function ScoreRow({ label, score, description }) {
 }
 
 export default function CreativeDrawer({ creative, imageIndex, onClose }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
+
+  useEffect(() => {
+    if (!creative) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [creative, onClose]);
 
   if (!creative) return null;
   const c = creative;
@@ -47,7 +54,13 @@ export default function CreativeDrawer({ creative, imageIndex, onClose }) {
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="fixed top-0 right-0 h-full w-full max-w-md z-50 bg-[var(--bg-card-solid)] border-l border-[var(--border-color)] shadow-2xl overflow-y-auto">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Creative detail: ${c.name}`}
+        className="fixed top-0 right-0 h-full w-full max-w-md z-50 bg-[var(--bg-card-solid)] border-l border-[var(--border-color)] shadow-2xl overflow-y-auto"
+        style={{ animation: "drillSlide 240ms cubic-bezier(0.18, 0.67, 0.6, 1.0)" }}
+      >
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-3 bg-[var(--bg-card-solid)] border-b border-[var(--border-color)]">
           <h3 className="text-sm font-semibold text-[var(--text-primary)] truncate">{c.name}</h3>

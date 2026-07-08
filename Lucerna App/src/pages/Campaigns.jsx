@@ -1,8 +1,11 @@
 import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getCampaignsForRange, getCampaignSparklineForRange } from "../data/campaignsData";
 import { ALL_CHANNEL_NAMES, getChannelPlatforms } from "../data/mockData";
 import CampaignDrillDrawer from "../components/CampaignDrillDrawer";
 import ExportCSV from "../components/ExportCSV";
+import { fmtD } from "../lib/format";
+import SortArrow from "../components/SortArrow";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -12,17 +15,7 @@ const CHANNEL_COLORS = {
   SMS: "#f472b6",
 };
 
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtN = (n) => n.toLocaleString("en-US");
 
-function SortArrow({ active, direction }) {
-  return (
-    <span className="ml-1 inline-flex flex-col leading-none text-[10px]">
-      <span className={active && direction === "asc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▲</span>
-      <span className={active && direction === "desc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▼</span>
-    </span>
-  );
-}
 
 function Pill({ label, onRemove }) {
   return (
@@ -71,8 +64,14 @@ export default function Campaigns({ dateRange }) {
 
   const allCampaigns = useMemo(() => getCampaignsForRange(start, end), [start, end]);
 
+  // Deep-link filter: /campaigns?channel=Paid%20Social preselects that channel
+  const [searchParams] = useSearchParams();
+  const channelParam = searchParams.get("channel");
+
   // Filters
-  const [selectedChannels, setSelectedChannels] = useState(ALL_CHANNEL_NAMES);
+  const [selectedChannels, setSelectedChannels] = useState(
+    channelParam && ALL_CHANNEL_NAMES.includes(channelParam) ? [channelParam] : ALL_CHANNEL_NAMES
+  );
   const [selectedPlatforms, setSelectedPlatforms] = useState([]); // empty = all
   const [selectedStatuses, setSelectedStatuses] = useState([]);    // empty = all
   const [minRoas, setMinRoas] = useState("");
@@ -170,6 +169,7 @@ export default function Campaigns({ dateRange }) {
     { key: "spend", label: "Spend", align: "text-right" },
     { key: "revenue", label: "Revenue", align: "text-right" },
     { key: "roas", label: "ROAS", align: "text-right" },
+    { key: "platformRoas", label: "Platform ROAS", align: "text-right" },
     { key: "cpa", label: "CPA", align: "text-right" },
     { key: "ctr", label: "CTR", align: "text-right" },
     { key: "trend", label: "7d Trend", align: "text-right", noSort: true },
@@ -177,7 +177,7 @@ export default function Campaigns({ dateRange }) {
 
   const exportData = sorted.map((c) => ({
     Campaign: c.name, Channel: c.channel, Platform: c.platform, Type: c.type || "",
-    Status: c.status, Spend: c.spend, Revenue: c.revenue, ROAS: c.roas, CPA: c.cpa, CTR: c.ctr,
+    Status: c.status, Spend: c.spend, Revenue: c.revenue, ROAS: c.roas, "Platform ROAS": c.platformRoas, CPA: c.cpa, CTR: c.ctr,
     Sessions: c.sessions, Orders: c.orders,
   }));
 
@@ -352,6 +352,20 @@ export default function Campaigns({ dateRange }) {
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{c.spend > 0 ? fmtD(c.spend) : "—"}</td>
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{fmtD(c.revenue)}</td>
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{c.roas != null ? c.roas.toFixed(2) + "x" : "—"}</td>
+                    <td className="px-4 py-2.5 text-right">
+                      {c.platformRoas != null ? (
+                        <span className="inline-flex items-center gap-1 justify-end">
+                          <span className="text-[var(--text-secondary)]">{c.platformRoas.toFixed(2)}x</span>
+                          {c.roas > 0 && c.platformRoas > c.roas && (
+                            <span className="text-[9px] text-[var(--warning)]" title="Platform over-report vs Lucerna calibrated">
+                              +{Math.round(((c.platformRoas - c.roas) / c.roas) * 100)}%
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-[var(--text-muted)]">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{c.cpa != null ? fmtD(c.cpa) : "—"}</td>
                     <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">{c.ctr != null ? c.ctr.toFixed(2) + "%" : "—"}</td>
                     <td className="px-4 py-2.5 text-right"><Sparkline values={sparkline} color={color} /></td>

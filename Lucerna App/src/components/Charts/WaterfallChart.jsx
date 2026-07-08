@@ -10,8 +10,9 @@ import {
   Cell,
 } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
+import { formatAxis } from "../../lib/format";
 
-const formatDollarK = (v) => `$${(v / 1000).toFixed(0)}K`;
+const formatDollarK = (v) => formatAxis(v, "dollar");
 const formatDollarFull = (v) =>
   `$${v.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   getDailyChannelMetricsForRange,
   getChannelSummaryWithBudgets,
@@ -15,7 +16,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { useTheme } from "../context/ThemeContext";
+import { fmtD, fmtDC, fmtN, fmtX, fmtCompactN as fmtCompact } from "../lib/format";
+import { useChartTheme } from "../lib/chartTheme";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -33,10 +35,6 @@ const SERIES_COLORS = {
   cpm: "#fbbf24",
 };
 
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtDC = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const fmtN = (n) => n.toLocaleString("en-US");
-const fmtX = (n) => (n != null ? n.toFixed(2) + "x" : "—");
 
 function pct(c, p) {
   if (!p || p === 0) return null;
@@ -149,9 +147,7 @@ export default function ChannelDrillDrawer({
   onBudgetReset,
   openInEditMode = false,
 }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const [enabledSeries, setEnabledSeries] = useState(() =>
     SERIES_DEF.filter((s) => s.default).map((s) => s.key)
@@ -296,11 +292,6 @@ export default function ChannelDrillDrawer({
   const pacingPct = pacing.hasTarget && pacing.target > 0
     ? Math.round((pacingCurrent / pacing.target) * 100)
     : null;
-  const fmtCompact = (n) => {
-    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-    if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
-    return Math.round(n).toString();
-  };
   const pacingCurrentLabel = isVolumePacing ? fmtCompact(pacingCurrent) : fmtD(pacingCurrent);
   const pacingTargetLabel = isVolumePacing ? `${fmtCompact(pacing.target)} ${pacing.unit}` : fmtD(pacing.target);
   const pacingNote = isVolumePacing
@@ -351,6 +342,15 @@ export default function ChannelDrillDrawer({
                     ? "Paid channel"
                     : "Earned / direct"}
             </p>
+            {isPaid && (
+              <Link
+                to={`/campaigns?channel=${encodeURIComponent(channelName)}`}
+                onClick={onClose}
+                className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-[var(--accent-blue)] hover:underline"
+              >
+                View campaigns in {channelName} →
+              </Link>
+            )}
           </div>
           <button
             type="button"

@@ -17,6 +17,8 @@ export default function SortableKPICard({
   editMode,
   onRemove,
   anomaly,
+  goodIfUp = true,
+  description = null,
   children,
 }) {
   const {
@@ -94,6 +96,8 @@ export default function SortableKPICard({
         compareEnabled={compareEnabled}
         priorValue={priorValue}
         anomaly={editMode ? null : anomaly}
+        goodIfUp={goodIfUp}
+        description={description}
       >
         {children}
         {!editMode && onDrillDown && (

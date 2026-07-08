@@ -7,6 +7,20 @@ import { TODAY, getChannelSummaryForRange, getChannelConfig } from "./mockData";
 // metrics across runs and across date-range filters (per-day distribution).
 // ─────────────────────────────────────────────────────────────────────────
 
+// Calibration factors by ad platform (platform-reported = calibrated / factor).
+// Mirrors the channel-level factors in mockData.calibrationFactors; platforms
+// without in-platform attribution (SMS, CTV) report no ROAS of their own.
+const PLATFORM_CALIBRATION = {
+  Meta: 0.62,
+  Google: 0.78,
+  TikTok: 0.45,
+  Email: 0.91,
+  Microsoft: 0.8,
+  Snap: 0.5,
+  Reddit: 0.55,
+  AppLovin: 0.48,
+};
+
 function seededRandom(seed) {
   const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
@@ -173,6 +187,10 @@ export function getCampaignsForRange(start, end) {
           spend,
           revenue,
           roas: spend > 0 ? Math.round((revenue / spend) * 100) / 100 : null,
+          platformRoas:
+            spend > 0 && PLATFORM_CALIBRATION[c.platform]
+              ? Math.round(((revenue / spend) / (PLATFORM_CALIBRATION[c.platform] * rand(cseed + 6, 0.95, 1.05))) * 100) / 100
+              : null,
           cpa: spend > 0 && orders > 0 ? Math.round((spend / orders) * 100) / 100 : null,
           sessions,
           orders,

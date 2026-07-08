@@ -19,7 +19,6 @@ import {
 } from "../data/eventWindows";
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import {
   ComposedChart,
   Area,
@@ -37,6 +36,9 @@ import {
   Legend,
 } from "recharts";
 import { format } from "date-fns";
+import { fmtD as fmtDollar } from "../lib/format";
+import { useChartTheme } from "../lib/chartTheme";
+import LockedFeature from "../components/LockedFeature";
 
 /* ── Tooltips ── */
 const DailyBarTooltip = ({ active, payload, label }) => {
@@ -117,9 +119,7 @@ const ChannelSparkline = ({ series, color = "#43a9df" }) => {
 };
 
 export default function Forecasting({ dateRange }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   // Operator-set revenue goals (synced via storage event from Settings)
   const [goals, setGoals] = useState(() => loadRevenueGoals());
@@ -360,7 +360,6 @@ export default function Forecasting({ dateRange }) {
     [forecast.marginSeries]
   );
 
-  const fmtDollar = (n) => "$" + Math.round(n).toLocaleString("en-US");
 
   /* color rule for daily revenue bars (above target = green, etc.) */
   const revBarColor = (rev, target) => {
@@ -500,14 +499,14 @@ export default function Forecasting({ dateRange }) {
         <KPICard
           title="Required Daily Revenue"
           value={fmtDollar(forecast.requiredDailyRev ?? 0)}
-          change={0}
+          change={null}
           subtitle={`${forecast.daysRemaining ?? 0} days left`}
           index={1}
         />
         <KPICard
           title="Required Daily Spend"
           value={fmtDollar(forecast.requiredDailySpend ?? 0)}
-          change={0}
+          change={null}
           subtitle={
             forecast.spendBudgetIsOperatorSet
               ? `vs $${forecast.dailyAvgSpend?.toLocaleString() ?? 0}/day actual`
@@ -1104,6 +1103,11 @@ export default function Forecasting({ dateRange }) {
 
       {/* ── Scenario Modeling ── */}
       {paidChannels.length > 0 && (
+        <LockedFeature
+          tier="lumen"
+          title="What-if Scenarios"
+          value="Model spend changes before you make them. Pick a channel, move the budget, and see projected revenue impact from its measured response curve."
+        >
         <div className="mt-6 bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
           <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
             <div>
@@ -1187,6 +1191,7 @@ export default function Forecasting({ dateRange }) {
             </div>
           </div>
         </div>
+        </LockedFeature>
       )}
 
       {/* ── Plan vs Forecast vs Actual ── */}

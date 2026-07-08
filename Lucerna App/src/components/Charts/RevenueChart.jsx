@@ -11,6 +11,7 @@ import {
 } from 'recharts';
 import { format, startOfWeek } from 'date-fns';
 import { useTheme } from '../../context/ThemeContext';
+import { formatAxis } from "../../lib/format";
 
 const CustomTooltip = ({ active, payload, label, compareEnabled }) => {
   if (!active || !payload?.length) return null;
@@ -94,7 +95,7 @@ export default function RevenueChart({
     }));
   }, [data, priorData, view, compareEnabled]);
 
-  const formatYAxis = (value) => `$${Math.round(value / 1000)}K`;
+  const formatYAxis = (value) => formatAxis(value, "dollar");
 
   return (
     <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-solid)] backdrop-blur-2xl p-6 hover:border-[var(--border-hover)] transition-colors">

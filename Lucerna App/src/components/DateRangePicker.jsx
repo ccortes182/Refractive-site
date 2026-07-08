@@ -16,20 +16,9 @@ import {
   differenceInCalendarDays,
   isBefore,
 } from "date-fns";
+import { TODAY } from "../data/mockData";
+import { PRESETS, COMPARE_MODES } from "../lib/dateConfig";
 
-const TODAY = new Date(2026, 2, 30);
-
-const PRESETS = [
-  { label: "Last 7 days", days: 7, key: "7d" },
-  { label: "Last 30 days", days: 30, key: "30d" },
-  { label: "Last 90 days", days: 90, key: "90d" },
-];
-
-const COMPARE_MODES = [
-  { label: "Previous Period", key: "previous" },
-  { label: "Year over Year", key: "yoy" },
-  { label: "Custom Range", key: "custom" },
-];
 
 function inRange(day, start, end) {
   if (!start || !end) return false;
@@ -264,7 +253,7 @@ export default function DateRangePicker({
                         ? "bg-[var(--accent-blue)]/10 text-[var(--accent-blue)]"
                         : "text-[var(--text-secondary)] hover:bg-[var(--border-color)]"
                     }`}>
-                    <span className="text-[13px] font-medium block">{p.label}</span>
+                    <span className="text-[13px] font-medium block">{p.longLabel}</span>
                     <span className="text-[10px] text-[var(--text-muted)] block mt-0.5">
                       {format(s, "MMM d")} – {format(TODAY, "MMM d, yyyy")}
                     </span>
@@ -309,7 +298,7 @@ export default function DateRangePicker({
                       <span className={`w-2.5 h-2.5 rounded-full border-[1.5px] flex-shrink-0 ${
                         cmpMode === m.key ? "border-[#8e68ad] bg-[#8e68ad]" : "border-[var(--text-muted)]"
                       }`} />
-                      {m.label}
+                      {m.longLabel}
                     </button>
                   ))}
                   {autoCompareRange && (

@@ -3,15 +3,17 @@ import { getMERKPIs, getMERDataForRange, getEfficiencyByChannel, calibrationFact
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
 import MERChart from "../components/Charts/MERChart";
-import { useTheme } from "../context/ThemeContext";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { format } from "date-fns";
+import { fmtD, fmtDC } from "../lib/format";
+import { CARD_SM as CARD } from "../lib/card";
+import { metricDefinition } from "../data/metricDefinitions";
+import { STATUS_STYLES } from "../lib/status";
+import InfoTooltip from "../components/InfoTooltip";
+import { useChartTheme } from "../lib/chartTheme";
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-5";
 const CHANNEL_COLORS = { "Paid Search": "#43a9df", "Paid Social": "#8e68ad", Email: "#c2dcd4", Organic: "#34d399", Direct: "#fbbf24" };
 
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtDC = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pctChange = (c, p) => p ? Math.round(((c - p) / p) * 10000) / 100 : 0;
 
 const ChartTooltip = ({ active, payload, label, keys }) => {
@@ -32,9 +34,7 @@ const ChartTooltip = ({ active, payload, label, keys }) => {
 export default function Efficiency({ dateRange, compare }) {
   const { start, end } = dateRange;
   const compareEnabled = compare.enabled && compare.start && compare.end;
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const [activeChart, setActiveChart] = useState("mer"); // mer | cac | spend
 
@@ -75,23 +75,23 @@ export default function Efficiency({ dateRange, compare }) {
     <div className="space-y-5">
       {/* KPI Row */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-        <KPICard title="MER" value={kpis.mer != null ? kpis.mer.toFixed(2) + "x" : "—"}
-          change={priorKpis ? pctChange(kpis.mer, priorKpis.mer) : 0} index={0}
+        <KPICard title="MER" description={metricDefinition("mer")} value={kpis.mer != null ? kpis.mer.toFixed(2) + "x" : "—"}
+          change={priorKpis ? pctChange(kpis.mer, priorKpis.mer) : null} index={0}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorKpis?.mer ? priorKpis.mer.toFixed(2) + "x" : null}
           active={activeChart === "mer"} onClick={() => setActiveChart("mer")} />
-        <KPICard title="NC-MER" value={kpis.ncMer != null ? kpis.ncMer.toFixed(2) + "x" : "—"}
-          change={priorKpis ? pctChange(kpis.ncMer, priorKpis.ncMer) : 0} index={1}
+        <KPICard title="NC-MER" description={metricDefinition("ncMer")} value={kpis.ncMer != null ? kpis.ncMer.toFixed(2) + "x" : "—"}
+          change={priorKpis ? pctChange(kpis.ncMer, priorKpis.ncMer) : null} index={1}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorKpis?.ncMer ? priorKpis.ncMer.toFixed(2) + "x" : null} />
-        <KPICard title="CAC" value={kpis.cac != null ? fmtDC(kpis.cac) : "—"}
-          change={priorKpis ? pctChange(kpis.cac, priorKpis.cac) : 0} index={2}
+        <KPICard title="CAC" description={metricDefinition("cac")} value={kpis.cac != null ? fmtDC(kpis.cac) : "—"}
+          change={priorKpis ? pctChange(kpis.cac, priorKpis.cac) : null} goodIfUp={false} index={2}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorKpis?.cac ? fmtDC(priorKpis.cac) : null}
           active={activeChart === "cac"} onClick={() => setActiveChart("cac")} />
-        <KPICard title="Ad Spend" value={fmtD(kpis.totalSpend)}
-          change={priorKpis ? pctChange(kpis.totalSpend, priorKpis.totalSpend) : 0} index={3}
+        <KPICard title="Ad Spend" description={metricDefinition("adSpend")} value={fmtD(kpis.totalSpend)}
+          change={priorKpis ? pctChange(kpis.totalSpend, priorKpis.totalSpend) : null} goodIfUp={false} index={3}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorKpis ? fmtD(priorKpis.totalSpend) : null}
           active={activeChart === "spend"} onClick={() => setActiveChart("spend")} />
-        <KPICard title="Spend % of Rev" value={kpis.spendPctOfRev.toFixed(1) + "%"}
-          change={priorKpis ? pctChange(kpis.spendPctOfRev, priorKpis.spendPctOfRev) : 0} index={4}
+        <KPICard title="Spend % of Rev" description={metricDefinition("marketingPctOfRev")} value={kpis.spendPctOfRev.toFixed(1) + "%"}
+          change={priorKpis ? pctChange(kpis.spendPctOfRev, priorKpis.spendPctOfRev) : null} goodIfUp={false} index={4}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorKpis ? priorKpis.spendPctOfRev.toFixed(1) + "%" : null} />
       </div>
 
@@ -187,16 +187,16 @@ export default function Efficiency({ dateRange, compare }) {
       {/* Incrementality Calibration Factors */}
       <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] overflow-hidden">
         <div className="px-5 py-3 border-b border-[var(--border-color)]">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)]">Incrementality Calibration Factors</h3>
-          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">Apply these multipliers to platform-reported conversions for true incremental value</p>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center">Incrementality Calibration Factors<InfoTooltip text={metricDefinition("calibrationFactor")} /></h3>
+          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">Multipliers learned from lift tests. Platform-reported numbers get scaled by these before they hit your dashboard.</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="bg-[var(--bg-surface)]">
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-left">Channel</th>
-                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Platform Reports</th>
-                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Actual Incremental</th>
+                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Calibration Factor</th>
+                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Platform Over-Reports By</th>
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-center">Confidence</th>
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Last Calibrated</th>
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-left">Source</th>
@@ -207,13 +207,13 @@ export default function Efficiency({ dateRange, compare }) {
               {calibrationFactors.map((row, i) => (
                 <tr key={row.channel} className={i % 2 === 0 ? "bg-transparent" : "bg-[var(--bg-table-stripe)]"}>
                   <td className="px-4 py-2.5 text-left font-medium text-[var(--text-primary)]">{row.channel}</td>
-                  <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">1.00x</td>
                   <td className="px-4 py-2.5 text-right font-medium text-[var(--text-primary)]">{row.actualMultiplier.toFixed(2)}x</td>
+                  <td className="px-4 py-2.5 text-right text-[var(--text-secondary)]">+{Math.round((1 / row.actualMultiplier - 1) * 100)}%</td>
                   <td className="px-4 py-2.5 text-center">
                     <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${
                       row.confidence === "High"
                         ? "bg-[var(--badge-positive-bg)] text-[var(--badge-positive-text)]"
-                        : "bg-[#fbbf24]/15 text-[#fbbf24]"
+                        : STATUS_STYLES.warning.pill
                     }`}>
                       {row.confidence}
                     </span>
@@ -222,7 +222,7 @@ export default function Efficiency({ dateRange, compare }) {
                   <td className="px-4 py-2.5 text-left text-[var(--text-secondary)]">{row.source}</td>
                   <td className="px-4 py-2.5">
                     <div className="flex items-center gap-2">
-                      <div className="w-full h-2.5 rounded-full bg-red-500/20 overflow-hidden">
+                      <div className="w-full h-2.5 rounded-full bg-[var(--toggle-bg)] overflow-hidden">
                         <div
                           className="h-full rounded-full bg-[#43a9df]"
                           style={{ width: `${row.actualMultiplier * 100}%` }}
@@ -241,16 +241,16 @@ export default function Efficiency({ dateRange, compare }) {
       {/* Blended vs Platform ROAS */}
       <div className="bg-[var(--bg-card-solid)] rounded-xl shadow-sm border border-[var(--border-color)] overflow-hidden">
         <div className="px-5 py-3 border-b border-[var(--border-color)]">
-          <h3 className="text-sm font-semibold text-[var(--text-primary)]">Platform Over-Reporting</h3>
-          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">Platform self-reported ROAS vs Lucerna measured ROAS</p>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] flex items-center">Platform Over-Reporting<InfoTooltip text={metricDefinition("platformRoas")} /></h3>
+          <p className="text-[11px] text-[var(--text-muted)] mt-0.5">What each platform claims vs what Lucerna measures. The gap is revenue platforms take credit for but didn't drive.</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="bg-[var(--bg-surface)]">
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-left">Channel</th>
-                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Platform ROAS</th>
-                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Lucerna ROAS</th>
+                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Platform-Reported</th>
+                <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Lucerna Calibrated</th>
                 <th className="px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] text-right">Over-Report</th>
               </tr>
             </thead>
@@ -270,7 +270,7 @@ export default function Efficiency({ dateRange, compare }) {
                     <td className="px-4 py-2.5 text-right">
                       <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${
                         delta > 15 ? "bg-[var(--badge-negative-bg)] text-[var(--badge-negative-text)]"
-                        : delta > 5 ? "bg-[#fbbf24]/15 text-[#fbbf24]"
+                        : delta > 5 ? STATUS_STYLES.warning.pill
                         : "bg-[var(--badge-positive-bg)] text-[var(--badge-positive-text)]"
                       }`}>
                         +{delta.toFixed(1)}%

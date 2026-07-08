@@ -110,3 +110,7 @@ body {
   background: var(--tooltip-bg) !important;
   border-color: var(--tooltip-border) !important;
 }
+
+/* Drawer animations (shared by all drill/detail drawers) */
+@keyframes drillFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drillSlide { from { transform: translateX(100%); } to { transform: translateX(0); } }

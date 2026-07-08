@@ -11,8 +11,9 @@ import {
   Legend,
 } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
+import { formatAxis } from "../../lib/format";
 
-const formatDollarK = (v) => `$${(v / 1000).toFixed(0)}K`;
+const formatDollarK = (v) => formatAxis(v, "dollar");
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;

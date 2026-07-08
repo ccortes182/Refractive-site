@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { fmtD as formatDollar } from "../lib/format";
 
 const sliderTrackStyle = `
   input[type="range"].budget-slider {
@@ -30,8 +31,6 @@ const sliderTrackStyle = `
   }
 `;
 
-const formatDollar = (v) =>
-  `$${v.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 
 export default function BudgetSlider({
   channels = [],

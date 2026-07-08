@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { journeyData } from "../data/mockData";
+import { fmtD, fmtN } from "../lib/format";
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
+import LockedFeature from "../components/LockedFeature";
+import { scaleAdditive, wobbleRatio, scaledChange } from "../lib/rangeScale";
 import {
   BarChart,
   Bar,
@@ -16,6 +18,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { CARD_SM as CARD } from "../lib/card";
+import { useChartTheme } from "../lib/chartTheme";
 
 const CHANNEL_COLORS = {
   "Paid Social": "#8e68ad",
@@ -32,9 +36,6 @@ const MODEL_COLORS = {
   dataDriven: "#34d399",
 };
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-5";
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtN = (n) => n.toLocaleString("en-US");
 
 function ChannelPill({ name }) {
   return (
@@ -75,13 +76,49 @@ function MiniBar({ value, max, color }) {
 }
 
 export default function Journeys({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const navigate = useNavigate();
 
-  const j = journeyData;
+  // Scale the static journey snapshot to the selected range: additive metrics
+  // (conversions, revenue) scale with range length; ratio/average metrics
+  // (touchpoints, days-to-convert, touch percentages) get a light wobble.
+  // Structural data (path shapes, conversion lag curve) stays fixed.
+  const j = useMemo(() => {
+    const src = journeyData;
+    const r1 = (v) => Math.round(v * 10) / 10;
+    const singleTouchPct = r1(wobbleRatio(src.kpis.singleTouchPct, "journeys:singleTouchPct", dateRange, 0.03));
+    return {
+      ...src,
+      kpis: {
+        totalConversions: Math.round(scaleAdditive(src.kpis.totalConversions, dateRange)),
+        totalRevenue: Math.round(scaleAdditive(src.kpis.totalRevenue, dateRange)),
+        avgTouchpoints: r1(wobbleRatio(src.kpis.avgTouchpoints, "journeys:avgTouchpoints", dateRange, 0.03)),
+        avgDaysToConvert: r1(wobbleRatio(src.kpis.avgDaysToConvert, "journeys:avgDaysToConvert", dateRange, 0.03)),
+        singleTouchPct,
+        multiTouchPct: r1(100 - singleTouchPct),
+      },
+      topPaths: src.topPaths.map((p, i) => ({
+        ...p,
+        conversions: Math.round(scaleAdditive(p.conversions, dateRange)),
+        revenue: Math.round(scaleAdditive(p.revenue, dateRange)),
+        avgDays: r1(wobbleRatio(p.avgDays, `journeys:path${i}:days`, dateRange, 0.03)),
+      })),
+      // Assisted-conversion and touchpoint charts are expressed as percentages
+      // of conversions, so they wobble lightly rather than scale additively.
+      assistedConversions: src.assistedConversions.map((r) => ({
+        ...r,
+        firstTouch: Math.round(wobbleRatio(r.firstTouch, `journeys:assisted:${r.channel}:first`, dateRange, 0.03)),
+        assisted: Math.round(wobbleRatio(r.assisted, `journeys:assisted:${r.channel}:mid`, dateRange, 0.03)),
+        lastTouch: Math.round(wobbleRatio(r.lastTouch, `journeys:assisted:${r.channel}:last`, dateRange, 0.03)),
+      })),
+      touchpointDistribution: src.touchpointDistribution.map((t) => ({
+        ...t,
+        pct: Math.round(wobbleRatio(t.pct, `journeys:tp:${t.touchpoints}`, dateRange, 0.03)),
+      })),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange.start, dateRange.end]);
   const k = j.kpis;
   const [channelFilter, setChannelFilter] = useState("All");
 
@@ -105,12 +142,12 @@ export default function Journeys({ dateRange, compare }) {
     <div className="space-y-5">
       {/* KPI Row */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
-        <KPICard title="Total Conversions" value={fmtN(k.totalConversions)} change={8.3} index={0} />
-        <KPICard title="Total Revenue" value={fmtD(k.totalRevenue)} change={12.1} index={1} />
-        <KPICard title="Avg Touchpoints" value={k.avgTouchpoints.toString()} change={-2.4} index={2} />
-        <KPICard title="Avg Days to Convert" value={k.avgDaysToConvert + "d"} change={-5.1} index={3} />
-        <KPICard title="Single-Touch" value={k.singleTouchPct + "%"} change={3.8} index={4} />
-        <KPICard title="Multi-Touch" value={k.multiTouchPct + "%"} change={-1.2} index={5} />
+        <KPICard title="Total Conversions" value={fmtN(k.totalConversions)} change={scaledChange("journeys:totalConversions", dateRange, compare)} index={0} />
+        <KPICard title="Total Revenue" value={fmtD(k.totalRevenue)} change={scaledChange("journeys:totalRevenue", dateRange, compare)} index={1} />
+        <KPICard title="Avg Touchpoints" value={k.avgTouchpoints.toString()} change={scaledChange("journeys:avgTouchpoints", dateRange, compare)} index={2} />
+        <KPICard title="Avg Days to Convert" value={k.avgDaysToConvert + "d"} change={scaledChange("journeys:avgDaysToConvert", dateRange, compare)} goodIfUp={false} index={3} />
+        <KPICard title="Single-Touch" value={k.singleTouchPct + "%"} change={scaledChange("journeys:singleTouchPct", dateRange, compare)} index={4} />
+        <KPICard title="Multi-Touch" value={k.multiTouchPct + "%"} change={scaledChange("journeys:multiTouchPct", dateRange, compare)} index={5} />
       </div>
 
       {/* Top Conversion Paths + Conversion Lag side by side */}
@@ -256,7 +293,12 @@ export default function Journeys({ dateRange, compare }) {
         </div>
       </div>
 
-      {/* Attribution Model Comparison */}
+      {/* Attribution Model Comparison — gated behind Lumen */}
+      <LockedFeature
+        tier="lumen"
+        title="Attribution Model Comparison"
+        value="See how revenue credit shifts under last-click, linear, position-based, and data-driven models. The gap between models is where platforms hide over-reporting."
+      >
       <div className={CARD}>
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Attribution Model Comparison</h3>
         <ResponsiveContainer width="100%" height={300}>
@@ -276,6 +318,7 @@ export default function Journeys({ dateRange, compare }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      </LockedFeature>
     </div>
   );
 }

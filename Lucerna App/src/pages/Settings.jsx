@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { usePlan, PLANS } from "../context/PlanContext";
 import {
   ALL_CHANNEL_NAMES,
   getChannelPacingKey,
@@ -47,6 +48,8 @@ import {
   getEventDayCount,
   EVENTS_CHANGED_EVENT,
 } from "../data/eventWindows";
+import { fmtCompactN as fmtCompact } from "../lib/format";
+import { CARD } from "../lib/card";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -63,12 +66,6 @@ const PACING_LABELS = {
   creditAllotment: { type: "Credits", unit: "credits/mo", inputPrefix: "", placeholder: "20000" },
 };
 
-function fmtCompact(n) {
-  if (n == null) return "—";
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
-  return Math.round(n).toString();
-}
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -1033,7 +1030,6 @@ function RevenueGoalsSection() {
   );
 }
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6";
 const INPUT = "w-full px-3 py-2 text-sm rounded-lg bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--accent-blue)] transition-colors";
 const LABEL = "block text-xs font-medium text-[var(--text-secondary)] mb-1.5";
 const BTN_PRIMARY = "px-4 py-2 text-sm font-medium text-white rounded-lg bg-gradient-to-r from-[#43a9df] to-[#8e68ad] hover:opacity-90 transition-opacity";
@@ -1045,6 +1041,31 @@ const BADGE_ROLE = {
   Editor: "bg-[#8e68ad]/15 text-[#8e68ad]",
   Viewer: "bg-[var(--toggle-bg)] text-[var(--text-muted)]",
 };
+
+// ── Local persistence for profile + preferences ──
+const PROFILE_STORAGE_KEY = "lucerna.settings.profile.v1";
+const PREFS_STORAGE_KEY = "lucerna.settings.prefs.v1";
+
+function loadStored(key) {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveStored(key, value) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value || {}));
+  } catch {
+    // ignore
+  }
+}
 
 function Toggle({ checked, onChange, label }) {
   return (
@@ -1338,15 +1359,23 @@ function EventWindowsSection() {
 
 export default function Settings() {
   const { theme, toggleTheme } = useTheme();
+  const { plan, setPlan } = usePlan();
 
-  // Profile state
-  const [profile, setProfile] = useState({
+  // Profile state (defaults merged with anything persisted locally)
+  const [profile, setProfile] = useState(() => ({
     name: "Christian Cortes",
     email: "christian@refractive.co",
     role: "Admin",
     company: "Refractive",
     timezone: "America/Los_Angeles",
-  });
+    ...(loadStored(PROFILE_STORAGE_KEY) || {}),
+  }));
+  const [profileSaved, setProfileSaved] = useState(false);
+  const saveProfile = () => {
+    saveStored(PROFILE_STORAGE_KEY, profile);
+    setProfileSaved(true);
+    setTimeout(() => setProfileSaved(false), 2000);
+  };
 
   // Team members
   const [team] = useState([
@@ -1357,8 +1386,8 @@ export default function Settings() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("Viewer");
 
-  // Notification prefs
-  const [notifications, setNotifications] = useState({
+  // Notification prefs (persisted alongside data prefs under one key)
+  const [notifications, setNotifications] = useState(() => ({
     weeklyMemo: true,
     alertsCritical: true,
     alertsWarning: true,
@@ -1366,7 +1395,8 @@ export default function Settings() {
     budgetPacing: true,
     inventoryAlerts: true,
     anomalyDetection: true,
-  });
+    ...(loadStored(PREFS_STORAGE_KEY)?.notifications || {}),
+  }));
 
   const toggleNotif = (key) => setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -1380,14 +1410,21 @@ export default function Settings() {
   };
   const pixelSnippet = `<!-- Lucerna Pixel -->\n<script>\n  (function(i,l,m){i.LucernaObject=m;i[m]=i[m]||function(){\n  (i[m].q=i[m].q||[]).push(arguments)};var s=l.createElement('script');\n  s.async=1;s.src='https://pixel.lucerna.io/v1/${pixelId}.js';\n  l.head.appendChild(s)})(window,document,'lcn');\n  lcn('init','${pixelId}');\n  lcn('track','PageView');\n</script>`;
 
-  // Data preferences
-  const [dataPrefs, setDataPrefs] = useState({
+  // Data preferences (persisted alongside notifications under one key)
+  const [dataPrefs, setDataPrefs] = useState(() => ({
     currency: "USD",
     attributionWindow: "7-day click, 1-day view",
     timezone: "America/Los_Angeles",
     fiscalYearStart: "January",
     defaultDateRange: "30d",
-  });
+    ...(loadStored(PREFS_STORAGE_KEY)?.dataPrefs || {}),
+  }));
+  const [prefsSaved, setPrefsSaved] = useState(false);
+  const savePrefs = () => {
+    saveStored(PREFS_STORAGE_KEY, { notifications, dataPrefs });
+    setPrefsSaved(true);
+    setTimeout(() => setPrefsSaved(false), 2000);
+  };
 
   return (
     <div className="max-w-4xl space-y-6">
@@ -1419,7 +1456,49 @@ export default function Settings() {
           </div>
         </div>
         <div className="mt-4 flex gap-3">
-          <button className={BTN_PRIMARY}>Save Changes</button>
+          <button type="button" onClick={saveProfile} className={BTN_PRIMARY}>
+            {profileSaved ? "Saved ✓" : "Save Changes"}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Plan & Billing ── */}
+      <div className={CARD}>
+        <SectionTitle title="Plan" description="Your Lucerna subscription. Switching takes effect immediately in this demo." />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {PLANS.map((p) => {
+            const isCurrent = plan === p.key;
+            return (
+              <div
+                key={p.key}
+                className={`rounded-xl border p-4 flex flex-col gap-2 transition-colors ${
+                  isCurrent
+                    ? "border-[var(--accent-blue)] bg-[var(--accent-blue)]/5"
+                    : "border-[var(--border-color)] bg-[var(--bg-surface)]/40"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">{p.label}</span>
+                  {isCurrent && (
+                    <span className="text-[9px] font-semibold uppercase tracking-wide rounded-full px-2 py-0.5 bg-[var(--accent-blue)]/15 text-[var(--accent-blue)]">
+                      Current
+                    </span>
+                  )}
+                </div>
+                <span className="text-lg font-bold text-[var(--text-primary)]">{p.price}</span>
+                <p className="text-[11px] text-[var(--text-muted)] leading-relaxed flex-1">{p.blurb}</p>
+                {!isCurrent && (
+                  <button
+                    type="button"
+                    onClick={() => setPlan(p.key)}
+                    className="mt-1 rounded-lg border border-[var(--accent-blue)]/40 text-[var(--accent-blue)] hover:bg-[var(--accent-blue)]/10 text-xs font-medium px-3 py-1.5 transition-colors"
+                  >
+                    Switch to {p.label}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -1566,7 +1645,9 @@ export default function Settings() {
           </div>
         </div>
         <div className="mt-4 flex gap-3">
-          <button className={BTN_PRIMARY}>Save Preferences</button>
+          <button type="button" onClick={savePrefs} className={BTN_PRIMARY}>
+            {prefsSaved ? "Saved ✓" : "Save Preferences"}
+          </button>
         </div>
       </div>
 

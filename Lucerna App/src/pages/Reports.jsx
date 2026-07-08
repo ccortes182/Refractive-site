@@ -3,8 +3,9 @@ import { getReportSummary } from "../data/mockData";
 import { useTheme } from "../context/ThemeContext";
 import { format } from "date-fns";
 import ExportCSV from "../components/ExportCSV";
+import LockedFeature from "../components/LockedFeature";
+import { CARD as card } from "../lib/card";
 
-const card = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6";
 
 const SECTIONS = ["Revenue", "Efficiency", "Creative", "Margin", "Pacing"];
 
@@ -92,6 +93,10 @@ export default function Reports({ dateRange, compare }) {
           )}
         </div>
         <div className="flex items-center gap-2 no-print">
+          <ExportCSV
+            data={visibleMetrics.map((m) => ({ Metric: m.label, Value: m.value, Section: m.section }))}
+            filename="executive-report"
+          />
           <button
             onClick={() => window.print()}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg
@@ -190,6 +195,34 @@ export default function Reports({ dateRange, compare }) {
           placeholder="Add commentary or notes for the report..."
           className="bg-[var(--bg-surface)] border border-[var(--border-color)] rounded-lg p-3 w-full text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] resize-y focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
         />
+      </div>
+
+      {/* White-label options — Pro */}
+      <div className="no-print">
+        <LockedFeature
+          tier="pro"
+          title="White-Label Reporting"
+          value="Put your agency's logo and colors on this report, drop the Lucerna branding, and send it from your own domain.">
+          <div className={card}>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">White-Label Options</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-xs text-[var(--text-muted)] mb-1.5">Report logo</label>
+                <div className="rounded-lg border border-dashed border-[var(--border-color)] bg-[var(--bg-surface)]/40 px-3 py-6 text-center text-xs text-[var(--text-muted)]">
+                  Upload logo
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs text-[var(--text-muted)] mb-1.5">Accent color</label>
+                <input type="text" defaultValue="#43a9df" className="w-full rounded-lg bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[var(--text-muted)] mb-1.5">Footer text</label>
+                <input type="text" placeholder="Prepared by Your Agency" className="w-full rounded-lg bg-[var(--bg-surface)] border border-[var(--border-color)] px-3 py-2 text-sm text-[var(--text-primary)]" />
+              </div>
+            </div>
+          </div>
+        </LockedFeature>
       </div>
     </div>
   );

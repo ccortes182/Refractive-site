@@ -1948,7 +1948,14 @@ function generateSubscriptionData() {
     { name: "Lisa W.", ltv: 456, churnedDaysAgo: 15, lastProduct: "Crossbody Sling Pack" },
   ];
 
-  return { activeSubscribers, avgSubValue, mrr, arr, churnRate, mrrWaterfall, subVsOneTime, churnCohort, subProducts, winbackCandidates };
+  // Month-over-month changes derived from the waterfall trend
+  const lastNet = mrrWaterfall[mrrWaterfall.length - 1]?.net || 0;
+  const mrrChange = Math.round((lastNet / mrr) * 1000) / 10;
+  const activeSubscribersChange = Math.round((lastNet / avgSubValue / activeSubscribers) * 1000) / 10;
+  const churnRateChange = -1.2;
+  const avgSubValueChange = 1.8;
+
+  return { activeSubscribers, avgSubValue, mrr, arr, churnRate, mrrWaterfall, subVsOneTime, churnCohort, subProducts, winbackCandidates, mrrChange, activeSubscribersChange, churnRateChange, avgSubValueChange };
 }
 
 export const subscriptionData = generateSubscriptionData();

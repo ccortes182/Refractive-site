@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { geoData, getGeoTrend } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
 import USMap from "../components/Charts/USMap";
-import { useTheme } from "../context/ThemeContext";
 import {
   LineChart,
   Line,
@@ -13,6 +12,9 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import SortArrow from "../components/SortArrow";
+import { useChartTheme } from "../lib/chartTheme";
+import { rangeDays, scaleAdditive, wobbleRatio } from "../lib/rangeScale";
 
 const TREND_COLORS = ["#43a9df", "#8e68ad", "#c2dcd4", "#34d399", "#fbbf24"];
 const MAP_METRICS = [
@@ -23,23 +25,48 @@ const MAP_METRICS = [
   { key: "netMargin", label: "Net Margin" },
 ];
 
-export default function Geo({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+export default function Geo({ dateRange }) {
+  const { gridColor, tickColor } = useChartTheme();
 
   const [mapMetric, setMapMetric] = useState("revenue");
 
-  const geoTrend = useMemo(() => getGeoTrend(), []);
+  // Scale the static geo snapshot to the selected range: additive metrics
+  // (revenue, orders, shipping, net margin dollars) scale with range length;
+  // ratio metrics (ROAS, CAC, AOV) get a small per-state wobble.
+  const scaledGeo = useMemo(
+    () =>
+      geoData.map((g) => ({
+        ...g,
+        revenue: Math.round(scaleAdditive(g.revenue, dateRange)),
+        orders: Math.round(scaleAdditive(g.orders, dateRange)),
+        shippingCost: Math.round(scaleAdditive(g.shippingCost, dateRange)),
+        netMargin: Math.round(
+          scaleAdditive(wobbleRatio(g.netMargin, `geo:${g.state}:netMargin`, dateRange), dateRange)
+        ),
+        roas: Math.round(wobbleRatio(g.roas, `geo:${g.state}:roas`, dateRange) * 100) / 100,
+        cac: Math.round(wobbleRatio(g.cac, `geo:${g.state}:cac`, dateRange) * 100) / 100,
+        aov: Math.round(wobbleRatio(g.aov, `geo:${g.state}:aov`, dateRange) * 100) / 100,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dateRange.start, dateRange.end]
+  );
+
+  const geoTrend = useMemo(() => {
+    const { topStates, trend } = getGeoTrend();
+    // Re-window the daily series to the selected range length (most recent points).
+    const days = Math.min(rangeDays(dateRange), trend.length);
+    return { topStates, trend: trend.slice(-days) };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange.start, dateRange.end]);
 
   const [sortField, setSortField] = useState("revenue");
   const [sortDir, setSortDir] = useState("desc");
 
   const allSorted = useMemo(() => {
-    const copy = [...geoData];
+    const copy = [...scaledGeo];
     copy.sort((a, b) => sortDir === "asc" ? (a[sortField] ?? 0) - (b[sortField] ?? 0) : (b[sortField] ?? 0) - (a[sortField] ?? 0));
     return copy;
-  }, [sortField, sortDir]);
+  }, [scaledGeo, sortField, sortDir]);
 
   const handleSort = (field) => {
     if (sortField === field) setSortDir((d) => d === "asc" ? "desc" : "asc");
@@ -76,7 +103,7 @@ export default function Geo({ dateRange, compare }) {
             ))}
           </div>
         </div>
-        <USMap data={geoData} valueKey={mapMetric} />
+        <USMap data={scaledGeo} valueKey={mapMetric} />
       </div>
 
       {/* All States Table */}
@@ -103,9 +130,7 @@ export default function Geo({ dateRange, compare }) {
                     className={`px-4 py-2.5 font-medium text-[var(--text-muted)] uppercase text-[10px] cursor-pointer select-none whitespace-nowrap ${col.align}`}>
                     <span className="inline-flex items-center gap-1">
                       {col.label}
-                      {sortField === col.key && (
-                        <span className="text-[var(--accent-blue)]">{sortDir === "desc" ? "▼" : "▲"}</span>
-                      )}
+                      <SortArrow active={sortField === col.key} direction={sortDir} />
                     </span>
                   </th>
                 ))}

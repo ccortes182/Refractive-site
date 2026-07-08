@@ -10,7 +10,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { useTheme } from "../../context/ThemeContext";
+import { fmtD, formatAxis } from "../../lib/format";
+import { useChartTheme } from "../../lib/chartTheme";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -21,7 +22,6 @@ const CHANNEL_COLORS = {
   Direct: "#fbbf24",
 };
 
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
 
 function ScatterTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
@@ -47,9 +47,7 @@ function ScatterTooltip({ active, payload }) {
 }
 
 export default function SpendRoasScatter({ data = [], onPointClick }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const points = data
     .filter((d) => d.spend > 0 && d.roas != null)
@@ -82,7 +80,7 @@ export default function SpendRoasScatter({ data = [], onPointClick }) {
           dataKey="spend"
           name="Spend"
           domain={[0, Math.ceil(maxSpend * 1.1)]}
-          tickFormatter={(v) => `$${(v / 1000).toFixed(0)}K`}
+          tickFormatter={(v) => formatAxis(v, "dollar")}
           tick={{ fill: tickColor, fontSize: 11 }}
           axisLine={{ stroke: gridColor }}
           tickLine={false}

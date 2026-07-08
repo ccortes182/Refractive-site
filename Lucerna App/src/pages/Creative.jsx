@@ -4,32 +4,54 @@ import ExportCSV from "../components/ExportCSV";
 import FatigueChart from "../components/Charts/FatigueChart";
 import CreativeDrawer from "../components/CreativeDrawer";
 import InfoTooltip from "../components/InfoTooltip";
-import { useTheme } from "../context/ThemeContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LineChart, Line } from "recharts";
+import { fmtD, fmtN } from "../lib/format";
+import { CARD_SM as CARD } from "../lib/card";
+import SortArrow from "../components/SortArrow";
+import { useChartTheme } from "../lib/chartTheme";
+import { scaleAdditive, wobbleRatio } from "../lib/rangeScale";
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-5";
 const SEL = "text-[10px] bg-[var(--bg-surface)] border border-[var(--border-color)] rounded px-2 py-1 text-[var(--text-muted)] focus:outline-none";
 const FC = { Video: "#43a9df", Image: "#8e68ad", Carousel: "#c2dcd4" };
 const FN = { TOF: "#43a9df", MOF: "#8e68ad", BOF: "#34d399" };
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtN = (n) => n.toLocaleString("en-US");
 
 function ScoreBar({ label, score }) {
   const c = score >= 60 ? "#34d399" : score >= 40 ? "#43a9df" : score >= 20 ? "#fbbf24" : "#f87171";
   return (<div className="flex items-center gap-2"><span className="text-[9px] text-[var(--text-muted)] w-10">{label}</span><div className="flex-1 h-1.5 rounded-full bg-[var(--toggle-bg)] overflow-hidden"><div className="h-full rounded-full" style={{ width: `${score}%`, backgroundColor: c }} /></div><span className="text-[10px] font-medium text-[var(--text-primary)] w-6 text-right">{score}</span></div>);
 }
-function SortArrow({ active, direction }) {
-  return (<span className="ml-1 inline-flex flex-col leading-none text-[10px]"><span className={active && direction === "asc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▲</span><span className={active && direction === "desc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▼</span></span>);
-}
 function Pill({ label, onRemove }) {
   return (<span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--accent-blue)]/10 text-[var(--accent-blue)] border border-[var(--accent-blue)]/20">{label}<button onClick={onRemove} className="hover:text-white ml-0.5"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 1l6 6M7 1l-6 6" /></svg></button></span>);
 }
 
-export default function Creative({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
-  const creatives = useMemo(() => getCreatives(), []);
+export default function Creative({ dateRange }) {
+  const { gridColor, tickColor } = useChartTheme();
+  // Scale the static creative snapshot to the selected range: additive metrics
+  // (spend, revenue, impressions, clicks, purchases) scale with range length;
+  // ratio metrics and scores (ROAS, CTR, CPA, thumbstop, scorecard) get a
+  // light per-creative wobble. Aggregates below derive from this scaled list.
+  const creatives = useMemo(
+    () =>
+      getCreatives().map((c) => ({
+        ...c,
+        spend: Math.round(scaleAdditive(c.spend, dateRange)),
+        revenue: Math.round(scaleAdditive(c.revenue, dateRange)),
+        impressions: Math.round(scaleAdditive(c.impressions, dateRange)),
+        clicks: Math.round(scaleAdditive(c.clicks, dateRange)),
+        purchases: Math.round(scaleAdditive(c.purchases, dateRange)),
+        roas: Math.round(wobbleRatio(c.roas, `creative:${c.id}:roas`, dateRange, 0.04) * 100) / 100,
+        ctr: Math.round(wobbleRatio(c.ctr, `creative:${c.id}:ctr`, dateRange, 0.04) * 100) / 100,
+        cpa: Math.round(wobbleRatio(c.cpa, `creative:${c.id}:cpa`, dateRange, 0.04) * 100) / 100,
+        thumbstopRate: Math.round(wobbleRatio(c.thumbstopRate, `creative:${c.id}:thumbstopRate`, dateRange, 0.04) * 10) / 10,
+        scorecard: {
+          hook: Math.min(100, Math.round(wobbleRatio(c.scorecard.hook, `creative:${c.id}:hook`, dateRange, 0.04))),
+          watch: Math.min(100, Math.round(wobbleRatio(c.scorecard.watch, `creative:${c.id}:watch`, dateRange, 0.04))),
+          click: Math.min(100, Math.round(wobbleRatio(c.scorecard.click, `creative:${c.id}:click`, dateRange, 0.04))),
+          convert: Math.min(100, Math.round(wobbleRatio(c.scorecard.convert, `creative:${c.id}:convert`, dateRange, 0.04))),
+        },
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dateRange.start, dateRange.end]
+  );
 
   // Sort
   const [sortField, setSortField] = useState("revenue");

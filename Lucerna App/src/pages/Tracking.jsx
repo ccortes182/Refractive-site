@@ -1,7 +1,8 @@
+import { useMemo } from "react";
 import { trackingHealth } from "../data/mockData";
+import { rangeDays, rangeFactor } from "../lib/rangeScale";
 import ExportCSV from "../components/ExportCSV";
 import GaugeChart from "../components/Charts/GaugeChart";
-import { useTheme } from "../context/ThemeContext";
 import {
   BarChart,
   Bar,
@@ -18,19 +19,38 @@ import {
   Legend,
 } from "recharts";
 import { format } from "date-fns";
+import { STATUS_STYLES } from "../lib/status";
+import { CARD } from "../lib/card";
+import { useChartTheme } from "../lib/chartTheme";
 
-const CARD =
-  "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6";
 
 export default function Tracking({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "#333" : "#e5e7eb";
-  const tickColor = theme === "dark" ? "#9ca3af" : "#6b7280";
+  const { gridColor, tickColor } = useChartTheme();
+
+  /* ── Range-aware data ───────────────────────────────────── */
+  // Match rate trend: window the 30-day daily series to the selected range.
+  const matchRateSeries = useMemo(() => {
+    const days = Math.min(rangeDays({ start: dateRange.start, end: dateRange.end }), 30);
+    return trackingHealth.dailyMatchRate.slice(-days);
+  }, [dateRange.start, dateRange.end]);
+
+  // Platform revenue figures are period totals: scale by range length.
+  // delta is a ratio of the two revenues, so it is unchanged by scaling
+  // both sides by the same factor — keep the stored value.
+  const platforms = useMemo(() => {
+    const factor = rangeFactor({ start: dateRange.start, end: dateRange.end });
+    return trackingHealth.platforms.map((p) => ({
+      ...p,
+      platformRevenue: Math.round(p.platformRevenue * factor),
+      lucernaRevenue: Math.round(p.lucernaRevenue * factor),
+    }));
+  }, [dateRange.start, dateRange.end]);
 
   /* ── Attribution donut data ─────────────────────────────── */
+  const attributedPct = trackingHealth.attributedPct;
   const attributionData = [
-    { name: "Attributed", value: 78.5, fill: "#43a9df" },
-    { name: "Unattributed", value: 21.5, fill: "var(--border-color)" },
+    { name: "Attributed", value: attributedPct, fill: "#43a9df" },
+    { name: "Unattributed", value: Math.round((100 - attributedPct) * 10) / 10, fill: "var(--border-color)" },
   ];
 
   /* ── Event Match Rates data ─────────────────────────────── */
@@ -39,13 +59,13 @@ export default function Tracking({ dateRange, compare }) {
   /* ── Platform table CSV ─────────────────────────────────── */
   const platformHeaders = [
     "Platform",
-    "Platform Revenue ($)",
-    "Lucerna Revenue ($)",
+    "Platform-Reported ($)",
+    "Lucerna Calibrated ($)",
     "Delta (%)",
     "Status",
   ];
 
-  const platformRows = trackingHealth.platforms.map((p) => [
+  const platformRows = platforms.map((p) => [
     p.platform,
     p.platformRevenue,
     p.lucernaRevenue,
@@ -67,7 +87,7 @@ export default function Tracking({ dateRange, compare }) {
     }
     if (s === "warning") {
       return (
-        <span className="rounded-full px-2 py-0.5 text-[10px] font-medium bg-[#fbbf24]/15 text-[#fbbf24]">
+        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLES.warning.pill}`}>
           Warning
         </span>
       );
@@ -82,7 +102,7 @@ export default function Tracking({ dateRange, compare }) {
   /* ── UTM bar color helper ───────────────────────────────── */
   const utmBarColor = (coverage) => {
     if (coverage > 80) return "#43a9df";
-    if (coverage >= 20) return "#fbbf24";
+    if (coverage >= 20) return "var(--warning)";
     return "#f87171";
   };
 
@@ -137,7 +157,7 @@ export default function Tracking({ dateRange, compare }) {
             </ResponsiveContainer>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <span className="text-xl font-bold text-[var(--text-primary)]">
-                78.5%
+                {attributedPct}%
               </span>
             </div>
           </div>
@@ -151,8 +171,8 @@ export default function Tracking({ dateRange, compare }) {
           <div className="space-y-3">
             {[
               { label: "Overall Score", value: `${trackingHealth.overallScore}/100` },
-              { label: "Events Tracked", value: "4" },
-              { label: "Platforms Monitored", value: "4" },
+              { label: "Events Tracked", value: String(trackingHealth.events.length) },
+              { label: "Platforms Monitored", value: String(trackingHealth.platforms.length) },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -230,10 +250,10 @@ export default function Tracking({ dateRange, compare }) {
                   Platform
                 </th>
                 <th className="py-2 px-3 font-medium text-[var(--text-secondary)]">
-                  Platform Revenue ($)
+                  Platform-Reported ($)
                 </th>
                 <th className="py-2 px-3 font-medium text-[var(--text-secondary)]">
-                  Lucerna Revenue ($)
+                  Lucerna Calibrated ($)
                 </th>
                 <th className="py-2 px-3 font-medium text-[var(--text-secondary)]">
                   Delta
@@ -244,7 +264,7 @@ export default function Tracking({ dateRange, compare }) {
               </tr>
             </thead>
             <tbody>
-              {trackingHealth.platforms.map((p) => (
+              {platforms.map((p) => (
                 <tr
                   key={p.platform}
                   className="border-b border-[var(--border-color)] last:border-0"
@@ -272,10 +292,10 @@ export default function Tracking({ dateRange, compare }) {
       {/* Daily Match Rate Trend */}
       <div className={CARD}>
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">
-          Match Rate Trend (30 Days)
+          Match Rate Trend ({matchRateSeries.length} Days)
         </h3>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={trackingHealth.dailyMatchRate}>
+          <LineChart data={matchRateSeries}>
             <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
             <XAxis
               dataKey="date"

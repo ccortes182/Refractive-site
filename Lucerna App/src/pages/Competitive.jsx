@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { competitiveData } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import {
   BarChart,
   Bar,
@@ -15,14 +14,29 @@ import {
   Line,
   Legend,
 } from "recharts";
-import { format } from "date-fns";
+import { rangeDays } from "../lib/rangeScale";
+import { STATUS_STYLES } from "../lib/status";
+import { useChartTheme } from "../lib/chartTheme";
 
 export default function Competitive({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const comp = competitiveData;
+
+  /* ── Range-aware data ───────────────────────────────────── */
+  // Share of search and CPM trends are 30-day daily series: window them
+  // to the selected range. Values are shares/rates (ratios), so nothing
+  // is scaled. Share of voice, price index, and monthly seasonality are
+  // snapshots — left untouched.
+  const shareOfSearch = useMemo(() => {
+    const days = Math.min(rangeDays({ start: dateRange.start, end: dateRange.end }), 30);
+    return competitiveData.shareOfSearch.slice(-days);
+  }, [dateRange.start, dateRange.end]);
+
+  const cpmTrend = useMemo(() => {
+    const days = Math.min(rangeDays({ start: dateRange.start, end: dateRange.end }), 30);
+    return competitiveData.cpmTrend.slice(-days);
+  }, [dateRange.start, dateRange.end]);
 
   // Color bar by value intensity for seasonality
   const getSeasonalityColor = (value) => {
@@ -40,7 +54,7 @@ export default function Competitive({ dateRange, compare }) {
       <div className="bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Share of Search Trend</h3>
         <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={comp.shareOfSearch} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <LineChart data={shareOfSearch} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
             <CartesianGrid stroke={gridColor} strokeDasharray="3 3" />
             <XAxis
               dataKey="dateStr"
@@ -119,7 +133,7 @@ export default function Competitive({ dateRange, compare }) {
       <div className="bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)] p-6">
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Platform CPM Trends</h3>
         <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={comp.cpmTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <LineChart data={cpmTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
             <CartesianGrid stroke={gridColor} strokeDasharray="3 3" />
             <XAxis
               dataKey="dateStr"
@@ -175,7 +189,7 @@ export default function Competitive({ dateRange, compare }) {
             </thead>
             <tbody>
               {comp.priceIndex.map((row) => {
-                const deltaColor = row.delta > 0 ? "text-yellow-400" : "text-green-400";
+                const deltaColor = row.delta > 0 ? STATUS_STYLES.warning.text : STATUS_STYLES.positive.text;
                 return (
                   <tr key={row.category} className="border-b border-[var(--border-color)] last:border-0">
                     <td className="py-2 px-3 text-[var(--text-primary)]">{row.category}</td>

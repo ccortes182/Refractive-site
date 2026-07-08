@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { getProfitabilityData } from "../data/mockData";
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import {
   BarChart,
   Bar,
@@ -17,6 +16,7 @@ import {
   Legend,
 } from "recharts";
 import { format } from "date-fns";
+import { useChartTheme } from "../lib/chartTheme";
 
 /* ── Tooltips ── */
 const DollarTooltip = ({ active, payload, label }) => {
@@ -70,9 +70,7 @@ const MarginTooltip = ({ active, payload, label }) => {
 };
 
 export default function Profitability({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   const profit = useMemo(
     () => getProfitabilityData(dateRange.start, dateRange.end),
@@ -113,7 +111,7 @@ export default function Profitability({ dateRange, compare }) {
         <KPICard
           title="Breakeven ROAS"
           value={`${profit.breakevenRoas}x`}
-          change={0}
+          change={null}
           index={3}
         />
       </div>

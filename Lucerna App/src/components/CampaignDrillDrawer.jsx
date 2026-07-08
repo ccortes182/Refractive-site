@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useTheme } from "../context/ThemeContext";
 import { getCampaignDailyForRange } from "../data/campaignsData";
+import { fmtD, fmtN, fmtX } from "../lib/format";
+import { useChartTheme } from "../lib/chartTheme";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -11,9 +12,6 @@ const CHANNEL_COLORS = {
   SMS: "#f472b6",
 };
 
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtN = (n) => n.toLocaleString("en-US");
-const fmtX = (n) => (n != null ? n.toFixed(2) + "x" : "—");
 
 function StatusPill({ status }) {
   const cls = status === "Active"
@@ -34,9 +32,7 @@ function KpiTile({ label, value }) {
 }
 
 export default function CampaignDrillDrawer({ open, onClose, campaign, dateRange }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor } = useChartTheme();
 
   useEffect(() => {
     if (!open) return;

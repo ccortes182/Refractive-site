@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import { format } from 'date-fns';
 import { useTheme } from '../../context/ThemeContext';
+import { fmtD, formatAxis } from "../../lib/format";
 
 const CHANNELS = [
   { key: 'Paid Search', color: '#43a9df' },
@@ -32,7 +33,7 @@ function makeTooltip({ chartMode }) {
     );
     const isIndexed = chartMode === 'indexed';
     const total = isIndexed ? null : entries.reduce((s, e) => s + (e.value || 0), 0);
-    const fmt = (v) => (isIndexed ? Math.round(v * 10) / 10 : `$${Math.round(v).toLocaleString()}`);
+    const fmt = (v) => (isIndexed ? Math.round(v * 10) / 10 : fmtD(v));
     return (
       <div className="rounded-lg border border-[var(--tooltip-border)] bg-[var(--tooltip-bg)] backdrop-blur-xl px-3 py-2 text-xs shadow-md min-w-[160px]">
         <p className="mb-1.5 font-medium text-[var(--text-primary)]">{label}</p>
@@ -134,7 +135,7 @@ export default function ChannelChart({
 
   const formatYAxis = chartMode === 'indexed'
     ? (v) => `${Math.round(v)}`
-    : (v) => `$${Math.round(v / 1000)}K`;
+    : (v) => formatAxis(v, "dollar");
 
   const sharedProps = { data: chartData };
   const Tip = useMemo(() => makeTooltip({ chartMode }), [chartMode]);

@@ -11,6 +11,7 @@ import {
   setTypeTarget,
   addCustomPlatform,
 } from "./channelsBudgets";
+import { escapeCsvCell } from "../lib/csv";
 
 // ─────────────────────────────────────────────────────────────────────────
 // CSV download/upload for the Budgets matrix.
@@ -65,13 +66,6 @@ function resolveMonthlyCell(budgets, channel, platform, platformWeight, type, ty
   return defaultMonthly ?? null;
 }
 
-function escapeCsvCell(v) {
-  const s = String(v ?? "");
-  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
-    return '"' + s.replace(/"/g, '""') + '"';
-  }
-  return s;
-}
 
 function pushRow(rows, budgets, channel, platform, platformWeight, type, typeWeight, mode, defMonthly, year) {
   const cells = [];

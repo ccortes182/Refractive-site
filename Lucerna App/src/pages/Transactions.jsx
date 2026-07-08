@@ -2,8 +2,9 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { transactionsData } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
+import { fmtDC as fmtDollar } from "../lib/format";
+import { CARD_BASE as CARD } from "../lib/card";
 
-const CARD = "bg-[var(--bg-card-solid)] rounded-xl border border-[var(--border-color)]";
 
 const STATUS_STYLES = {
   Fulfilled: "bg-[var(--badge-positive-bg)] text-[var(--badge-positive-text)]",
@@ -205,7 +206,6 @@ export default function Transactions({ dateRange, compare }) {
     setPage(0); setSearchParams({});
   };
 
-  const fmtDollar = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
     <div className="space-y-4">

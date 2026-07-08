@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
+import { fmtCompact } from "../../lib/format";
 
 const FIPS = {
   "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT",
@@ -27,12 +28,7 @@ const STATE_NAMES = {
   VA:"Virginia",WA:"Washington",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming",
 };
 
-const fmtD = (n) => {
-  if (n == null) return "—";
-  if (Math.abs(n) >= 1e6) return "$" + (n / 1e6).toFixed(1) + "M";
-  if (Math.abs(n) >= 1e3) return "$" + (n / 1e3).toFixed(1) + "K";
-  return "$" + Math.round(n).toLocaleString();
-};
+const fmtD = fmtCompact;
 
 function interpolateColor(t) {
   const c = Math.max(0, Math.min(1, t));

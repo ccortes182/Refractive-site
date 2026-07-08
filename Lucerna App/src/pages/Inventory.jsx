@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { inventoryData } from "../data/mockData";
 import KPICard from "../components/KPICard";
 import ExportCSV from "../components/ExportCSV";
-import { useTheme } from "../context/ThemeContext";
 import {
   BarChart,
   Bar,
@@ -13,13 +12,17 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { statusStyle } from "../lib/status";
+import SortArrow from "../components/SortArrow";
+import { useChartTheme } from "../lib/chartTheme";
+import { scaleAdditive } from "../lib/rangeScale";
 
 /* ── Status badge helper ── */
 const statusConfig = {
-  Critical: "bg-red-500/15 text-red-400 border border-red-500/20",
-  Low: "bg-yellow-500/15 text-yellow-400 border border-yellow-500/20",
-  Healthy: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20",
-  Overstock: "bg-blue-500/15 text-blue-400 border border-blue-500/20",
+  Critical: statusStyle("Critical").pill,
+  Low: statusStyle("Low").pill,
+  Healthy: statusStyle("Healthy").pill,
+  Overstock: statusStyle("Overstock").pill,
 };
 
 const StatusBadge = ({ status }) => (
@@ -32,24 +35,6 @@ const StatusBadge = ({ status }) => (
   </span>
 );
 
-/* ── Sort Arrow ── */
-const SortArrow = ({ active, dir }) => (
-  <svg
-    className={`inline ml-1 h-3 w-3 ${active ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
-    viewBox="0 0 12 12"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {dir === "asc" ? (
-      <path d="M6 9V3M6 3L3 6M6 3l3 3" />
-    ) : (
-      <path d="M6 3v6M6 9l-3-3M6 9l3-3" />
-    )}
-  </svg>
-);
 
 /* ── Chart Tooltip ── */
 const SpendTooltip = ({ active, payload, label }) => {
@@ -79,12 +64,32 @@ const SpendTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function Inventory({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+export default function Inventory({ dateRange }) {
+  const { gridColor, tickColor } = useChartTheme();
 
-  const data = inventoryData || [];
+  // Ad spend is a period metric, so it scales with the selected range.
+  // Stock levels, days of supply, and sell-through are point-in-time
+  // snapshots and stay untouched.
+  const data = useMemo(
+    () =>
+      (inventoryData || []).map((d) => ({
+        ...d,
+        adSpend: Math.round(
+          scaleAdditive(d.adSpend || 0, {
+            start: dateRange.start,
+            end: dateRange.end,
+          })
+        ),
+      })),
+    [dateRange.start, dateRange.end]
+  );
+
+  // Mismatch threshold is spend-based, so it scales with the range too:
+  // the same products flag regardless of window length.
+  const mismatchThreshold = scaleAdditive(500, {
+    start: dateRange.start,
+    end: dateRange.end,
+  });
 
   /* ── KPI computations ── */
   const kpis = useMemo(() => {
@@ -168,25 +173,26 @@ export default function Inventory({ dateRange, compare }) {
         <KPICard
           title="Avg Days of Supply"
           value={kpis.avgDaysOfSupply}
-          change={0}
+          change={null}
           index={0}
         />
         <KPICard
           title="Stockout Risk Items"
           value={kpis.criticalCount}
-          change={kpis.criticalCount > 0 ? -kpis.criticalCount : 0}
+          change={null}
+          subtitle={kpis.criticalCount > 0 ? "Needs reorder now" : "All items healthy"}
           index={1}
         />
         <KPICard
           title="Overstock Items"
           value={kpis.overstockCount}
-          change={0}
+          change={null}
           index={2}
         />
         <KPICard
           title="Avg Sell-Through Rate"
           value={`${kpis.avgSellThrough}%`}
-          change={0}
+          change={null}
           index={3}
         />
       </div>
@@ -210,7 +216,7 @@ export default function Inventory({ dateRange, compare }) {
                   Product
                   <SortArrow
                     active={sortCol === "product"}
-                    dir={sortCol === "product" ? sortDir : "asc"}
+                    direction={sortCol === "product" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -220,7 +226,7 @@ export default function Inventory({ dateRange, compare }) {
                   Current Stock
                   <SortArrow
                     active={sortCol === "currentStock"}
-                    dir={sortCol === "currentStock" ? sortDir : "asc"}
+                    direction={sortCol === "currentStock" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -230,7 +236,7 @@ export default function Inventory({ dateRange, compare }) {
                   Daily Sell Rate
                   <SortArrow
                     active={sortCol === "dailySellRate"}
-                    dir={sortCol === "dailySellRate" ? sortDir : "asc"}
+                    direction={sortCol === "dailySellRate" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -240,7 +246,7 @@ export default function Inventory({ dateRange, compare }) {
                   Days of Supply
                   <SortArrow
                     active={sortCol === "daysOfSupply"}
-                    dir={sortCol === "daysOfSupply" ? sortDir : "asc"}
+                    direction={sortCol === "daysOfSupply" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -250,7 +256,7 @@ export default function Inventory({ dateRange, compare }) {
                   Sell-Through %
                   <SortArrow
                     active={sortCol === "sellThroughPct"}
-                    dir={sortCol === "sellThroughPct" ? sortDir : "asc"}
+                    direction={sortCol === "sellThroughPct" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -260,7 +266,7 @@ export default function Inventory({ dateRange, compare }) {
                   Status
                   <SortArrow
                     active={sortCol === "status"}
-                    dir={sortCol === "status" ? sortDir : "asc"}
+                    direction={sortCol === "status" ? sortDir : "asc"}
                   />
                 </th>
                 <th
@@ -270,7 +276,7 @@ export default function Inventory({ dateRange, compare }) {
                   Ad Spend ($)
                   <SortArrow
                     active={sortCol === "adSpend"}
-                    dir={sortCol === "adSpend" ? sortDir : "asc"}
+                    direction={sortCol === "adSpend" ? sortDir : "asc"}
                   />
                 </th>
               </tr>
@@ -429,7 +435,7 @@ export default function Inventory({ dateRange, compare }) {
             <tbody>
               {topBySpend.map((row, i) => {
                 const mismatch =
-                  (row.adSpend || 0) > 500 &&
+                  (row.adSpend || 0) > mismatchThreshold &&
                   (row.status === "Critical" || row.status === "Low");
                 return (
                   <tr

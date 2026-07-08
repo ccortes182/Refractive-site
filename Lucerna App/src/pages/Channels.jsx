@@ -49,6 +49,9 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { fmtD, fmtDC, fmtN, fmtCompactN as fmtCompact } from "../lib/format";
+import SortArrow from "../components/SortArrow";
+import { metricDefinition } from "../data/metricDefinitions";
 
 const CHANNEL_COLORS = {
   "Paid Search": "#43a9df",
@@ -59,24 +62,7 @@ const CHANNEL_COLORS = {
   Direct: "#fbbf24",
 };
 
-const fmtCompact = (n) => {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(0) + "K";
-  return Math.round(n).toString();
-};
 
-const fmtN = (n) => n.toLocaleString("en-US");
-const fmtD = (n) => "$" + Math.round(n).toLocaleString("en-US");
-const fmtDC = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-function SortArrow({ active, direction }) {
-  return (
-    <span className="ml-1 inline-flex flex-col leading-none text-[10px]">
-      <span className={active && direction === "asc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▲</span>
-      <span className={active && direction === "desc" ? "text-[var(--accent-blue)]" : "text-[var(--text-muted)] opacity-30"}>▼</span>
-    </span>
-  );
-}
 
 function Pill({ label, onRemove }) {
   return (
@@ -191,7 +177,7 @@ function renderCell(row, key, pacing) {
         <span className="inline-flex items-center gap-1 justify-end w-full">
           <span className="text-[var(--text-secondary)]">{row.platformRoas.toFixed(2)}x</span>
           {overcount != null && overcount > 0 && (
-            <span className="text-[9px] text-[#fbbf24]">+{overcount}%</span>
+            <span className="text-[9px] text-[var(--warning)]" title="Platform over-report vs Lucerna calibrated">+{overcount}%</span>
           )}
         </span>
       );
@@ -694,15 +680,15 @@ export default function Channels({ dateRange, compare }) {
 
       {/* KPI Row */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-        <KPICard title="Total Spend" value={fmtD(totals.spend)} change={pct(totals.spend, priorTotals.spend)} index={0}
+        <KPICard title="Total Spend" value={fmtD(totals.spend)} change={pct(totals.spend, priorTotals.spend)} goodIfUp={false} index={0}
           compareEnabled={compareEnabled} priorValue={compareEnabled ? fmtD(priorTotals.spend) : null} />
         <KPICard title="Total Revenue" value={fmtD(totals.revenue)} change={pct(totals.revenue, priorTotals.revenue)} index={1}
           compareEnabled={compareEnabled} priorValue={compareEnabled ? fmtD(priorTotals.revenue) : null} />
-        <KPICard title="Blended ROAS" value={totals.blendedRoas != null ? totals.blendedRoas.toFixed(2) + "x" : "—"} change={pct(totals.blendedRoas, priorTotals.blendedRoas)} index={2}
+        <KPICard title="Blended ROAS" description={metricDefinition("blendedRoas")} value={totals.blendedRoas != null ? totals.blendedRoas.toFixed(2) + "x" : "—"} change={pct(totals.blendedRoas, priorTotals.blendedRoas)} index={2}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorTotals.blendedRoas ? priorTotals.blendedRoas.toFixed(2) + "x" : null} />
-        <KPICard title="Blended CPA" value={totals.cpa != null ? fmtDC(totals.cpa) : "—"} change={pct(totals.cpa, priorTotals.cpa)} index={3}
+        <KPICard title="Blended CPA" description={metricDefinition("cpa")} value={totals.cpa != null ? fmtDC(totals.cpa) : "—"} change={pct(totals.cpa, priorTotals.cpa)} goodIfUp={false} index={3}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorTotals.cpa ? fmtDC(priorTotals.cpa) : null} />
-        <KPICard title="NC-ROAS" value={totals.ncRoas != null ? totals.ncRoas.toFixed(2) + "x" : "—"} change={pct(totals.ncRoas, priorTotals.ncRoas)} index={4}
+        <KPICard title="NC-ROAS" description={metricDefinition("ncRoas")} value={totals.ncRoas != null ? totals.ncRoas.toFixed(2) + "x" : "—"} change={pct(totals.ncRoas, priorTotals.ncRoas)} index={4}
           compareEnabled={compareEnabled} priorValue={compareEnabled && priorTotals.ncRoas ? priorTotals.ncRoas.toFixed(2) + "x" : null} />
       </div>
 

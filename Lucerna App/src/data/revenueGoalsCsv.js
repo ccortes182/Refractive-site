@@ -1,15 +1,9 @@
 import { ALL_CHANNEL_NAMES } from "./mockData";
 import { setRevenueGoal, resolveGoalForMonth, TOTAL_KEY } from "./revenueGoals";
+import { escapeCsvCell } from "../lib/csv";
 
 const MONTHS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
 
-function escapeCsvCell(v) {
-  const s = String(v ?? "");
-  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
-    return '"' + s.replace(/"/g, '""') + '"';
-  }
-  return s;
-}
 
 function pushRow(rows, goals, channel, displayLabel, year) {
   const cells = [];

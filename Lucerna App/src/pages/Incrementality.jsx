@@ -2,8 +2,12 @@ import { useMemo, useState } from "react";
 import { incrementalityTests, getIncrementalWaterfall, getChannelIncrementalityScores, experimentRecommendations } from "../data/mockData";
 import ExportCSV from "../components/ExportCSV";
 import WaterfallChart from "../components/Charts/WaterfallChart";
-import { useTheme } from "../context/ThemeContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { fmtD as fmtDollar } from "../lib/format";
+import { useChartTheme } from "../lib/chartTheme";
+import { rangeFactor, wobbleRatio } from "../lib/rangeScale";
+import { STATUS_STYLES } from "../lib/status";
+import { loadDrafts, saveDrafts } from "../data/experimentDrafts";
 
 const SCORE_COLORS = ["#43a9df", "#8e68ad", "#c2dcd4", "#f59e0b", "#6b7280"];
 
@@ -18,11 +22,33 @@ const ScoreTooltip = ({ active, payload }) => {
 };
 
 export default function Incrementality({ dateRange, compare }) {
-  const { theme } = useTheme();
-  const gridColor = theme === "dark" ? "rgba(255,255,255,0.06)" : "#e2e8f0";
-  const tickColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "#94a3b8";
+  const { gridColor, tickColor, cursorFill } = useChartTheme();
 
-  const waterfallData = useMemo(() => getIncrementalWaterfall(), []);
+  // Period dollar amounts scale with the selected range; ratio metrics get a
+  // light deterministic wobble. Experiment results (lift, confidence, p-value)
+  // are point-in-time test outcomes and stay static.
+  const waterfallData = useMemo(() => {
+    const factor = rangeFactor(dateRange);
+    return getIncrementalWaterfall().map((step) => ({
+      ...step,
+      value: Math.round(step.value * factor),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange?.start, dateRange?.end]);
+
+  const scaledTests = useMemo(() => {
+    const factor = rangeFactor(dateRange);
+    return incrementalityTests.map((t) => ({
+      ...t,
+      spend: Math.round(t.spend * factor),
+      testGroup: { ...t.testGroup, revenue: Math.round(t.testGroup.revenue * factor) },
+      controlGroup: { ...t.controlGroup, revenue: Math.round(t.controlGroup.revenue * factor) },
+      incrementalRevenue: Math.round(t.incrementalRevenue * factor),
+      iRoas: t.iRoas != null ? wobbleRatio(t.iRoas, `incr:${t.channel}:iroas`, dateRange, 0.04) : null,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange?.start, dateRange?.end]);
+
   const scores = useMemo(() => getChannelIncrementalityScores(), []);
 
   const [expChannel, setExpChannel] = useState("Meta");
@@ -33,15 +59,74 @@ export default function Incrementality({ dateRange, compare }) {
   const [expTestMarkets, setExpTestMarkets] = useState("");
   const [expControlMarkets, setExpControlMarkets] = useState("");
 
+  const [drafts, setDrafts] = useState(() => loadDrafts());
+  const [designError, setDesignError] = useState("");
+  const [designConfirmation, setDesignConfirmation] = useState("");
+
   const getMinDetectableLift = (duration) => {
     if (duration === "2 weeks" || duration === "3 weeks") return "~8-12%";
     if (duration === "4 weeks") return "~5-8%";
     return "~3-5%";
   };
 
-  const estimatedSampleSize = expBudget ? (parseFloat(expBudget.replace(/[^0-9.]/g, "")) * 12).toLocaleString("en-US") : "—";
+  // Two-sample proportion power calculation at 95% confidence / 80% power.
+  // Expected lift comes from the duration's minimum detectable lift midpoint;
+  // baseline conversion is the account's blended site CVR.
+  const CONFIDENCE_LEVEL = 95; // fixed — the designer has no confidence input
+  const BASELINE_CONVERSION = 0.035;
+  const Z_ALPHA = 1.96; // 95% confidence, two-sided
+  const Z_BETA = 0.84; // 80% power
+  const getExpectedLift = (duration) => {
+    if (duration === "2 weeks" || duration === "3 weeks") return 0.10;
+    if (duration === "4 weeks") return 0.065;
+    return 0.04;
+  };
 
-  const fmtDollar = (n) => "$" + Math.round(n).toLocaleString("en-US");
+  const parsedBudget = parseFloat((expBudget || "").replace(/[^0-9.]/g, ""));
+
+  const estimatedSampleSize = useMemo(() => {
+    if (!Number.isFinite(parsedBudget) || parsedBudget <= 0) return "—";
+    const lift = getExpectedLift(expDuration);
+    const p = BASELINE_CONVERSION;
+    const delta = p * lift;
+    // Required visitors per group, doubled for test + control.
+    const perGroup = (2 * Math.pow(Z_ALPHA + Z_BETA, 2) * p * (1 - p)) / Math.pow(delta, 2);
+    // A larger budget buys more geos/audience overlap, trimming waste slightly.
+    const budgetEfficiency = 1 + 5000 / (parsedBudget + 5000); // 2.0 → 1.0 as budget grows
+    return Math.round(2 * perGroup * budgetEfficiency).toLocaleString("en-US");
+  }, [parsedBudget, expDuration]);
+
+  const handleLaunchExperiment = () => {
+    const missing = [];
+    if (!expChannel) missing.push("channel");
+    if (!expTestType) missing.push("test type");
+    if (!expMetric) missing.push("success metric");
+    if (!expDuration) missing.push("duration");
+    if (!Number.isFinite(parsedBudget) || parsedBudget <= 0) missing.push("a budget greater than $0");
+    if (missing.length > 0) {
+      setDesignConfirmation("");
+      setDesignError(`Please provide ${missing.join(", ")}.`);
+      return;
+    }
+    const draft = {
+      id: `draft-${Date.now()}`,
+      channel: expChannel,
+      testType: expTestType,
+      metric: expMetric,
+      duration: expDuration,
+      budget: parsedBudget,
+      testMarkets: expTestMarkets.trim(),
+      controlMarkets: expControlMarkets.trim(),
+      status: "Draft",
+      createdAt: new Date().toISOString(),
+    };
+    const next = [draft, ...drafts];
+    setDrafts(next);
+    saveDrafts(next);
+    setDesignError("");
+    setDesignConfirmation("Draft saved — your CSM will review the design");
+  };
+
 
   const statusClasses = {
     Completed: "bg-[var(--badge-positive-bg)] text-[var(--badge-positive-text)]",
@@ -51,8 +136,34 @@ export default function Incrementality({ dateRange, compare }) {
 
   return (
     <div>
-      {/* Active Tests */}
+      {/* Active Tests (saved drafts first, then completed/running tests) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {drafts.map((draft) => (
+          <div
+            key={draft.id}
+            className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-solid)] backdrop-blur-2xl p-5 hover:border-[var(--border-hover)] transition-colors"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-[var(--text-primary)]">{draft.channel}</h3>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_STYLES.info.pill}`}>
+                Draft
+              </span>
+            </div>
+            <p className="text-xs text-[var(--text-muted)] mb-3">
+              {draft.testType} &middot; {draft.metric}
+            </p>
+            <p className="text-3xl font-semibold text-[var(--text-primary)]">{fmtDollar(draft.budget)}</p>
+            <p className="text-xs text-[var(--text-muted)] mt-1">Budget &middot; {draft.duration}</p>
+            <div className="mt-3 flex items-center gap-4 text-xs text-[var(--text-secondary)]">
+              <span>
+                Test: <span className="font-medium text-[var(--text-primary)]">{draft.testMarkets || "TBD"}</span>
+              </span>
+              <span>
+                Control: <span className="font-medium text-[var(--text-primary)]">{draft.controlMarkets || "TBD"}</span>
+              </span>
+            </div>
+          </div>
+        ))}
         {incrementalityTests.map((test) => (
           <div
             key={test.id}
@@ -92,7 +203,7 @@ export default function Incrementality({ dateRange, compare }) {
         <div className="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
           <h2 className="text-lg font-semibold text-[var(--text-primary)]">Incremental ROAS by Channel</h2>
           <ExportCSV
-            data={incrementalityTests.map((t) => ({
+            data={scaledTests.map((t) => ({
               Channel: t.channel,
               Spend: t.spend,
               "Total Revenue": t.testGroup.revenue,
@@ -116,7 +227,7 @@ export default function Incrementality({ dateRange, compare }) {
               </tr>
             </thead>
             <tbody>
-              {incrementalityTests.map((row, i) => (
+              {scaledTests.map((row, i) => (
                 <tr key={row.id} className={i % 2 === 0 ? "bg-transparent" : "bg-[var(--bg-table-stripe)]"}>
                   <td className="px-6 py-3 text-left font-medium text-[var(--text-primary)]">{row.channel}</td>
                   <td className="px-6 py-3 text-right text-[var(--text-secondary)]">{fmtDollar(row.spend)}</td>
@@ -152,7 +263,7 @@ export default function Incrementality({ dateRange, compare }) {
               axisLine={false}
               width={100}
             />
-            <Tooltip content={<ScoreTooltip />} cursor={{ fill: theme === "dark" ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)" }} />
+            <Tooltip content={<ScoreTooltip />} cursor={{ fill: cursorFill }} />
             <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={24}>
               {scores.map((_, idx) => (
                 <Cell key={idx} fill={SCORE_COLORS[idx % SCORE_COLORS.length]} />
@@ -226,15 +337,20 @@ export default function Incrementality({ dateRange, compare }) {
             </div>
             <div>
               <span className="text-[var(--text-muted)]">Confidence Level</span>
-              <p className="text-sm font-semibold text-[var(--text-primary)] mt-0.5">95%</p>
+              <p className="text-sm font-semibold text-[var(--text-primary)] mt-0.5">{CONFIDENCE_LEVEL}%</p>
             </div>
           </div>
         </div>
 
         <div className="mt-5">
-          <button className="bg-gradient-to-r from-[#43a9df] to-[#8e68ad] text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity">
+          <button
+            onClick={handleLaunchExperiment}
+            className="bg-gradient-to-r from-[#43a9df] to-[#8e68ad] text-white text-sm font-medium px-6 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
+          >
             Launch Experiment
           </button>
+          {designError && <p className="mt-2 text-xs text-[var(--error)]">{designError}</p>}
+          {designConfirmation && <p className="mt-2 text-xs text-[var(--text-muted)]">{designConfirmation}</p>}
         </div>
       </div>
 

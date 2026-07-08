@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import InfoTooltip from "./InfoTooltip";
 
 export default function KPICard({
   title,
   value,
   change,
+  description = null,
   sparklineData = [],
   prefix = "",
   suffix = "",
@@ -16,6 +18,7 @@ export default function KPICard({
   children = null,
   subtitle = null,
   anomaly = null, // { isPositive: bool, isGood: bool, change: number } or null
+  goodIfUp = true, // false for cost metrics (CAC, CPA, churn) where a drop is good
 }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -24,8 +27,10 @@ export default function KPICard({
     const timer = setTimeout(() => setVisible(true), index * 80);
     return () => clearTimeout(timer);
   }, [index]);
+  const hasChange = change != null && !Number.isNaN(change);
   const isPositive = change >= 0;
-  const chartColor = isPositive ? "#43a9df" : "#ef4444";
+  const isGood = isPositive === goodIfUp;
+  const chartColor = isGood || !hasChange ? "var(--accent-blue)" : "var(--error)";
   const gradientId = `gradient-${title?.replace(/\s+/g, "-").toLowerCase()}`;
 
   const chartData = (sparklineData || []).map((v) => ({ value: v }));
@@ -46,6 +51,7 @@ export default function KPICard({
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 leading-tight min-h-[2.25rem]">
           {title}
+          {description && <InfoTooltip text={description} />}
           {anomaly && (
             <span
               className="relative inline-flex w-2 h-2"
@@ -75,9 +81,10 @@ export default function KPICard({
           {suffix}
         </span>
 
+        {hasChange && (
         <span
           className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-medium whitespace-nowrap flex-shrink-0 ${
-            isPositive
+            isGood
               ? "bg-[var(--badge-positive-bg)] text-[var(--badge-positive-text)]"
               : "bg-[var(--badge-negative-bg)] text-[var(--badge-negative-text)]"
           }`}
@@ -110,6 +117,7 @@ export default function KPICard({
           {isPositive ? "+" : ""}
           {change}%
         </span>
+        )}
       </div>
 
       {subtitle && (
@@ -119,8 +127,8 @@ export default function KPICard({
       {/* Prior period value */}
       {compareEnabled && priorValue != null && (
         <div className="mt-1.5 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#8e68ad]" />
-          <span className="text-xs text-[#8e68ad] font-medium">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-violet)]" />
+          <span className="text-xs text-[var(--accent-violet)] font-medium">
             Prior: {prefix}{priorValue}{suffix}
           </span>
         </div>
