@@ -15,3 +15,9 @@
 /investor/illuminate-roadmap.html             /investor/lucerna-roadmap.html             301
 /illuminate-app/*                             /lucerna-app/:splat                        301
 /downloads/Refractive_Illuminate_Roadmap.pdf  /downloads/Refractive_Lucerna_Roadmap.pdf  301
+
+# Lucerna app is a react-router SPA (BrowserRouter). Without this fallback any
+# deep link or refresh on a sub-route 404s. Static assets still win over the
+# rewrite, so bundles and images resolve normally. Must stay below the
+# /illuminate-app/* 301 above.
+/lucerna-app/*                                /lucerna-app/index.html                    200

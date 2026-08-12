@@ -45,6 +45,10 @@ function initDeckPrism(containerId) {
 
   var vertSrc = 'attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}';
 
+  // Raymarch step count is the dominant cost in this shader. Phones get a
+  // shorter march — visually near-identical at small sizes, far cheaper.
+  var STEPS = window.innerWidth < 768 ? 45 : 100;
+
   var fragSrc = [
     'precision highp float;',
     'uniform vec2 iResolution;uniform float iTime;uniform mat3 uRot;',
@@ -62,7 +66,7 @@ function initDeckPrism(containerId) {
     'void main(){',
     'vec2 f=(gl_FragCoord.xy-0.5*iResolution.xy)*uPxScale;',
     'float z=5.0,d=0.0;vec3 p;vec4 o=vec4(0.0);',
-    'for(int i=0;i<100;i++){p=uRot*vec3(f,z);vec3 q=p;q.y+=uCenterShift;',
+    'for(int i=0;i<' + STEPS + ';i++){p=uRot*vec3(f,z);vec3 q=p;q.y+=uCenterShift;',
     'd=0.1+0.2*abs(sdPyr(q));z-=d;o+=(sin((p.y+z)*uColorFreq+vec4(0,1,2,3))+1.0)/d;}',
     'o=tanh4(o*o*(uGlow*uBloom)/1e5);vec3 col=o.rgb;',
     'col+=(rand(gl_FragCoord.xy+vec2(iTime))-0.5)*uNoise;col=clamp(col,0.0,1.0);',
@@ -135,9 +139,11 @@ function initDeckPrism(containerId) {
 
   var raf = 0;
   var t0 = performance.now();
+  var lastTime = 0;
 
   function render(t) {
     var time = (t - t0) * 0.001;
+    lastTime = time;
     gl.uniform1f(loc.iTime, time);
     gl.uniform1f(loc.uGlow, params.glow);
     gl.uniform1f(loc.uNoise, params.noise);
@@ -154,12 +160,29 @@ function initDeckPrism(containerId) {
     raf = requestAnimationFrame(render);
   }
 
+  var visible = true;
+
+  function sync() {
+    var shouldRun = visible && !document.hidden;
+    if (shouldRun && !raf) {
+      // Rebase the clock so the prism doesn't jump after being paused.
+      t0 = performance.now() - lastTime * 1000;
+      raf = requestAnimationFrame(render);
+    } else if (!shouldRun && raf) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+  }
+
   var io = new IntersectionObserver(function(entries) {
-    var vis = entries.some(function(e) { return e.isIntersecting; });
-    if (vis && !raf) raf = requestAnimationFrame(render);
-    else if (!vis && raf) { cancelAnimationFrame(raf); raf = 0; }
+    visible = entries.some(function(e) { return e.isIntersecting; });
+    sync();
   });
   io.observe(container);
+
+  // A backgrounded tab should not keep a fragment shader running.
+  document.addEventListener('visibilitychange', sync);
+
   raf = requestAnimationFrame(render);
 
   return { params: params };

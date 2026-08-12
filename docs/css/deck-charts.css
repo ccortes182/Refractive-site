@@ -1,0 +1,579 @@
+/* ==========================================================================
+   Deck Charts — presentation layer for docs/js/deck-charts.js
+   --------------------------------------------------------------------------
+   SVG text is styled here rather than inline so the whole chart system can be
+   retuned from one place. Font sizes are in SVG user units, so they scale with
+   the viewBox — the mobile blocks bump them up to stay legible once a wide
+   chart is squeezed onto a phone.
+   ========================================================================== */
+
+/* ── Figure wrapper ── */
+.deck-chart {
+  margin: clamp(6px, 1.2vh, 16px) 0 0;
+  width: 100%;
+}
+
+.deck-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Wide charts must never push a slide past the card height — the viewBox
+     letterboxes rather than forcing the card to scroll. */
+  max-height: 42vh;
+  /* Must be hidden, not visible: the glow filters paint well outside the
+     viewBox, and visible overflow counts toward the card's scroll height,
+     which silently turns slides into scrollable panes. */
+  overflow: hidden;
+}
+
+.deck-viz--split .deck-chart__svg,
+.deck-viz--split-wide .deck-chart__svg,
+.deck-card--split .deck-chart__svg {
+  max-height: 54vh;
+}
+
+/* Square charts would otherwise stretch to the full column width and swamp
+   the slide — they read best at a fixed, modest size. */
+.deck-chart[data-chart="ring"] .deck-chart__svg {
+  max-width: min(220px, 26vh);
+  max-height: min(220px, 26vh);
+  margin: 0 auto;
+}
+
+/* Honesty label for modelled / illustrative figures. */
+.deck-chart__note {
+  margin-top: clamp(4px, 0.8vh, 10px);
+  font-size: clamp(0.55rem, 0.5rem + 0.15vw, 0.68rem);
+  color: var(--color-text-muted);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* Screen-reader data table — the chart's content in linear form. */
+.deck-chart__a11y {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SVG typography
+   ═══════════════════════════════════════════ */
+
+.deck-chart__svg text {
+  font-family: var(--font-body);
+  fill: var(--color-text-secondary);
+}
+
+/* Row / axis labels */
+.deck-chart__label {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  fill: var(--color-text-secondary);
+}
+.deck-chart__label.is-hi {
+  fill: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Secondary descriptive text */
+.deck-chart__sub {
+  font-size: 11.5px;
+  fill: var(--color-text-muted);
+}
+.deck-chart__sub.is-hi { fill: var(--color-accent-cyan); }
+
+/* Numeric values */
+.deck-chart__value {
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+  fill: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.deck-chart__value.is-hi { fill: var(--color-accent-blue); }
+.deck-chart__value.is-loss { fill: #b28e8e; }
+
+/* Stage / node headings inside a chart */
+.deck-chart__stage {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  fill: var(--color-text-primary);
+}
+
+.deck-chart__node {
+  font-size: 10.5px;
+  font-weight: var(--font-weight-medium);
+  fill: var(--color-text-secondary);
+}
+
+.deck-chart__outcome {
+  font-size: 11px;
+  fill: var(--color-accent-blue);
+}
+
+.deck-chart__leak {
+  font-size: 11px;
+  fill: #b28e8e;
+}
+
+/* Grid ticks */
+.deck-chart__tick {
+  font-size: 10.5px;
+  fill: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Axis captions */
+.deck-chart__axis {
+  font-size: 11.5px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  fill: var(--color-text-muted);
+}
+.deck-chart__axis.is-hi { fill: var(--color-accent-blue); }
+
+/* Big centred number in a donut / ring */
+.deck-chart__centre {
+  font-size: 30px;
+  font-weight: var(--font-weight-black);
+  fill: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pulsing halo on the highlighted quadrant point */
+.deck-chart__pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: deck-chart-pulse 2.4s var(--ease-out) infinite;
+}
+
+@keyframes deck-chart-pulse {
+  0%   { transform: scale(1);   opacity: 0.32; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   Chart + copy side-by-side layout
+   ═══════════════════════════════════════════ */
+
+/* A slide where the chart carries the argument and copy plays support. */
+.deck-viz {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(6px, 1vh, 14px);
+  align-items: center;
+}
+
+.deck-viz--split {
+  grid-template-columns: 1fr 1.15fr;
+  gap: clamp(12px, 2vw, 30px);
+}
+
+.deck-viz--split-wide {
+  grid-template-columns: 0.85fr 1.4fr;
+  gap: clamp(12px, 2vw, 30px);
+}
+
+/* Split card where the visual, not the copy, is the point of the slide. */
+.deck-card--split-viz .deck-card__inner {
+  grid-template-columns: 0.92fr 1.3fr;
+}
+
+/* Compact caption tiles that sit under a chart instead of full text tiles. */
+.deck-captions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: clamp(6px, 0.9vh, 12px);
+  margin-top: clamp(6px, 1vh, 14px);
+}
+
+.deck-caption {
+  padding: clamp(6px, 0.8vh, 10px) clamp(8px, 1vw, 14px);
+  background: rgba(255, 255, 255, 0.022);
+  border-left: 2px solid var(--color-accent-blue);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.deck-caption h3 {
+  font-size: clamp(0.68rem, 0.6rem + 0.25vw, 0.85rem);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 1px;
+  color: var(--color-text-primary);
+}
+
+.deck-caption p {
+  font-size: clamp(0.62rem, 0.56rem + 0.2vw, 0.76rem);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.deck-caption--loss { border-left-color: #b28e8e; }
+
+/* ═══════════════════════════════════════════
+   Lucerna tier strip — stacked rows so it fits a split column
+   ═══════════════════════════════════════════ */
+
+.deck-tiers {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.7vh, 8px);
+  margin: clamp(6px, 1vh, 12px) 0;
+}
+
+.deck-tier-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px clamp(8px, 1vw, 16px);
+  align-items: baseline;
+  padding: clamp(6px, 0.9vh, 11px) clamp(9px, 1vw, 14px);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-normal) var(--ease-out);
+}
+
+.deck-tier-row:hover { border-color: rgba(67, 169, 223, 0.25); }
+
+.deck-tier-row--featured {
+  border-color: rgba(67, 169, 223, 0.3);
+  background: rgba(67, 169, 223, 0.05);
+}
+
+.deck-tier-row__name {
+  font-size: clamp(0.75rem, 0.66rem + 0.3vw, 0.95rem);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.deck-tier-row__price {
+  font-size: clamp(0.85rem, 0.72rem + 0.45vw, 1.15rem);
+  font-weight: var(--font-weight-bold);
+  background: var(--color-accent-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin: 0;
+  text-align: right;
+}
+
+.deck-tier-row__price span {
+  font-size: 0.68em;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Pitch and fit band share the second row of the grid. */
+.deck-tier-row__pitch {
+  grid-column: 1;
+  font-size: clamp(0.6rem, 0.55rem + 0.18vw, 0.74rem);
+  color: var(--color-text-muted);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.deck-tier-row__fit {
+  grid-column: 2;
+  font-size: clamp(0.55rem, 0.5rem + 0.15vw, 0.68rem);
+  color: var(--color-accent-blue);
+  white-space: nowrap;
+  text-align: right;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════
+   Logo walls (portfolio / integrations)
+   ═══════════════════════════════════════════ */
+
+.deck-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(8px, 1.2vh, 16px);
+  margin: clamp(8px, 1.4vh, 18px) 0;
+}
+
+.deck-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: clamp(10px, 1.4vh, 18px) clamp(8px, 1vw, 14px);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  transition: border-color var(--duration-normal) var(--ease-out),
+              background var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
+}
+
+.deck-logo:hover {
+  border-color: rgba(67, 169, 223, 0.28);
+  background: rgba(255, 255, 255, 0.045);
+  transform: translateY(-2px);
+}
+
+.deck-logo img {
+  height: clamp(18px, 2.6vh, 30px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  opacity: 0.85;
+  filter: grayscale(1) brightness(1.6);
+  transition: opacity var(--duration-normal) var(--ease-out),
+              filter var(--duration-normal) var(--ease-out);
+}
+
+.deck-logo:hover img {
+  opacity: 1;
+  filter: grayscale(0) brightness(1);
+}
+
+.deck-logo span {
+  font-size: clamp(0.55rem, 0.5rem + 0.15vw, 0.66rem);
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Small dense strip for platform/integration marks. */
+.deck-logo-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6vw, 26px);
+  padding: clamp(8px, 1.2vh, 14px) 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: clamp(6px, 1vh, 12px);
+}
+
+.deck-logo-strip img {
+  height: clamp(14px, 2vh, 22px);
+  width: auto;
+  opacity: 0.55;
+  filter: grayscale(1) brightness(1.8);
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.deck-logo-strip img:hover { opacity: 0.95; }
+
+/* ═══════════════════════════════════════════
+   People (team slide)
+   ═══════════════════════════════════════════ */
+
+.deck-person__photo,
+.deck-person__monogram {
+  width: clamp(72px, 9vh, 108px);
+  height: clamp(72px, 9vh, 108px);
+  border-radius: 50%;
+  margin: 0 auto clamp(6px, 1vh, 12px);
+  display: block;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.deck-person__monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-style: dashed;
+  font-size: clamp(0.9rem, 0.8rem + 0.5vw, 1.4rem);
+  font-weight: var(--font-weight-bold);
+  background-image: var(--color-accent-gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ═══════════════════════════════════════════
+   Lucerna live embed — browser chrome + iframe
+   ═══════════════════════════════════════════ */
+
+.deck-embed {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #0f0f14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55),
+              0 0 60px rgba(67, 169, 223, 0.06);
+}
+
+/* Fake browser title bar — sells "this is a real product". */
+.deck-embed__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.045);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.deck-embed__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  flex: none;
+}
+
+.deck-embed__url {
+  flex: 1;
+  text-align: center;
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Viewport that the scaled iframe sits inside. */
+.deck-embed__viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+/* The iframe renders at a desktop width and is scaled down, so the real
+   dashboard layout is preserved instead of collapsing to its mobile view. */
+.deck-embed__frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1440px;
+  height: 900px;
+  border: 0;
+  transform-origin: 0 0;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+.deck-embed.is-loaded .deck-embed__frame { opacity: 1; }
+
+/* Poster image shown until the app boots, and used instead of the iframe
+   on phones — a 1.2MB React bundle is the wrong trade on cellular. */
+.deck-embed__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+.deck-embed.is-loaded .deck-embed__poster { opacity: 0; }
+
+.deck-embed__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.62rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: rgba(15, 15, 20, 0.72);
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.deck-embed.is-loaded .deck-embed__loading,
+.deck-embed.is-static .deck-embed__loading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Static embeds show the poster only — no iframe is ever requested. */
+.deck-embed.is-static .deck-embed__frame { display: none; }
+
+.deck-embed__spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-top-color: var(--color-accent-blue);
+  animation: deck-embed-spin 0.8s linear infinite;
+}
+
+@keyframes deck-embed-spin { to { transform: rotate(360deg); } }
+
+.deck-embed__caption {
+  font-size: clamp(0.55rem, 0.5rem + 0.15vw, 0.66rem);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   Mobile — bump SVG type so squeezed charts stay legible
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .deck-viz--split,
+  .deck-viz--split-wide {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Portrait charts render against a ~380-unit viewBox at roughly 0.9 scale,
+     so these land near 12-14 real pixels. */
+  .deck-chart__label  { font-size: 14px; }
+  .deck-chart__sub    { font-size: 12.5px; }
+  .deck-chart__value  { font-size: 14px; }
+  .deck-chart__stage  { font-size: 15px; }
+  .deck-chart__node   { font-size: 11px; }
+  .deck-chart__tick   { font-size: 11px; }
+  .deck-chart__axis   { font-size: 11.5px; }
+  .deck-chart__leak   { font-size: 12px; }
+  .deck-chart__outcome { font-size: 12px; }
+  .deck-chart__centre { font-size: 30px; }
+
+  /* Portrait charts are tall by design — the desktop height cap would
+     letterbox them back down to nothing. */
+  .deck-chart__svg,
+  .deck-viz--split .deck-chart__svg,
+  .deck-viz--split-wide .deck-chart__svg,
+  .deck-card--split .deck-chart__svg {
+    max-height: none;
+  }
+
+  .deck-captions {
+    grid-template-columns: 1fr;
+  }
+
+  .deck-logos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   Reduced motion — charts render complete and hold still
+   ═══════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-chart__pulse,
+  .deck-embed__spinner {
+    animation: none;
+  }
+  .deck-logo,
+  .deck-logo img,
+  .deck-embed__frame,
+  .deck-embed__poster {
+    transition: none;
+  }
+}

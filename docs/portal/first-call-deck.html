@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/deck.css">
+  <link rel="stylesheet" href="../css/deck-charts.css">
 
   <!-- refractive-analytics -->
   <link rel="stylesheet" href="/css/consent.css">
@@ -40,7 +41,7 @@
   <!-- Back to site -->
   <a href="../index.html" class="deck-back">&larr; Back</a>
 
-  <!-- Slide Counter -->
+  <!-- Slide Counter / grid trigger -->
   <div class="deck-counter" id="deck-counter" aria-live="polite">
     <span id="deck-current">1</span> / <span id="deck-total">15</span>
   </div>
@@ -65,11 +66,11 @@
 
     <!-- ── 1. Cover ── -->
     <section class="deck-slide deck-slide--active" id="slide-1" role="group" aria-roledescription="slide" aria-label="Slide 1 of 15: Cover"
-             data-hue="0.0" data-glow="1.0" data-color-freq="1.0" data-bloom="1.0">
+             data-title="Cover" data-hue="0.0" data-glow="1.0" data-color-freq="1.0" data-bloom="1.0">
       <div class="deck-card deck-card--title">
         <div class="deck-card__inner">
-          <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="deck-card__logo deck-anim">
-          <h1 class="deck-anim">Illuminating Brands.<br>Amplifying Reach.</h1>
+          <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="deck-card__logo deck-anim" data-motion="scale">
+          <h1 class="deck-anim" data-motion="chars">Illuminating Brands.<br>Amplifying Reach.</h1>
           <p class="deck-subtitle deck-anim">A growth partner for operator-led eCommerce brands.</p>
           <p class="deck-presenter deck-anim">Christian Cortes &middot; Founder &amp; CEO</p>
           <p class="deck-presenter deck-anim" style="margin-top: 4px;">growth@refractive.co</p>
@@ -79,16 +80,16 @@
 
     <!-- ── 2. The 30-Second Promise ── -->
     <section class="deck-slide" id="slide-2" role="group" aria-roledescription="slide" aria-label="Slide 2 of 15: Promise"
-             data-hue="0.2" data-glow="1.3" data-color-freq="0.9" data-bloom="1.3">
+             data-title="The Promise" data-hue="0.2" data-glow="1.3" data-color-freq="0.9" data-bloom="1.3">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">The Promise</p>
-          <h2 class="deck-anim">We turn signal into momentum.</h2>
+          <h2 class="deck-anim" data-motion="mask">We turn signal into momentum.</h2>
 
           <div class="deck-card__grid deck-card__grid--3 deck-anim">
             <div class="deck-grid-item">
               <h3>One System</h3>
-              <p>Acquisition, experience, and retention on one roadmap. Every channel talks to every other channel.</p>
+              <p>Acquisition, experience and retention on one roadmap. Every channel talks to every other channel.</p>
             </div>
             <div class="deck-grid-item">
               <h3>Senior Operators</h3>
@@ -109,29 +110,23 @@
 
     <!-- ── 3. What Breaks Growth ── -->
     <section class="deck-slide" id="slide-3" role="group" aria-roledescription="slide" aria-label="Slide 3 of 15: What Breaks Growth"
-             data-hue="-0.4" data-glow="0.8" data-color-freq="1.4" data-bloom="0.8">
+             data-title="What Breaks Growth" data-hue="-0.4" data-glow="0.8" data-color-freq="1.4" data-bloom="0.8">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">The Problem</p>
-          <h2 class="deck-anim">Growth stalls for predictable reasons.</h2>
+          <h2 class="deck-anim" data-motion="mask">Growth stalls for predictable reasons.</h2>
 
-          <div class="deck-card__grid deck-anim">
-            <div class="deck-grid-item">
-              <h3>Paid vs. Landing</h3>
-              <p>Paid and creative are not aligned to the landing experience. Traffic arrives, then leaks.</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>CRO Is Absent</h3>
-              <p>CRO is random or missing entirely. You pay to bring visitors, then lose them at checkout.</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>Retention Is Underbuilt</h3>
-              <p>No lifecycle system means every sale is a first sale. CAC pressure rises, margins compress.</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>Attribution Lies</h3>
-              <p>Budgets follow the wrong signal. Nobody runs incrementality tests. Decisions are based on vanity dashboards.</p>
-            </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="funnel"
+                  data-title="Where growth leaks"
+                  data-values="100,58,34,19"
+                  data-labels="Traffic arrives,Lands on page,Converts,Comes back"
+                  data-sub="You paid for every visit; Paid and creative are not aligned to the landing experience; CRO is random or missing entirely; No lifecycle system means every sale is a first sale"
+                  data-leaks="Wrong-fit clicks,Message mismatch,Checkout friction,No lifecycle"
+                  data-note="Illustrative funnel shape. The leak points are what audits consistently surface, not measured values."></figure>
+
+          <div class="deck-insight deck-anim">
+            <p>"Attribution lies. Budgets follow the wrong signal, nobody runs incrementality tests, and decisions get made on vanity dashboards."</p>
           </div>
         </div>
       </div>
@@ -139,29 +134,22 @@
 
     <!-- ── 4. What We Do Differently ── -->
     <section class="deck-slide" id="slide-4" role="group" aria-roledescription="slide" aria-label="Slide 4 of 15: Difference"
-             data-hue="0.0" data-glow="1.4" data-color-freq="1.0" data-bloom="1.4">
+             data-title="Our Edge" data-hue="0.0" data-glow="1.4" data-color-freq="1.0" data-bloom="1.4">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">Our Edge</p>
-          <h2 class="deck-anim">Alignment creates compounding wins.</h2>
+          <h2 class="deck-anim" data-motion="mask">Alignment creates compounding wins.</h2>
 
-          <div class="deck-card__grid deck-card__grid--3 deck-anim">
-            <div class="deck-grid-item">
-              <h3>One Roadmap</h3>
-              <p>Ads, pages, CRO, and lifecycle connected under a single plan with clear owners.</p>
-              <p class="deck-grid-outcomes">Channels amplify each other</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>Weekly Testing Velocity</h3>
-              <p>Structured test queue with hypotheses, owners, and measured outcomes every week.</p>
-              <p class="deck-grid-outcomes">Faster learning loops</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>Aligned Incentives</h3>
-              <p>Flat retainers. Performance bonuses tied to your KPIs. No percent of ad spend.</p>
-              <p class="deck-grid-outcomes">We win when you win</p>
-            </div>
-          </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="compare"
+                  data-title="Typical agency versus Refractive"
+                  data-them="Typical agency"
+                  data-us="Refractive"
+                  data-rows="Who executes|Junior account managers|The senior operators on your call;
+                             How you pay|Percentage of ad spend|Flat retainer + KPI bonus;
+                             The roadmap|One per channel, per vendor|One plan, clear owners;
+                             Measurement|Platform-reported ROAS|Attribution + incrementality + MMM;
+                             Testing|Ad hoc, when there's time|Weekly queue with measured outcomes"></figure>
 
           <div class="deck-insight deck-anim">
             <p>"Built after scaling a $40M eCommerce brand and seeing the gap firsthand: agencies with energy at the pitch, and silence after the contract."</p>
@@ -172,11 +160,11 @@
 
     <!-- ── 5. Who We're Built For ── -->
     <section class="deck-slide" id="slide-5" role="group" aria-roledescription="slide" aria-label="Slide 5 of 15: Best Fit"
-             data-hue="0.3" data-glow="1.1" data-color-freq="0.8" data-bloom="1.1">
+             data-title="Best-Fit Brands" data-hue="0.3" data-glow="1.1" data-color-freq="0.8" data-bloom="1.1">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">Best-Fit Brands</p>
-          <h2 class="deck-anim">Built for founder-operators who need senior execution.</h2>
+          <h2 class="deck-anim" data-motion="mask">Built for founder-operators who need senior execution.</h2>
 
           <div class="deck-stat-row deck-anim">
             <div class="deck-stat-block">
@@ -193,11 +181,21 @@
             </div>
           </div>
 
-          <ul class="deck-anim">
-            <li>DTC, CPG, apparel, sporting goods, creator-led brands</li>
-            <li>Meaningful ad spend and willingness to test</li>
-            <li>Product-market fit established, ready to scale profitably</li>
-          </ul>
+          <div class="deck-captions deck-anim">
+            <div class="deck-caption">
+              <h3>Category</h3>
+              <p>DTC, CPG, apparel, sporting goods and creator-led brands.</p>
+            </div>
+            <div class="deck-caption">
+              <h3>Spend</h3>
+              <p>Meaningful ad spend and a willingness to test.</p>
+            </div>
+            <div class="deck-caption">
+              <h3>Stage</h3>
+              <p>Product-market fit established, ready to scale profitably.</p>
+            </div>
+          </div>
+
           <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted);">Earlier-stage brands can start with a Signal Scan or Spectrum Sprint.</p>
         </div>
       </div>
@@ -205,73 +203,40 @@
 
     <!-- ── 6. Solutions ── -->
     <section class="deck-slide" id="slide-6" role="group" aria-roledescription="slide" aria-label="Slide 6 of 15: Solutions"
-             data-hue="0.6" data-glow="1.0" data-color-freq="1.2" data-bloom="1.0">
+             data-title="The Refraction Map" data-hue="0.6" data-glow="1.0" data-color-freq="1.2" data-bloom="1.0">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">The Refraction Map</p>
-          <h2 class="deck-anim">Solutions built to compound.</h2>
+          <h2 class="deck-anim" data-motion="mask">One budget in. Four compounding pillars out.</h2>
 
-          <div class="deck-card__grid deck-card__grid--4 deck-anim">
-            <div class="deck-grid-item">
-              <h3>01 Foundation</h3>
-              <p>Business Strategy, Brand Positioning, GTM Planning, Creative Strategy, Ops &amp; Integrations</p>
-              <p class="deck-grid-outcomes">Clear priorities + 90-day plan</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>02 Growth</h3>
-              <p>Paid Social, Paid Search &amp; Shopping, Creative Production, Marketplace, Analytics</p>
-              <p class="deck-grid-outcomes">Lower CAC + stronger MER</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>03 Experience</h3>
-              <p>Shopify Dev, CRO &amp; A/B Testing, SEO, AI Enhancements, Performance UX</p>
-              <p class="deck-grid-outcomes">Higher CVR + revenue per session</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>04 Retention</h3>
-              <p>Email &amp; SMS (Klaviyo), Loyalty &amp; Referral, Subscriptions, CX Systems, Affiliate</p>
-              <p class="deck-grid-outcomes">Higher repeat rate + LTV</p>
-            </div>
-          </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="prism-split"
+                  data-title="One system refracted into four pillars"
+                  data-labels="01 Foundation,02 Growth,03 Experience,04 Retention"
+                  data-sub="Strategy, positioning, GTM, creative strategy; Paid social, search &amp; shopping, production; Shopify dev, CRO, SEO, performance UX; Email &amp; SMS, loyalty, subscriptions, CX"
+                  data-outcomes="Clear priorities + 90-day plan;Lower CAC + stronger MER;Higher CVR + revenue per session;Higher repeat rate + LTV"></figure>
 
-          <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted); margin-top: clamp(4px, 0.8vh, 10px);">One integrated system. Can be purchased pillar by pillar or as a full-stack engagement.</p>
+          <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted); margin-top: clamp(4px, 0.8vh, 10px);">One integrated system. Purchasable pillar by pillar or as a full-stack engagement.</p>
         </div>
       </div>
     </section>
 
     <!-- ── 7. Cadence ── -->
     <section class="deck-slide" id="slide-7" role="group" aria-roledescription="slide" aria-label="Slide 7 of 15: Cadence"
-             data-hue="0.15" data-glow="1.1" data-color-freq="0.9" data-bloom="1.1">
+             data-title="Operating Cadence" data-hue="0.15" data-glow="1.1" data-color-freq="0.9" data-bloom="1.1">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">How The Work Runs</p>
-          <h2 class="deck-anim">Weekly velocity, monthly roadmaps.</h2>
+          <h2 class="deck-anim" data-motion="mask">Weekly velocity, monthly roadmaps.</h2>
 
-          <div class="deck-funnel deck-anim">
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Weekly</p>
-              <p class="deck-funnel-step__title">Execute</p>
-              <p class="deck-funnel-step__desc">Performance memo, test queue, budget moves</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Biweekly</p>
-              <p class="deck-funnel-step__title">Create</p>
-              <p class="deck-funnel-step__desc">Creative review, new concepts, asset pipeline</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Monthly</p>
-              <p class="deck-funnel-step__title">Optimize</p>
-              <p class="deck-funnel-step__desc">Roadmap reallocations based on data</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Quarterly</p>
-              <p class="deck-funnel-step__title">Reset</p>
-              <p class="deck-funnel-step__desc">Strategy reset, Lucerna readout, next quarter plan</p>
-            </div>
-          </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="orbit"
+                  data-title="Operating cadence"
+                  data-labels="Weekly,Biweekly,Monthly,Quarterly"
+                  data-sub="Performance memo, test queue, budget moves; Creative review, new concepts, asset pipeline; Roadmap reallocations based on data; Strategy reset, Lucerna readout, next quarter plan"></figure>
 
           <div class="deck-insight deck-anim">
-            <p>"Every person on your account has done the work themselves. No layers. No telephone game. The people on your call are the people doing the work."</p>
+            <p>"Every person on your account has done the work themselves. No layers. No telephone game."</p>
           </div>
         </div>
       </div>
@@ -279,34 +244,18 @@
 
     <!-- ── 8. First 30 Days ── -->
     <section class="deck-slide" id="slide-8" role="group" aria-roledescription="slide" aria-label="Slide 8 of 15: First 30 Days"
-             data-hue="0.1" data-glow="1.2" data-color-freq="1.0" data-bloom="1.2">
+             data-title="First 30 Days" data-hue="0.1" data-glow="1.2" data-color-freq="1.0" data-bloom="1.2">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">First 30 Days</p>
-          <h2 class="deck-anim">Fast clarity, then compounding execution.</h2>
+          <h2 class="deck-anim" data-motion="mask">Fast clarity, then compounding execution.</h2>
 
-          <div class="deck-funnel deck-anim">
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Week 1</p>
-              <p class="deck-funnel-step__title">Baseline</p>
-              <p class="deck-funnel-step__desc">Full audit: paid accounts, site, email flows, analytics. Tracking integrity check. Priorities set.</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Week 2</p>
-              <p class="deck-funnel-step__title">Plan</p>
-              <p class="deck-funnel-step__desc">Creative and offer testing plan. Landing system alignment. Quick wins identified.</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Week 3</p>
-              <p class="deck-funnel-step__title">Launch</p>
-              <p class="deck-funnel-step__desc">CRO tests live. Lifecycle quick wins deployed. First budget optimizations.</p>
-            </div>
-            <div class="deck-funnel-step">
-              <p class="deck-funnel-step__num">Week 4</p>
-              <p class="deck-funnel-step__title">Measure</p>
-              <p class="deck-funnel-step__desc">Lucerna readout. Reallocation plan. 90-day roadmap finalized.</p>
-            </div>
-          </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="gantt"
+                  data-title="First 30 days"
+                  data-labels="Week 1,Week 2,Week 3,Week 4"
+                  data-titles="Baseline,Plan,Launch,Measure"
+                  data-sub="Full audit: paid, site, email flows, analytics. Tracking integrity check.; Creative and offer testing plan. Landing system alignment.; CRO tests live. Lifecycle quick wins. First budget optimizations.; Lucerna readout. Reallocation plan. 90-day roadmap finalized."></figure>
 
           <p class="deck-anim">Most clients see their <span class="deck-highlight">first optimizations live within two weeks</span>.</p>
         </div>
@@ -315,23 +264,54 @@
 
     <!-- ── 9. Lucerna ── -->
     <section class="deck-slide" id="slide-9" role="group" aria-roledescription="slide" aria-label="Slide 9 of 15: Lucerna"
-             data-hue="-0.2" data-glow="1.4" data-color-freq="1.3" data-bloom="1.3">
-      <div class="deck-card deck-card--text deck-card--split">
+             data-title="Lucerna — measurement" data-hue="-0.2" data-glow="1.4" data-color-freq="1.3" data-bloom="1.3">
+      <div class="deck-card deck-card--text deck-card--split deck-card--split-viz">
         <div class="deck-card__inner">
           <div>
             <p class="deck-label deck-anim">Measurement</p>
-            <h2 class="deck-anim">Lucerna&trade; proves what is real.</h2>
-            <ul class="deck-anim">
-              <li>Attribution views for the full customer journey</li>
-              <li>Incrementality testing (geo + holdouts) to prove true lift</li>
-              <li>MMM for privacy-resilient budget planning</li>
-              <li>Budget simulator: see where the next dollar should go</li>
-              <li>Creative intelligence tied to revenue outcomes</li>
-            </ul>
-            <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted);">Included with retainers or available standalone from $2,500/mo.</p>
+            <h2 class="deck-anim"><span class="brand-name">Lucerna</span><sup>&trade;</sup> proves what is real.</h2>
+            <p class="deck-anim">Start with one dashboard you can trust. Add modeled incrementality when platform ROAS and MER stop agreeing. Add geo-holdout proof when the budget decisions get big enough to need it.</p>
+
+            <div class="deck-tiers deck-anim">
+              <div class="deck-tier-row">
+                <p class="deck-tier-row__name">Core</p>
+                <p class="deck-tier-row__price">$149<span>/mo</span></p>
+                <p class="deck-tier-row__pitch">One dashboard. Every channel. No more tab switching.</p>
+                <p class="deck-tier-row__fit">$5K-30K/mo spend</p>
+              </div>
+              <div class="deck-tier-row deck-tier-row--featured">
+                <p class="deck-tier-row__name">Lumen</p>
+                <p class="deck-tier-row__price">$799<span>/mo</span></p>
+                <p class="deck-tier-row__pitch">Modeled incrementality signals. No experiments required.</p>
+                <p class="deck-tier-row__fit">$15K-75K/mo spend</p>
+              </div>
+              <div class="deck-tier-row">
+                <p class="deck-tier-row__name">Pro</p>
+                <p class="deck-tier-row__price">$1,999<span>/mo</span></p>
+                <p class="deck-tier-row__pitch">Experimental proof. Every budget decision backed by causal data.</p>
+                <p class="deck-tier-row__fit">$50K-300K/mo spend</p>
+              </div>
+            </div>
+
+            <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted);">Included with every retainer. Available standalone from $149/mo.</p>
           </div>
           <div>
-            <div class="deck-placeholder deck-anim">Lucerna dashboard: attribution views, budget simulator, creative clusters</div>
+            <div class="deck-embed deck-anim" data-src="/lucerna-app/">
+              <div class="deck-embed__bar">
+                <span class="deck-embed__dot"></span>
+                <span class="deck-embed__dot"></span>
+                <span class="deck-embed__dot"></span>
+                <span class="deck-embed__url">lucerna.refractive.co</span>
+              </div>
+              <div class="deck-embed__viewport">
+                <img class="deck-embed__poster" src="../images/lucerna-preview.png" alt="Lucerna dashboard: net revenue, contribution margin, LTV:CAC, MER and orders with a revenue-over-time chart" loading="lazy" width="1440" height="900">
+                <iframe class="deck-embed__frame" title="Lucerna product demo" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+                <div class="deck-embed__loading">
+                  <span class="deck-embed__spinner"></span> Loading live product
+                </div>
+              </div>
+            </div>
+            <p class="deck-embed__caption deck-anim">Live product &mdash; running on demo data</p>
           </div>
         </div>
       </div>
@@ -339,32 +319,36 @@
 
     <!-- ── 10. Starting Points ── -->
     <section class="deck-slide" id="slide-10" role="group" aria-roledescription="slide" aria-label="Slide 10 of 15: Starting Points"
-             data-hue="0.4" data-glow="1.2" data-color-freq="0.8" data-bloom="1.2">
+             data-title="Starting Points" data-hue="0.4" data-glow="1.2" data-color-freq="0.8" data-bloom="1.2">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">Choose Your Entry</p>
-          <h2 class="deck-anim">Start small or run the full system.</h2>
+          <h2 class="deck-anim" data-motion="mask">Start small or run the full system.</h2>
 
-          <div class="deck-card__grid deck-card__grid--4 deck-anim">
-            <div class="deck-grid-item">
+          <figure class="deck-chart deck-anim"
+                  data-chart="ladder"
+                  data-title="Ways to start"
+                  data-labels="Signal Read,Signal Scan,Spectrum Sprint,Full-Stack Partner"
+                  data-display="Free,$3,500,$12.5-18.5k,$14-45k+/mo"
+                  data-sub="20-min diagnostic; 7-day working plan, creditable; 21-day alignment build; Ongoing across all pillars"
+                  data-highlight="3"></figure>
+
+          <div class="deck-captions deck-anim">
+            <div class="deck-caption">
               <h3>Signal Read</h3>
-              <p>Free 20-min diagnostic. Qualifies fit and identifies highest-upside moves.</p>
-              <p class="deck-grid-outcomes">Free</p>
+              <p>Qualifies fit and identifies the highest-upside moves.</p>
             </div>
-            <div class="deck-grid-item">
+            <div class="deck-caption">
               <h3>Signal Scan</h3>
-              <p>7-day working plan with quick wins, 90-day roadmap, and Lucerna snapshot.</p>
-              <p class="deck-grid-outcomes">$3,500 (creditable)</p>
+              <p>Quick wins, 90-day roadmap and a Lucerna snapshot.</p>
             </div>
-            <div class="deck-grid-item">
+            <div class="deck-caption">
               <h3>Spectrum Sprint</h3>
-              <p>21-day alignment build across creative, landing systems, CRO, and lifecycle.</p>
-              <p class="deck-grid-outcomes">$12.5k-$18.5k</p>
+              <p>Creative, landing systems, CRO and lifecycle aligned.</p>
             </div>
-            <div class="deck-grid-item" style="border-color: rgba(67, 169, 223, 0.3); background: rgba(67, 169, 223, 0.04);">
+            <div class="deck-caption">
               <h3>Full-Stack Partner</h3>
-              <p>Ongoing execution across all pillars with Lucerna included.</p>
-              <p class="deck-grid-outcomes">$14k-$45k+/mo</p>
+              <p>Ongoing execution with Lucerna included.</p>
             </div>
           </div>
         </div>
@@ -373,92 +357,86 @@
 
     <!-- ── 11. Signal Scan Deep Dive ── -->
     <section class="deck-slide" id="slide-11" role="group" aria-roledescription="slide" aria-label="Slide 11 of 15: Signal Scan"
-             data-hue="0.25" data-glow="1.1" data-color-freq="1.0" data-bloom="1.1">
-      <div class="deck-card deck-card--text">
+             data-title="Signal Scan" data-hue="0.25" data-glow="1.1" data-color-freq="1.0" data-bloom="1.1">
+      <div class="deck-card deck-card--text deck-card--split">
         <div class="deck-card__inner">
-          <p class="deck-label deck-anim">Signal Scan</p>
-          <h2 class="deck-anim">A real plan in 7 days. Not a pitch deck.</h2>
+          <div>
+            <p class="deck-label deck-anim">Signal Scan</p>
+            <h2 class="deck-anim" data-motion="mask">A real plan in 7 days. Not a pitch deck.</h2>
 
-          <div class="deck-card__grid deck-anim">
-            <div class="deck-grid-item">
-              <h3>Refraction Map</h3>
-              <p>Ads &rarr; Pages &rarr; CRO &rarr; Retention mapped as one system with gaps identified.</p>
+            <div class="deck-captions deck-anim" style="grid-template-columns: 1fr 1fr;">
+              <div class="deck-caption">
+                <h3>Refraction Map</h3>
+                <p>Ads &rarr; Pages &rarr; CRO &rarr; Retention mapped as one system with gaps identified.</p>
+              </div>
+              <div class="deck-caption">
+                <h3>Priority List</h3>
+                <p>Ranked leaks and opportunities across your full funnel.</p>
+              </div>
+              <div class="deck-caption">
+                <h3>90-Day Roadmap</h3>
+                <p>Testing plan for creative, CRO and lifecycle with owners and timelines.</p>
+              </div>
+              <div class="deck-caption">
+                <h3>Lucerna Snapshot</h3>
+                <p>Attribution baseline + recommended incrementality test design.</p>
+              </div>
             </div>
-            <div class="deck-grid-item">
-              <h3>Priority List</h3>
-              <p>Ranked leaks and opportunities across your full funnel.</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>90-Day Roadmap</h3>
-              <p>Testing plan for creative, CRO, and lifecycle with owners and timelines.</p>
-            </div>
-            <div class="deck-grid-item">
-              <h3>Lucerna Snapshot</h3>
-              <p>Attribution baseline + recommended incrementality test design.</p>
+
+            <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted);">Delivered as a 20-25 minute Loom walkthrough + PDF/Notion doc.</p>
+          </div>
+          <div>
+            <figure class="deck-chart deck-anim"
+                    data-chart="ring"
+                    data-title="Signal Scan turnaround"
+                    data-value="100"
+                    data-center="7 days"
+                    data-center-label="Start to delivery"></figure>
+            <div class="deck-stat-row deck-anim" style="margin-top: 0;">
+              <div class="deck-stat-block">
+                <p class="deck-stat" data-count="3500" data-prefix="$">$3,500</p>
+                <p class="deck-stat-label">One-time fee</p>
+              </div>
+              <div class="deck-stat-block">
+                <p class="deck-stat" data-count="100" data-suffix="%">100%</p>
+                <p class="deck-stat-label">Creditable to retainer</p>
+              </div>
             </div>
           </div>
-
-          <hr class="deck-divider deck-anim">
-
-          <div class="deck-stat-row deck-anim">
-            <div class="deck-stat-block">
-              <p class="deck-stat">$3,500</p>
-              <p class="deck-stat-label">One-time fee</p>
-            </div>
-            <div class="deck-stat-block">
-              <p class="deck-stat">100%</p>
-              <p class="deck-stat-label">Creditable to retainer (30 days)</p>
-            </div>
-            <div class="deck-stat-block">
-              <p class="deck-stat">7 days</p>
-              <p class="deck-stat-label">Delivery timeline</p>
-            </div>
-          </div>
-
-          <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted);">Delivered as a 20-25 minute Loom walkthrough + PDF/Notion doc.</p>
         </div>
       </div>
     </section>
 
     <!-- ── 12. Pricing ── -->
     <section class="deck-slide" id="slide-12" role="group" aria-roledescription="slide" aria-label="Slide 12 of 15: Pricing"
-             data-hue="0.5" data-glow="1.2" data-color-freq="0.8" data-bloom="1.1">
+             data-title="Pricing" data-hue="0.5" data-glow="1.2" data-color-freq="0.8" data-bloom="1.1">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">Pricing</p>
-          <h2 class="deck-anim">Pricing aligned to outcomes, not ad spend.</h2>
+          <h2 class="deck-anim" data-motion="mask">Pricing aligned to outcomes, not ad spend.</h2>
 
-          <div class="deck-card__grid deck-card__grid--3 deck-anim">
-            <div class="deck-tier">
-              <h3>Core</h3>
-              <p class="deck-stat">$14-18k</p>
-              <p class="deck-stat-label">per month</p>
-            </div>
-            <div class="deck-tier deck-tier--featured">
-              <h3>Scale</h3>
-              <p class="deck-stat">$22-28k</p>
-              <p class="deck-stat-label">per month</p>
-            </div>
-            <div class="deck-tier">
-              <h3>Enterprise</h3>
-              <p class="deck-stat">$32-45k+</p>
-              <p class="deck-stat-label">per month</p>
-            </div>
-          </div>
+          <figure class="deck-chart deck-anim"
+                  data-chart="bar"
+                  data-title="Retainer tiers"
+                  data-values="16,25,38"
+                  data-max="45"
+                  data-display="$14-18k,$22-28k,$32-45k+"
+                  data-labels="Core,Scale,Enterprise"
+                  data-sub="Single pillar depth or lean full stack; Full-stack growth across all four pillars; Multi-brand, multi-market, custom scope"
+                  data-highlight="1"></figure>
 
-          <hr class="deck-divider deck-anim">
-
-          <div class="deck-card__grid deck-anim">
-            <div>
+          <div class="deck-captions deck-anim" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="deck-caption">
               <h3>Programs</h3>
-              <ul>
-                <li><span class="deck-highlight">Signal Scan:</span> $3.5k (creditable)</li>
-                <li><span class="deck-highlight">Spectrum Sprint:</span> $12.5k-$18.5k</li>
-              </ul>
+              <p>Signal Scan $3.5k (creditable) &middot; Spectrum Sprint $12.5k-$18.5k</p>
             </div>
-            <div>
+            <div class="deck-caption">
               <h3>Performance Bonus</h3>
               <p>Not tied to ad spend. Tied to mutually defined KPIs: MER, CAC, contribution margin, net revenue.</p>
+            </div>
+            <div class="deck-caption">
+              <h3><span class="brand-name">Lucerna</span> standalone</h3>
+              <p>Core $149 &middot; Lumen $799 &middot; Pro $1,999 per month. Included free with every retainer.</p>
             </div>
           </div>
         </div>
@@ -467,42 +445,47 @@
 
     <!-- ── 13. Proof ── -->
     <section class="deck-slide" id="slide-13" role="group" aria-roledescription="slide" aria-label="Slide 13 of 15: Proof"
-             data-hue="0.1" data-glow="1.3" data-color-freq="1.1" data-bloom="1.3">
+             data-title="Proof" data-hue="0.1" data-glow="1.3" data-color-freq="1.1" data-bloom="1.3">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
-          <p class="deck-label deck-anim">Results</p>
-          <h2 class="deck-anim">Results we care about.</h2>
+          <p class="deck-label deck-anim">Track Record</p>
+          <h2 class="deck-anim" data-motion="mask">Results built in the operator's seat.</h2>
+
+          <p class="deck-anim">Refractive is new. The operator running it is not. These are measured results from owning growth in-house at two eCommerce brands:</p>
 
           <div class="deck-card__grid deck-card__grid--3 deck-anim">
-            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.5vh, 20px);">
-              <p class="deck-stat">CAC</p>
-              <p class="deck-stat-label">Down X%</p>
-              <p>MER up. Efficiency compounding through aligned channels.</p>
+            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.8vh, 22px);">
+              <img src="../images/kane-white-logo.avif" alt="KANE" loading="lazy" style="height: 26px; width: auto; opacity: 0.85; margin: 0 auto 10px; display: block;">
+              <p class="deck-stat" data-count="16.4" data-prefix="+" data-suffix="%" data-decimals="1">+16.4%</p>
+              <p class="deck-stat-label">Conversion rate, YoY</p>
+              <p>70+ A/B tests shipped as in-house Ecommerce Manager.</p>
             </div>
-            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.5vh, 20px);">
-              <p class="deck-stat">Revenue</p>
-              <p class="deck-stat-label">Up X% in 90 days</p>
-              <p>AOV improvements through CRO, creative testing, and offer strategy.</p>
+            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.8vh, 22px);">
+              <img src="../images/laxdotcom.svg" alt="Lax.com" loading="lazy" style="height: 26px; width: auto; opacity: 0.85; margin: 0 auto 10px; display: block;">
+              <p class="deck-stat" data-count="21.5" data-prefix="+" data-suffix="%" data-decimals="1">+21.5%</p>
+              <p class="deck-stat-label">Revenue</p>
+              <p>First 4 months post-replatform as in-house Digital Marketing Manager.</p>
             </div>
-            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.5vh, 20px);">
-              <p class="deck-stat">LTV</p>
-              <p class="deck-stat-label">Email/SMS share up X%</p>
-              <p>Churn down. Owned channel revenue growing through lifecycle systems.</p>
+            <div class="deck-grid-item" style="text-align: center; padding: clamp(12px, 1.8vh, 22px);">
+              <img src="../images/laxdotcom.svg" alt="Lax.com" loading="lazy" style="height: 26px; width: auto; opacity: 0.85; margin: 0 auto 10px; display: block;">
+              <p class="deck-stat" data-count="27.7" data-prefix="+" data-suffix="%" data-decimals="1">+27.7%</p>
+              <p class="deck-stat-label">Conversion rate</p>
+              <p>Same period. Paid, creative, site and lifecycle run as one system.</p>
             </div>
           </div>
 
-          <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted); text-align: center; margin-top: clamp(6px, 1vh, 12px);">Case study metrics to be populated as client engagements complete.</p>
+          <p class="deck-anim" style="font-size: clamp(0.65rem, 0.58rem + 0.2vw, 0.8rem); color: var(--color-text-muted); text-align: center; margin-top: clamp(6px, 1vh, 12px);">In-house results, not agency case studies. Client engagement case studies will be published as they complete.</p>
         </div>
       </div>
     </section>
 
     <!-- ── 14. What We Need From You ── -->
     <section class="deck-slide" id="slide-14" role="group" aria-roledescription="slide" aria-label="Slide 14 of 15: Inputs"
-             data-hue="-0.1" data-glow="1.0" data-color-freq="1.0" data-bloom="1.0">
+             data-title="Getting Started" data-hue="-0.1" data-glow="1.0" data-color-freq="1.0" data-bloom="1.0">
       <div class="deck-card deck-card--text">
         <div class="deck-card__inner">
           <p class="deck-label deck-anim">Getting Started</p>
-          <h2 class="deck-anim">Inputs that unlock speed.</h2>
+          <h2 class="deck-anim" data-motion="mask">Inputs that unlock speed.</h2>
 
           <div class="deck-card__grid deck-anim">
             <div class="deck-grid-item">
@@ -525,8 +508,19 @@
             </div>
           </div>
 
+          <div class="deck-logo-strip deck-anim">
+            <img src="../images/shopify.svg" alt="Shopify" loading="lazy">
+            <img src="../images/meta.svg" alt="Meta" loading="lazy">
+            <img src="../images/google.svg" alt="Google" loading="lazy">
+            <img src="../images/tiktok.svg" alt="TikTok" loading="lazy">
+            <img src="../images/klaviyo.svg" alt="Klaviyo" loading="lazy">
+            <img src="../images/attentive.svg" alt="Attentive" loading="lazy">
+            <img src="../images/triple-whale.svg" alt="Triple Whale" loading="lazy">
+            <img src="../images/northbeam.svg" alt="Northbeam" loading="lazy">
+          </div>
+
           <div class="deck-insight deck-anim">
-            <p>"We start with a full audit of your current stack: paid accounts, site performance, email flows, analytics setup, and creative library. Most clients see their first optimizations live within two weeks."</p>
+            <p>"We start with a full audit of your current stack: paid accounts, site performance, email flows, analytics setup and creative library. Most clients see their first optimizations live within two weeks."</p>
           </div>
         </div>
       </div>
@@ -534,11 +528,11 @@
 
     <!-- ── 15. Next Steps / Close ── -->
     <section class="deck-slide" id="slide-15" role="group" aria-roledescription="slide" aria-label="Slide 15 of 15: Next Steps"
-             data-hue="0.0" data-glow="1.3" data-color-freq="1.0" data-bloom="1.3">
+             data-title="Next Steps" data-hue="0.0" data-glow="1.3" data-color-freq="1.0" data-bloom="1.3">
       <div class="deck-card deck-card--title">
         <div class="deck-card__inner">
-          <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="deck-card__logo deck-anim">
-          <h1 class="deck-anim" style="font-size: clamp(1.5rem, 1rem + 3vw, 3.5rem);">Let's find the signal.</h1>
+          <img src="../images/REFRACTIVE-DIGITAL.svg" alt="Refractive" class="deck-card__logo deck-anim" data-motion="scale">
+          <h1 class="deck-anim" data-motion="chars" style="font-size: clamp(1.5rem, 1rem + 3vw, 3.5rem);">Let's find the signal.</h1>
 
           <div class="deck-card__grid deck-card__grid--3 deck-anim" style="max-width: 800px; margin-top: clamp(12px, 2vh, 24px);">
             <div class="deck-grid-item" style="text-align: center;">
@@ -555,7 +549,7 @@
             </div>
           </div>
 
-          <a href="mailto:growth@refractive.co" class="deck-cta deck-anim" style="margin-top: clamp(12px, 2vh, 24px);">Book a call</a>
+          <a href="mailto:growth@refractive.co" class="deck-cta deck-anim" data-motion="scale" style="margin-top: clamp(12px, 2vh, 24px);">Book a call</a>
           <p class="deck-presenter deck-anim">growth@refractive.co</p>
         </div>
       </div>
@@ -568,6 +562,7 @@
 
   <!-- Deck Scripts (shared with investor deck) -->
   <script src="../js/deck-prism.js"></script>
+  <script src="../js/deck-charts.js"></script>
   <script src="../js/deck.js"></script>
   <script src="/js/analytics-events.js"></script></body>
 </html>
