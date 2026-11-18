@@ -169,6 +169,7 @@ function initPrism() {
   gl.uniform1f(loc.uMinAxis, Math.min(BASE_HALF, HEIGHT));
 
   // ── Resize ──
+  let frozenAt = null; // set when reduced motion is on: draw one still frame
   const dpr = Math.min(2, window.devicePixelRatio || 1);
 
   function resize() {
@@ -181,6 +182,7 @@ function initPrism() {
     // Zoom out on mobile so the prism isn't as concentrated/intense
     const scale = w <= 768 ? SCALE * 0.55 : SCALE;
     gl.uniform1f(loc.uPxScale, 1 / (canvas.height * 0.1 * scale));
+    if (frozenAt !== null) draw(frozenAt);
   }
 
   const ro = new ResizeObserver(resize);
@@ -209,7 +211,7 @@ function initPrism() {
   let raf = 0;
   const t0 = performance.now();
 
-  function render(t) {
+  function draw(t) {
     const time = (t - t0) * 0.001;
     gl.uniform1f(loc.iTime, time);
 
@@ -218,14 +220,28 @@ function initPrism() {
     gl.uniformMatrix3fv(loc.uRot, false, rotBuf);
 
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+    // Shader is drawing — drop the CSS fallback image behind it
+    if (!container.classList.contains('is-live')) container.classList.add('is-live');
+  }
+
+  function render(t) {
+    draw(t);
     raf = requestAnimationFrame(render);
   }
+
+  // If the GPU drops the context, fall back to the CSS gradient
+  canvas.addEventListener('webglcontextlost', () => {
+    container.classList.remove('is-live');
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  });
 
   // ── Respect reduced motion ──
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) {
-    // Render a single static frame
-    render(performance.now());
+    // Render a single static frame (and redraw it after resizes,
+    // since resizing the canvas clears it)
+    frozenAt = performance.now();
+    draw(frozenAt);
     return;
   }
 

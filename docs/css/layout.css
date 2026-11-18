@@ -358,6 +358,32 @@
   width: 100%;
   height: 100%;
   z-index: 0;
+  /* Static fallback for visitors without WebGL (disabled, unsupported,
+     shader failure, or script blocked): a still frame of the prism shader,
+     over a brand-color glow in case the image fails to load.
+     Cleared by prism.js once the shader renders. */
+  background:
+    url('../images/prism-fallback.webp') center / cover no-repeat,
+    radial-gradient(ellipse 38% 46% at 50% 42%, rgba(194, 220, 212, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 38% 46%, rgba(67, 169, 223, 0.38) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 60% at 63% 50%, rgba(142, 104, 173, 0.42) 0%, transparent 72%),
+    radial-gradient(ellipse 80% 70% at 50% 60%, rgba(123, 118, 211, 0.18) 0%, transparent 75%),
+    var(--color-bg-primary);
+}
+
+@media (max-width: 768px) {
+  .hero__prism {
+    background-image:
+      url('../images/prism-fallback-mobile.webp'),
+      radial-gradient(ellipse 38% 46% at 50% 42%, rgba(194, 220, 212, 0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 60% at 38% 46%, rgba(67, 169, 223, 0.38) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 60% at 63% 50%, rgba(142, 104, 173, 0.42) 0%, transparent 72%),
+      radial-gradient(ellipse 80% 70% at 50% 60%, rgba(123, 118, 211, 0.18) 0%, transparent 75%);
+  }
+}
+
+.hero__prism.is-live {
+  background: none;
 }
 
 .hero__overlay {
